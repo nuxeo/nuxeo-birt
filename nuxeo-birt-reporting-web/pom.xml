@@ -42,10 +42,6 @@
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>javax.faces</groupId>
-      <artifactId>jsf-api</artifactId>
-    </dependency>
 
 
   <!-- EL + JSF + facelets deps -->
@@ -62,8 +58,6 @@
       <artifactId>jsf-facelets</artifactId>
     </dependency>
 
-
-
     <!-- webengine stuffs -->
      <dependency>
        <groupId>javax.ws.rs</groupId>
@@ -73,55 +67,6 @@
        <groupId>org.nuxeo.ecm.webengine</groupId>
        <artifactId>nuxeo-webengine-core</artifactId>
      </dependency>
-
-
-    <dependency>
-      <groupId>com.ibm.icu</groupId>
-      <artifactId>icu4j</artifactId>
-      <version>4.0.1</version>
-    </dependency>
-    <!-- BIRT stuffs -->
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>core-api</artifactId>
-      <version>2.6.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>report-engine-api</artifactId>
-      <version>2.6.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>report-model-api</artifactId>
-      <version>2.6.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>birt-runtime-web</artifactId>
-      <version>2.6.1</version>
-      <type>zip</type>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>org.mozilla.javascript</artifactId>
-      <version>1.7.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>script-api</artifactId>
-      <version>2.6.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>birt-runtime-all</artifactId>
-      <version>2.6.1</version>
-      <type>zip</type>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>

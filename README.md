@@ -7,8 +7,35 @@ This addons contains a set of Nuxeo Plugins to integrate BIRT Reporting engine i
 * Reports instances are bound to Document Context
 * Report Rendering is automatically adjusted to use Nuxeo server data sources
 
-## How to build
 
+## Building and deploying
+
+To see the list of all commands available for building and deploying, use the following:
+
+    $ ant usage
+
+
+### How to build
+
+You can build Nuxeo BIRT with:
+
+    $ ant build
+
+If you want to build and launch the tests, do it with:
+
+    $ ant build-with-tests
+
+
+### How to deploy
+
+Configure the build.properties files (starting from the `build.properties.sample` file to be found in the current folder), to point your Tomcat instance:
+
+    $ cp build.properties.sample build.properties
+    $ vi build.properties
+
+You can then deploy Nuxeo BIRT to your Tomcat instance with:
+
+    $ ant deploy-tomcat
 
 
 ## About Nuxeo

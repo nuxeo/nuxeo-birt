@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<fragment version="1">
+
+
+  <!-- AT: mixing filters and mappings for clarity, does not change
+    resulting web.xml file -->
+
+  <extension target="web#SERVLET">
+    <servlet>
+      <servlet-name>Nuxeo BIRT Servlet</servlet-name>
+      <servlet-class>org.nuxeo.ecm.platform.reporting.servlet.BirtServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>Nuxeo BIRT Servlet</servlet-name>
+      <url-pattern>/reporting/*</url-pattern>
+    </servlet-mapping>
+  </extension>
+
+  <install>
+  <!--  unzip the war template -->
+    <unzip from="${bundle.fileName}" to="/" prefix="web">
+      <include>web/nuxeo.war/**</include>
+    </unzip>
+  </install>
+
+</fragment>
+

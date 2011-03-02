@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.nuxeo.ecm.platform</groupId>
+    <artifactId>nuxeo-features-parent</artifactId>
+    <version>5.4.0.1</version>
+  </parent>
+
+  <artifactId>nuxeo-birt-parent</artifactId>
+  <name>Nuxeo Birt Reporting Parent</name>
+  <description>Nuxeo Birt Reporting Parent</description>
+  <packaging>pom</packaging>
+  <version>5.4.0-SNAPSHOT</version>
+
+  <modules>
+    <module>nuxeo-birt-reporting</module>
+    <module>nuxeo-birt-reporting-web</module>
+  </modules>
+  
+  <properties>
+    <nuxeo.birt.version>5.4.0-SNAPSHOT</nuxeo.birt.version>
+  </properties>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.nuxeo.ecm.platform</groupId>
+        <artifactId>nuxeo-birt-reporting</artifactId>
+        <version>${nuxeo.birt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.ecm.platform</groupId>
+        <artifactId>nuxeo-birt-reporting-web</artifactId>
+        <version>${nuxeo.birt.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
+  <repositories>
+    <repository>
+      <id>public</id>
+      <url>http://maven.nuxeo.org/nexus/content/groups/public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>public-snapshot</id>
+      <url>http://maven.nuxeo.org/nexus/content/groups/public-snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>always</updatePolicy>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+</project>

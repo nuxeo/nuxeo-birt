@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<module name="reports" root-type="reports" path="/reports" extends="base">
+</module>

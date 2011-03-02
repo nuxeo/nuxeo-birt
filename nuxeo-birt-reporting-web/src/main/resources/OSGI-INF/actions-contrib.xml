@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.nuxeo.platform.birt.reporting.actions">
+
+  <require>org.nuxeo.ecm.platform.reporting.engine.ReportComponent</require>
+
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
+
+    <action id="TAB_REPORTING" link="/incl/tabs/birt_preview.xhtml"
+      enabled="true" label="action.view.preview" order="55">
+      <category>VIEW_ACTION_LIST</category>
+      <filter id="view_report">
+        <rule grant="true">
+          <permission>Read</permission>
+        </rule>
+        <rule grant="true">
+          <type>BirtReport</type>
+        </rule>
+      </filter>
+    </action>
+  </extension>
+
+</component>

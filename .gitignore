@@ -1,0 +1,8 @@
+syntax: glob
+*.class
+target
+bin
+gen
+.classpath
+.settings
+.project

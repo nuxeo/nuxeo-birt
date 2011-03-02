@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.nuxeo.platform.birt.reporting.types.web">
+
+  <require>org.nuxeo.ecm.platform.types.TypeService</require>
+  <require>org.nuxeo.ecm.platform.reporting.engine.ReportComponent</require>
+
+  <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
+
+    <type id="BirtReport" coretype="BirtReport">
+      <label>Birt Report</label>
+      <icon>/icons/picturebook.gif</icon>
+      <bigIcon>/icons/picturebook_100.png</bigIcon>
+      <description>BIRT Report</description>
+      <default-view>view_documents</default-view>
+      <category>Reporting</category>
+      <layouts mode="any">
+        <layout>heading</layout>
+        <layout>birtReport</layout>
+      </layouts>
+    </type>
+
+    <type id="BirtReportModel" coretype="BirtReportModel">
+      <label>Birt Report Model</label>
+      <icon>/icons/picturebook.gif</icon>
+      <bigIcon>/icons/picturebook_100.png</bigIcon>
+      <description>BIRT report model</description>
+      <default-view>view_documents</default-view>
+      <category>Reporting</category>
+      <layouts mode="any">
+        <layout>heading</layout>
+        <layout>file</layout>
+        <layout>birtReportModel</layout>
+      </layouts>
+    </type>
+
+    <type id="Folder" coretype="Folder">
+      <subtypes>
+        <type>BirtReport</type>
+        <type>BirtReportModel</type>
+      </subtypes>
+    </type>
+
+    <type id="Workspace" coretype="Workspace">
+      <subtypes>
+        <type>BirtReport</type>
+        <type>BirtReportModel</type>
+      </subtypes>
+    </type>
+
+  </extension>
+
+</component>

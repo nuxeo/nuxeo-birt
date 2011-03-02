@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://nuxeo.org/schemas/birtreportmodel"
+  xmlns:birtreportmodel="http://nuxeo.org/schemas/birtreportmodel">
+
+  <xs:complexType name="parameter">
+    <xs:sequence>
+      <xs:element name="pName" type="xs:string" minOccurs="0"
+        maxOccurs="unbounded" />
+      <xs:element name="pValue" type="xs:string" minOccurs="0"
+        maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="reportName" type="xs:string"/>
+
+  <xs:element name="parameters" type="birtreportmodel:parameterListType" />
+
+  <xs:complexType name="parameterListType">
+    <xs:sequence>
+      <xs:element name="item" type="birtreportmodel:parameter" minOccurs="0"
+        maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

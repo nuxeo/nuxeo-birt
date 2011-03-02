@@ -1,0 +1,195 @@
+/*
+ * (C) Copyright 2006-20011 Nuxeo SAS (http://nuxeo.com/) and contributors.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser General Public License
+ * (LGPL) version 2.1 which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl.html
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * Contributors:
+ *     Nuxeo - initial API and implementation
+ *
+ */
+
+package org.nuxeo.ecm.platform.reporting.tests;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.birt.report.engine.api.HTMLRenderOption;
+import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
+import org.nuxeo.common.utils.FileUtils;
+import org.nuxeo.common.utils.Path;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
+import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
+import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
+import org.nuxeo.ecm.platform.reporting.api.ReportModel;
+import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
+
+public class TestAdapters extends SQLRepositoryTestCase {
+
+    String reportPath = null;
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        deployBundle("org.nuxeo.ecm.platform.birt.reporting");
+        openSession();
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        if(reportPath!=null) {
+            FileUtils.deleteTree(new File(reportPath));
+            reportPath=null;
+        }
+    }
+    protected DocumentModel createModelDoc() throws Exception {
+
+        DocumentModel model = session.createDocumentModel("/", "model", "BirtReportModel");
+
+        File report = FileUtils.getResourceFileFromContext("reports/VCSReportWithParams.rptdesign");
+
+        model.setPropertyValue("dc:title", "My model");
+        model.setPropertyValue("birtmodel:reportName", "VCSReportWithParams" );
+        model.setPropertyValue("file:content", new FileBlob(report) );
+
+        model = session.createDocument(model);
+        session.save();
+
+        return model;
+    }
+
+    protected DocumentModel createInstanceDoc(ReportModel model) throws Exception {
+
+        DocumentModel instance = session.createDocumentModel("/", "instance", "BirtReport");
+
+        instance.setPropertyValue("dc:title", "My instance");
+        instance.setPropertyValue("birt:modelRef", model.getId() );
+
+        instance = session.createDocument(instance);
+        session.save();
+
+        return instance;
+    }
+
+    public void testAdapters() throws Exception {
+
+        DocumentModel model = createModelDoc();
+
+        ReportModel reportModel = model.getAdapter(ReportModel.class);
+        assertNotNull(reportModel);
+
+        List<ReportParameter> reportParams =  reportModel.getReportParameters();
+        assertEquals(4, reportParams.size());
+
+        Map<String,String> params = reportModel.getStoredParameters();
+
+        reportModel.setParameter("modelParam", "fromModel");
+
+        session.save();
+
+        // check params
+        params = reportModel.getStoredParameters();
+        assertTrue(params.containsKey("modelParam"));
+
+        // recheck after full refresh
+        model = session.getDocument(model.getRef());
+        reportModel = model.getAdapter(ReportModel.class);
+        params = reportModel.getStoredParameters();
+        assertTrue(params.containsKey("modelParam"));
+
+        // create instance
+        DocumentModel instance = createInstanceDoc(reportModel);
+        ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
+        assertNotNull(reportInstance);
+
+        assertNotNull(reportInstance.getModel());
+
+        reportInstance.setParameter("instanceParam", "fromInstance");
+        session.save();
+        params = reportInstance.getStoredParameters();
+        assertNotNull(params.get("instanceParam"));
+
+        // test rendering
+
+        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append("birt-test-report-doc-" + System.currentTimeMillis()).toString();
+        reportPath = dirPath;
+        File baseDir = new File(dirPath);
+        baseDir.mkdir();
+        File imagesDir = new File(dirPath+"/images");
+        imagesDir.mkdir();
+        File result = new File(dirPath + "/report");
+
+        OutputStream out = new FileOutputStream(result);
+
+        HTMLRenderOption options = new HTMLRenderOption();
+        options.setImageHandler(new HTMLServerImageHandler());
+        options.setOutputFormat(HTMLRenderOption.OUTPUT_FORMAT_HTML);
+        options.setOutputStream(out);
+        options.setBaseImageURL("images");
+        options.setImageDirectory(imagesDir.getAbsolutePath());
+
+        Map<String, Object> userParams = new HashMap<String, Object>();
+        userParams.put("userParam", "fromUser");
+        reportInstance.render(options, userParams);
+
+        String generatedHtml = FileUtils.readFile(result);
+
+        // model param
+        assertTrue(generatedHtml.contains("fromModel"));
+        // instance param
+        assertTrue(generatedHtml.contains("fromInstance"));
+        // user param
+        assertTrue(generatedHtml.contains("fromUser"));
+        // ctx param
+        assertTrue(generatedHtml.contains(ReportInstance.TYPE_NAME));
+
+        // query result
+        assertTrue(generatedHtml.contains(model.getId()));
+        assertTrue(generatedHtml.contains(instance.getId()));
+
+    }
+
+    public void testParams() throws Exception {
+
+        DocumentModel model = createModelDoc();
+        ReportModel reportModel = model.getAdapter(ReportModel.class);
+        assertNotNull(reportModel);
+
+        // create instance
+        DocumentModel instance = createInstanceDoc(reportModel);
+        ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
+        assertNotNull(reportInstance);
+
+        List<ReportParameter> allParams = reportInstance.getReportParameters();
+        assertEquals(4, allParams.size());
+
+        List<ReportParameter> userParams = reportInstance.getReportUserParameters();
+        assertEquals(3, userParams.size());
+
+        reportModel.setParameter("modelParam", "fromModel");
+        session.save();
+
+        userParams = reportInstance.getReportUserParameters();
+        assertEquals(2, userParams.size());
+
+        reportInstance.setParameter("instanceParam", "fromInstance");
+        session.save();
+
+        userParams = reportInstance.getReportUserParameters();
+        assertEquals(1, userParams.size());
+
+    }
+}

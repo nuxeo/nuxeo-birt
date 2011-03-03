@@ -10,7 +10,7 @@
     <c:set var="reportModel" value="#{reportAction.getReportModel(field_0)}" />
     <c:if test="#{reportModel != null }">
         <table>
-        <tr><td><h:outputText value="#{reportModel.reportName}"/></td></tr>
+        <tr><td><h:outputText value="#{report.doc.title}"/></td></tr>
         <tr><td><h:outputText value="#{reportModel.doc.dc.description}"/></td></tr>
         </table>
     </c:if>
@@ -23,7 +23,7 @@
       id="#{widget.id}">
       <nxu:selectItems var="report" value="#{reportModels}"
         itemValue="#{report.id}"
-        itemLabel="#{report.reportName}" />
+        itemLabel="#{report.doc.title}" />
     </h:selectOneMenu>
   </c:if>
   <h:message for="#{widget.id}" styleClass="errorMessage" />

@@ -37,8 +37,6 @@ import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
  */
 public interface ReportInstance {
 
-    public static final String TYPE_NAME="BirtReport";
-
     /**
      * Return the associated {@link ReportModel}
      *

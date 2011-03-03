@@ -29,6 +29,7 @@ import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 
 /**
@@ -50,7 +51,7 @@ public class ReportKeyListener implements EventListener {
 
             DocumentModel doc = docCtx.getSourceDocument();
 
-            if (doc.getType().equals(ReportInstance.TYPE_NAME)) {
+            if (doc.hasSchema(Constants.BIRT_REPORT_INSTANCE_SCHEMA)) {
 
                 ReportInstance reportInstance = doc.getAdapter(ReportInstance.class);
                 if (reportInstance!=null) {

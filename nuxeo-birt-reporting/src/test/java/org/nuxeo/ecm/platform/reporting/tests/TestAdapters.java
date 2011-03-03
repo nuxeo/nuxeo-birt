@@ -18,6 +18,8 @@
 
 package org.nuxeo.ecm.platform.reporting.tests;
 
+import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_INSTANCE_TYPE;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -154,7 +156,7 @@ public class TestAdapters extends SQLRepositoryTestCase {
         // user param
         assertTrue(generatedHtml.contains("fromUser"));
         // ctx param
-        assertTrue(generatedHtml.contains(ReportInstance.TYPE_NAME));
+        assertTrue(generatedHtml.contains(BIRT_REPORT_INSTANCE_TYPE));
 
         // query result
         assertTrue(generatedHtml.contains(model.getId()));

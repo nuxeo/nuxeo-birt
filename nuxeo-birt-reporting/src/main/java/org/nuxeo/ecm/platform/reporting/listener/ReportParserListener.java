@@ -18,6 +18,9 @@
 
 package org.nuxeo.ecm.platform.reporting.listener;
 
+import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_INSTANCE_SCHEMA;
+import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_MODEL_SCHEMA;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -26,6 +29,7 @@ import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 
@@ -48,7 +52,7 @@ public class ReportParserListener implements EventListener {
 
             DocumentModel doc = docCtx.getSourceDocument();
 
-            if (doc.getType().equals(ReportModel.TYPE_NAME)) {
+            if (doc.hasSchema(BIRT_REPORT_MODEL_SCHEMA)) {
                 ReportModel reportModel = doc.getAdapter(ReportModel.class);
                 if (reportModel!=null) {
                     try {
@@ -61,7 +65,7 @@ public class ReportParserListener implements EventListener {
                     }
                 }
             }
-            else if (doc.getType().equals(ReportInstance.TYPE_NAME)) {
+            else if (doc.hasSchema(BIRT_REPORT_INSTANCE_SCHEMA)) {
                 ReportInstance reportInstance = doc.getAdapter(ReportInstance.class);
                 if (reportInstance!=null) {
                     try {

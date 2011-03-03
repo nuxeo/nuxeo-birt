@@ -28,8 +28,6 @@ import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 
 public interface ReportModel {
 
-    public static final String TYPE_NAME="BirtReportModel";
-
     String getId();
 
     InputStream getReportFileAsStream() throws Exception;

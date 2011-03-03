@@ -18,6 +18,9 @@
 
 package org.nuxeo.ecm.platform.reporting.api;
 
+import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_INSTANCE_SCHEMA;
+import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_MODEL_SCHEMA;
+
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
 /**
@@ -41,13 +44,13 @@ public class AdapterFactory implements DocumentAdapterFactory {
         String adapterClassName =adapterClass.getSimpleName();
 
         if (adapterClassName.equals(ReportInstance.class.getSimpleName())) {
-            if (doc.getType().equals(ReportInstance.TYPE_NAME)) {
+            if (doc.hasSchema(BIRT_REPORT_INSTANCE_SCHEMA)) {
                 return new BirtReportInstance(doc);
             }
         }
 
         if (adapterClassName.equals(ReportModel.class.getSimpleName())) {
-            if (doc.getType().equals(ReportModel.TYPE_NAME)) {
+            if (doc.hasSchema(BIRT_REPORT_MODEL_SCHEMA)) {
                 return new BirtReportModel(doc);
             }
         }

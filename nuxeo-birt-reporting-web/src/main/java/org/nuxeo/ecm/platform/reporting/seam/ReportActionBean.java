@@ -51,16 +51,15 @@ public class ReportActionBean implements Serializable {
 
     protected static final Log log = LogFactory.getLog(ReportActionBean.class);
 
-    @In(create=true)
+    @In(create = true)
     protected transient CoreSession documentManager;
 
-    @Factory(value="reportModels", scope=ScopeType.EVENT, autoCreate=true)
+    @Factory(value = "reportModels", scope = ScopeType.EVENT, autoCreate = true)
     public List<ReportModel> getAvailableModels() {
         try {
             ReportService rs = Framework.getLocalService(ReportService.class);
             return rs.getReportAvailableModels(documentManager);
-        }
-        catch (ClientException e) {
+        } catch (ClientException e) {
             log.error("Error while getting reports models", e);
             return new ArrayList<ReportModel>();
         }
@@ -68,10 +67,10 @@ public class ReportActionBean implements Serializable {
 
     public ReportModel getReportModel(String uuid) {
         try {
-            DocumentModel reportModelDoc = documentManager.getDocument(new IdRef(uuid));
+            DocumentModel reportModelDoc = documentManager.getDocument(new IdRef(
+                    uuid));
             return reportModelDoc.getAdapter(ReportModel.class);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }

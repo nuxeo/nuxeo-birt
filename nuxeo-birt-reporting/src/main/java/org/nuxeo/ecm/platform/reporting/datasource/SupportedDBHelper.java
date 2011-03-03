@@ -25,10 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Helper class to find JDBC jar from the database type.
- * Since BIRT used ODA to wrap JDBC we must provide the JDBC JAR.
+ * Helper class to find JDBC jar from the database type. Since BIRT used ODA to
+ * wrap JDBC we must provide the JDBC JAR.
  *
- * This class directly finds the target Class in the server ClassLoader and extract the associated Jar.
+ * This class directly finds the target Class in the server ClassLoader and
+ * extract the associated Jar.
  *
  * @author Tiry (tdelprat@nuxeo.com)
  *
@@ -38,10 +39,11 @@ public class SupportedDBHelper {
     protected static Map<String, String> driverMapping;
 
     public static final String H2 = "h2";
+
     public static final String PGSQL = "postgresql";
 
     public static Map<String, String> getMapping() {
-        if (driverMapping==null) {
+        if (driverMapping == null) {
             driverMapping = new HashMap<String, String>();
             driverMapping.put(H2, "org.h2.Driver");
             driverMapping.put(PGSQL, "org.postgresql.Driver");
@@ -61,7 +63,7 @@ public class SupportedDBHelper {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         URL url = cl.getResource(className);
 
-        if (url==null) {
+        if (url == null) {
             return null;
         }
         return url.getFile().split("!")[0].replace("file:", "");
@@ -71,10 +73,10 @@ public class SupportedDBHelper {
 
         List<String> jars = new ArrayList<String>();
         for (String name : getMapping().keySet()) {
-          String jar = getDriverJar(name);
-          if (jar!=null) {
-              jars.add(jar);
-          }
+            String jar = getDriverJar(name);
+            if (jar != null) {
+                jars.add(jar);
+            }
         }
         return jars;
     }

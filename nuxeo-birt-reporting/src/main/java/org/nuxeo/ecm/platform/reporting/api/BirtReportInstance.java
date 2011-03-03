@@ -37,8 +37,8 @@ import org.nuxeo.ecm.platform.reporting.report.ReportHelper;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 
 /**
- * This is the implementation of the {@link ReportInstance} adapter.
- * Holds most of the rendering logic.
+ * This is the implementation of the {@link ReportInstance} adapter. Holds most
+ * of the rendering logic.
  *
  * @author Tiry (tdelprat@nuxeo.com)
  *
@@ -46,9 +46,9 @@ import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 public class BirtReportInstance extends BaseBirtReportAdapter implements
         ReportInstance {
 
-    protected static final String PREFIX="birt";
+    protected static final String PREFIX = "birt";
 
-    public BirtReportInstance(DocumentModel doc)  {
+    public BirtReportInstance(DocumentModel doc) {
         super(doc);
     }
 
@@ -74,12 +74,13 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
 
         Map<String, String> params = new HashMap<String, String>();
 
-        List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(PREFIX + ":parameters");
-        if (localParams!=null) {
+        List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(PREFIX
+                + ":parameters");
+        if (localParams != null) {
             for (Map<String, Serializable> localParam : localParams) {
-                String name = (String)localParam.get("pName");
-                String value = (String)localParam.get("pValue");
-                if (value!=null) {
+                String name = (String) localParam.get("pName");
+                String value = (String) localParam.get("pValue");
+                if (value != null) {
                     params.put(name, value);
                 }
             }
@@ -95,12 +96,12 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
 
         for (ReportParameter param : params) {
             String value = modelParams.get(param.getName());
-            if (value!=null && !value.isEmpty()) {
+            if (value != null && !value.isEmpty()) {
                 param.setValue(value);
                 param.setEditable(false);
             }
             value = localParams.get(param.getName());
-            if (value!=null && !value.isEmpty()) {
+            if (value != null && !value.isEmpty()) {
                 param.setValue(value);
             }
         }
@@ -111,11 +112,11 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
         List<ReportParameter> params = getReportParameters();
         ReportContext.setContextualParameters(params, doc);
 
-
         List<ReportParameter> userParams = new ArrayList<ReportParameter>();
 
         for (ReportParameter param : params) {
-            if (param.getStringValue()==null || param.getStringValue().isEmpty()) {
+            if (param.getStringValue() == null
+                    || param.getStringValue().isEmpty()) {
                 userParams.add(param);
             }
         }
@@ -128,8 +129,9 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
             // get model params
             List<ReportParameter> params = getModel().getReportParameters();
             // remove all stored params
-            List<Map<String, Serializable>> localParams = new ArrayList<Map<String,Serializable>>();
-            doc.setPropertyValue(getPrefix() + ":parameters", (Serializable)localParams);
+            List<Map<String, Serializable>> localParams = new ArrayList<Map<String, Serializable>>();
+            doc.setPropertyValue(getPrefix() + ":parameters",
+                    (Serializable) localParams);
             // init params
             for (ReportParameter param : params) {
                 setParameter(param.getName(), null, false);
@@ -138,11 +140,13 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
     }
 
     @SuppressWarnings("unchecked")
-    public void render(IRenderOption options, Map<String, Object> userParameters) throws Exception {
+    public void render(IRenderOption options, Map<String, Object> userParameters)
+            throws Exception {
 
         InputStream report = getModel().getReportFileAsStream();
 
-        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(report, doc.getRepositoryName());
+        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(report,
+                doc.getRepositoryName());
 
         // get Stored params
         List<ReportParameter> params = getReportParameters();
@@ -162,7 +166,8 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
             birtParams.put(param.getName(), param.getObjectValue());
         }
 
-        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(nuxeoReport);
+        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
+                nuxeoReport);
 
         task.setParameterValues(birtParams);
         task.setRenderOption(options);
@@ -176,8 +181,7 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
 
         try {
             return (String) doc.getPropertyValue(PREFIX + ":reportKey");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }

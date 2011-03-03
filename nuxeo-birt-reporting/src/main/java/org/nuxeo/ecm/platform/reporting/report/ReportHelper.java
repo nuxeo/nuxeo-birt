@@ -56,25 +56,29 @@ public class ReportHelper {
 
     protected static final Log log = LogFactory.getLog(ReportHelper.class);
 
-    public static IReportRunnable getReport(String reportPath) throws EngineException {
+    public static IReportRunnable getReport(String reportPath)
+            throws EngineException {
         return BirtEngine.getBirtEngine().openReportDesign(reportPath);
     }
 
-    public static IReportRunnable getReport(InputStream stream) throws EngineException {
+    public static IReportRunnable getReport(InputStream stream)
+            throws EngineException {
         return BirtEngine.getBirtEngine().openReportDesign(stream);
     }
 
-    public static IReportRunnable getNuxeoReport(InputStream stream) throws Exception {
+    public static IReportRunnable getNuxeoReport(InputStream stream)
+            throws Exception {
         return getNuxeoReport(stream, null);
     }
 
-    public static Map<String, String> getReportMetaData(InputStream stream) throws Exception {
+    public static Map<String, String> getReportMetaData(InputStream stream)
+            throws Exception {
 
         Map<String, String> meta = new HashMap<String, String>();
 
-        IDesignEngine dEngine =  BirtEngine.getBirtDesignEngine();
+        IDesignEngine dEngine = BirtEngine.getBirtDesignEngine();
         SessionHandle sh = dEngine.newSessionHandle(ULocale.ENGLISH);
-        ReportDesignHandle designHandle = sh.openDesign( (String) null, stream);
+        ReportDesignHandle designHandle = sh.openDesign((String) null, stream);
 
         meta.put("title", designHandle.getTitle());
         meta.put("author", designHandle.getAuthor());
@@ -85,19 +89,21 @@ public class ReportHelper {
         return meta;
     }
 
-    public static IReportRunnable getNuxeoReport(InputStream stream,String repositoryName) throws Exception {
+    public static IReportRunnable getNuxeoReport(InputStream stream,
+            String repositoryName) throws Exception {
 
-        IDesignEngine dEngine =  BirtEngine.getBirtDesignEngine();
+        IDesignEngine dEngine = BirtEngine.getBirtDesignEngine();
         SessionHandle sh = dEngine.newSessionHandle(ULocale.ENGLISH);
-        ReportDesignHandle designHandle = sh.openDesign( (String) null, stream);
+        ReportDesignHandle designHandle = sh.openDesign((String) null, stream);
 
         for (Iterator i = designHandle.getDataSources().iterator(); i.hasNext();) {
 
             OdaDataSourceHandle dsh = (OdaDataSourceHandle) i.next();
 
-            NuxeoDSConfig newConfig = DSHelper.getReplacementDS(dsh.getName(), repositoryName);
+            NuxeoDSConfig newConfig = DSHelper.getReplacementDS(dsh.getName(),
+                    repositoryName);
 
-            if (newConfig!=null) {
+            if (newConfig != null) {
 
                 OdaDataSource ds = (OdaDataSource) dsh.getElement();
 
@@ -106,22 +112,22 @@ public class ReportHelper {
                 List<IElementPropertyDefn> propNames = ds.getPropertyDefns();
                 for (IElementPropertyDefn propName : propNames) {
                     ElementPropertyDefn prop = ds.getPropertyDefn(propName.getName());
-                    //Object propValue = ds.getProperty(designHandle.getModule(), prop);
-                    //System.out.println(propName.getName() + ":" + propValue);
+                    // Object propValue =
+                    // ds.getProperty(designHandle.getModule(), prop);
+                    // System.out.println(propName.getName() + ":" + propValue);
 
                     if (propName.getName().equals("odaDriverClass")) {
-                        log.debug(" ->changing odaDriverClass to " + newConfig.getDriverClass());
+                        log.debug(" ->changing odaDriverClass to "
+                                + newConfig.getDriverClass());
                         ds.setProperty(prop, newConfig.getDriverClass());
-                    }
-                    else if (propName.getName().equals("odaURL")) {
-                        log.debug(" ->changing odaURL to " +newConfig.getUrl());
+                    } else if (propName.getName().equals("odaURL")) {
+                        log.debug(" ->changing odaURL to " + newConfig.getUrl());
                         ds.setProperty(prop, newConfig.getUrl());
-                    }
-                    else if (propName.getName().equals("odaUser")) {
-                        log.debug(" ->changing odaUser to " + newConfig.getUserName());
+                    } else if (propName.getName().equals("odaUser")) {
+                        log.debug(" ->changing odaUser to "
+                                + newConfig.getUserName());
                         ds.setProperty(prop, newConfig.getUserName());
-                    }
-                    else if (propName.getName().equals("odaPassword")) {
+                    } else if (propName.getName().equals("odaPassword")) {
                         if (prop.isEncryptable()) {
                             String b64pwd = Base64.encodeBytes(newConfig.getPassword().getBytes());
                             ds.setProperty(prop, b64pwd);
@@ -133,7 +139,8 @@ public class ReportHelper {
             }
         }
 
-        IReportRunnable modifiedReport = BirtEngine.getBirtEngine().openReportDesign(designHandle);
+        IReportRunnable modifiedReport = BirtEngine.getBirtEngine().openReportDesign(
+                designHandle);
 
         // Can we really ?
         sh.closeAll(false);
@@ -141,12 +148,14 @@ public class ReportHelper {
         return modifiedReport;
     }
 
-    public static List<IParameterDefn> getReportParameter(IReportRunnable report) throws EngineException {
+    public static List<IParameterDefn> getReportParameter(IReportRunnable report)
+            throws EngineException {
 
         List<IParameterDefn> params = new ArrayList<IParameterDefn>();
-        IGetParameterDefinitionTask task = BirtEngine.getBirtEngine().createGetParameterDefinitionTask( report );
-        Collection paramDefns = task.getParameterDefns( false );
-        Iterator iter = paramDefns.iterator( );
+        IGetParameterDefinitionTask task = BirtEngine.getBirtEngine().createGetParameterDefinitionTask(
+                report);
+        Collection paramDefns = task.getParameterDefns(false);
+        Iterator iter = paramDefns.iterator();
         while (iter.hasNext()) {
             Object p = iter.next();
             if (p instanceof IParameterDefn) {

@@ -55,18 +55,20 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
-    public List<ReportInstance> getReportInstanceByModelName(CoreSession session, String reportModelName) throws ClientException  {
+    public List<ReportInstance> getReportInstanceByModelName(
+            CoreSession session, String reportModelName) throws ClientException {
 
         String uuid = getReportModelByName(session, reportModelName).getId();
 
-        String query = "select * from BirtReport where birt:modelRef='" + uuid + "'";
+        String query = "select * from BirtReport where birt:modelRef='" + uuid
+                + "'";
 
         DocumentModelList reports = session.query(query);
 
         List<ReportInstance> result = new ArrayList<ReportInstance>();
         for (DocumentModel doc : reports) {
             ReportInstance report = doc.getAdapter(ReportInstance.class);
-            if (report!=null) {
+            if (report != null) {
                 result.add(report);
             }
         }
@@ -75,28 +77,31 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
-    public ReportInstance getReportInstanceByKey(CoreSession session, String key) throws ClientException {
+    public ReportInstance getReportInstanceByKey(CoreSession session, String key)
+            throws ClientException {
 
-        String query = "select * from BirtReport where birt:reportKey='" + key + "'";
+        String query = "select * from BirtReport where birt:reportKey='" + key
+                + "'";
 
         DocumentModelList reports = session.query(query);
 
-        if (reports.size()==0) {
+        if (reports.size() == 0) {
             return null;
         }
 
         return reports.get(0).getAdapter(ReportInstance.class);
     }
 
-
     @Override
-    public ReportModel getReportModelByName(CoreSession session,String reportModelName) throws ClientException {
+    public ReportModel getReportModelByName(CoreSession session,
+            String reportModelName) throws ClientException {
 
-        String query = "select * from BirtReportModel where birtmodel:reportName='" + reportModelName + "'";
+        String query = "select * from BirtReportModel where birtmodel:reportName='"
+                + reportModelName + "'";
 
         DocumentModelList reports = session.query(query);
 
-        if (reports.size()==0) {
+        if (reports.size() == 0) {
             return null;
         }
 
@@ -104,8 +109,8 @@ public class ReportComponent extends DefaultComponent implements ReportService {
 
     }
 
-
-    public List<ReportModel> getReportAvailableModels(CoreSession session) throws ClientException {
+    public List<ReportModel> getReportAvailableModels(CoreSession session)
+            throws ClientException {
 
         String query = "select * from BirtReportModel";
 
@@ -114,7 +119,7 @@ public class ReportComponent extends DefaultComponent implements ReportService {
         List<ReportModel> result = new ArrayList<ReportModel>();
         for (DocumentModel doc : reports) {
             ReportModel report = doc.getAdapter(ReportModel.class);
-            if (report!=null) {
+            if (report != null) {
                 result.add(report);
             }
         }

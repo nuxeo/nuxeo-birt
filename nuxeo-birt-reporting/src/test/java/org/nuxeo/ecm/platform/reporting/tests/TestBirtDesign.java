@@ -38,7 +38,9 @@ import org.nuxeo.ecm.platform.reporting.report.ReportHelper;
 public class TestBirtDesign extends SQLRepositoryTestCase {
 
     String reportPath = null;
+
     DocumentModel folder1 = null;
+
     DocumentModel file1 = null;
 
     @Override
@@ -46,12 +48,12 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
         super.setUp();
         openSession();
 
-        folder1 = session.createDocumentModel("/","folder1", "Folder");
-        folder1.setProperty("dublincore","title", "My Super Folder");
+        folder1 = session.createDocumentModel("/", "folder1", "Folder");
+        folder1.setProperty("dublincore", "title", "My Super Folder");
         folder1 = session.createDocument(folder1);
 
-        file1 = session.createDocumentModel("/","file1", "File");
-        file1.setProperty("dublincore","title", "My Super File");
+        file1 = session.createDocumentModel("/", "file1", "File");
+        file1.setProperty("dublincore", "title", "My Super File");
         file1 = session.createDocument(file1);
 
         session.save();
@@ -61,9 +63,9 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
-        if(reportPath!=null) {
+        if (reportPath != null) {
             FileUtils.deleteTree(new File(reportPath));
-            reportPath=null;
+            reportPath = null;
         }
     }
 
@@ -71,15 +73,18 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
 
         File report = FileUtils.getResourceFileFromContext("reports/testNX2.rptdesign");
 
-        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(new FileInputStream(report));
+        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(new FileInputStream(
+                report));
 
-        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(nuxeoReport);
+        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
+                nuxeoReport);
 
-        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append("birt-test-report-modified" + System.currentTimeMillis()).toString();
+        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
+                "birt-test-report-modified" + System.currentTimeMillis()).toString();
         File baseDir = new File(dirPath);
         baseDir.mkdir();
 
-        File imagesDir = new File(dirPath+"/images");
+        File imagesDir = new File(dirPath + "/images");
         imagesDir.mkdir();
 
         File result = new File(dirPath + "/report");
@@ -107,20 +112,22 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
 
     }
 
-
     public void testNuxeoReportWithParams() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/simpleVCSReport.rptdesign");
 
-        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(new FileInputStream(report));
+        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(new FileInputStream(
+                report));
 
-        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(nuxeoReport);
+        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
+                nuxeoReport);
 
-        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append("birt-test-report-modified" + System.currentTimeMillis()).toString();
+        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
+                "birt-test-report-modified" + System.currentTimeMillis()).toString();
         File baseDir = new File(dirPath);
         baseDir.mkdir();
 
-        File imagesDir = new File(dirPath+"/images");
+        File imagesDir = new File(dirPath + "/images");
         imagesDir.mkdir();
 
         File result = new File(dirPath + "/report");
@@ -133,7 +140,6 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
         options.setOutputStream(out);
         options.setBaseImageURL("images");
         options.setImageDirectory(imagesDir.getAbsolutePath());
-
 
         HashMap inputValues = new HashMap();
         inputValues.put("docType", "Folder");

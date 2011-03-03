@@ -39,8 +39,8 @@ public abstract class BaseBirtReportAdapter {
 
     protected DocumentModel doc;
 
-    public BaseBirtReportAdapter (DocumentModel doc) {
-        this.doc=doc;
+    public BaseBirtReportAdapter(DocumentModel doc) {
+        this.doc = doc;
     }
 
     protected CoreSession getSession() {
@@ -49,13 +49,15 @@ public abstract class BaseBirtReportAdapter {
 
     protected abstract String getPrefix();
 
-    public abstract List<ReportParameter> getReportParameters() throws Exception;
+    public abstract List<ReportParameter> getReportParameters()
+            throws Exception;
 
     public void setParameter(ReportParameter param) throws Exception {
-            setParameter(param, true);
+        setParameter(param, true);
     }
 
-    public void setParameter(ReportParameter param, boolean save) throws Exception {
+    public void setParameter(ReportParameter param, boolean save)
+            throws Exception {
         setParameter(param.getName(), param.getStringValue(), save);
     }
 
@@ -64,7 +66,8 @@ public abstract class BaseBirtReportAdapter {
     }
 
     @SuppressWarnings("unchecked")
-    public void setParameter(String name, Object value, boolean save) throws Exception {
+    public void setParameter(String name, Object value, boolean save)
+            throws Exception {
 
         List<ReportParameter> reportParams = getReportParameters();
         ReportParameter targetParameter = null;
@@ -75,7 +78,7 @@ public abstract class BaseBirtReportAdapter {
             }
         }
 
-        if (targetParameter==null) {
+        if (targetParameter == null) {
             // parameter does not exist !
             return;
         }
@@ -83,19 +86,20 @@ public abstract class BaseBirtReportAdapter {
         targetParameter.setObjectValue(value);
         String stringValue = targetParameter.getStringValue();
 
-        List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(getPrefix() + ":parameters");
-        if (localParams==null) {
-            localParams = new ArrayList<Map<String,Serializable>>();
+        List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(getPrefix()
+                + ":parameters");
+        if (localParams == null) {
+            localParams = new ArrayList<Map<String, Serializable>>();
         }
 
         boolean addParam = true;
 
         for (Map<String, Serializable> localParam : localParams) {
-            String pName = (String)localParam.get("pName");
-            //String pValue = (String)localParam.get("pValue");
+            String pName = (String) localParam.get("pName");
+            // String pValue = (String)localParam.get("pValue");
             if (name.equals(pName)) {
                 localParam.put("pValue", stringValue);
-                addParam=false;
+                addParam = false;
                 break;
             }
         }
@@ -107,7 +111,8 @@ public abstract class BaseBirtReportAdapter {
             localParams.add(newEntry);
         }
 
-        doc.setPropertyValue(getPrefix() + ":parameters", (Serializable) localParams);
+        doc.setPropertyValue(getPrefix() + ":parameters",
+                (Serializable) localParams);
         if (save) {
             doc = getSession().saveDocument(doc);
         }
@@ -118,4 +123,3 @@ public abstract class BaseBirtReportAdapter {
     }
 
 }
-

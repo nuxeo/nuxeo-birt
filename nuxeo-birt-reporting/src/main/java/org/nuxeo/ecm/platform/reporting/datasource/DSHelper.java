@@ -32,7 +32,8 @@ import org.nuxeo.ecm.core.storage.sql.ra.ManagedConnectionFactoryImpl;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Helper class used to extract JDBC DB settings from the Live SQLRepository configuration
+ * Helper class used to extract JDBC DB settings from the Live SQLRepository
+ * configuration
  *
  * @author Tiry (tdelprat@nuxeo.com)
  *
@@ -43,15 +44,15 @@ public class DSHelper {
 
     public static Map<String, NuxeoDSConfig> getDSForRepos() throws Exception {
 
-        if (detectedDS==null) {
+        if (detectedDS == null) {
             Map<String, NuxeoDSConfig> configs = new HashMap<String, NuxeoDSConfig>();
 
             RepositoryManager rm = Framework.getLocalService(RepositoryManager.class);
-            for (Repository repo :  rm.getRepositories()) {
+            for (Repository repo : rm.getRepositories()) {
 
                 Object repoImpl = RepositoryResolver.getRepository(repo.getName());
 
-                RepositoryDescriptor desc =null;
+                RepositoryDescriptor desc = null;
 
                 if (repoImpl instanceof RepositoryImpl) {
                     RepositoryImpl sqlRepo = (RepositoryImpl) repoImpl;
@@ -63,38 +64,40 @@ public class DSHelper {
                     Field field = mcf.getClass().getDeclaredField("repository");
                     field.setAccessible(true);
                     RepositoryImpl sqlRepositoryImpl = (RepositoryImpl) field.get(mcf);
-                    desc= sqlRepositoryImpl.getRepositoryDescriptor();
+                    desc = sqlRepositoryImpl.getRepositoryDescriptor();
                 }
 
-                NuxeoDSConfig config = new NuxeoDSConfig(desc.xaDataSourceName, desc.properties);
+                NuxeoDSConfig config = new NuxeoDSConfig(desc.xaDataSourceName,
+                        desc.properties);
 
                 configs.put(repo.getName(), config);
             }
 
-
-            detectedDS =  configs;
+            detectedDS = configs;
         }
         return detectedDS;
     }
 
-    public static NuxeoDSConfig getDefaultRepoDS(String repositoryName) throws Exception {
+    public static NuxeoDSConfig getDefaultRepoDS(String repositoryName)
+            throws Exception {
 
         Map<String, NuxeoDSConfig> configs = getDSForRepos();
 
-        if (configs.size()==0) {
+        if (configs.size() == 0) {
             return null;
         }
-        if (configs.size()==1) {
+        if (configs.size() == 1) {
             return configs.get(configs.keySet().iterator().next());
         }
 
-        if (repositoryName==null) {
-            repositoryName="default";
+        if (repositoryName == null) {
+            repositoryName = "default";
         }
         return configs.get(repositoryName);
     }
 
-    public static NuxeoDSConfig getReplacementDS(String birtDSName, String repositoryName) throws Exception {
+    public static NuxeoDSConfig getReplacementDS(String birtDSName,
+            String repositoryName) throws Exception {
 
         String name = birtDSName.toLowerCase();
 

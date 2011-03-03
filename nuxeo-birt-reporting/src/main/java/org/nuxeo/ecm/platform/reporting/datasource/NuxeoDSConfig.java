@@ -39,24 +39,27 @@ public class NuxeoDSConfig {
     protected String password;
 
     public static final String H2_PREFIX = "org.h2";
+
     public static final String PG_PREFIX = "org.postgresql";
 
     public NuxeoDSConfig(String dataSourceName, Map<String, String> properties) {
         if (dataSourceName.startsWith(H2_PREFIX)) {
-            userName = getProp(properties,"User");
-            password = getProp(properties,"Password");
-            url = getProp(properties,"URL");
-            driverClass=SupportedDBHelper.getDriver(SupportedDBHelper.H2);
-        } else  if (dataSourceName.startsWith(PG_PREFIX)) {
-            userName = getProp(properties,"User");
-            password = getProp(properties,"Password");
-            url = "jdbc:postgresql://" + getProp(properties, "ServerName") + ":" + getProp(properties, "PortNumber") + "/" +  getProp(properties, "DatabaseName");
-            driverClass=SupportedDBHelper.getDriver(SupportedDBHelper.PGSQL);
+            userName = getProp(properties, "User");
+            password = getProp(properties, "Password");
+            url = getProp(properties, "URL");
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.H2);
+        } else if (dataSourceName.startsWith(PG_PREFIX)) {
+            userName = getProp(properties, "User");
+            password = getProp(properties, "Password");
+            url = "jdbc:postgresql://" + getProp(properties, "ServerName")
+                    + ":" + getProp(properties, "PortNumber") + "/"
+                    + getProp(properties, "DatabaseName");
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.PGSQL);
         }
     }
 
     protected String getProp(Map<String, String> properties, String name) {
-        String value=Framework.expandVars(properties.get(name));
+        String value = Framework.expandVars(properties.get(name));
         return value;
     }
 
@@ -64,16 +67,13 @@ public class NuxeoDSConfig {
         return driverClass;
     }
 
-
     public String getUrl() {
         return url;
     }
 
-
     public String getUserName() {
         return userName;
     }
-
 
     public String getPassword() {
         return password;

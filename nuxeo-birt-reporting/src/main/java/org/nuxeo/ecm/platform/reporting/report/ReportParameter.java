@@ -34,11 +34,14 @@ import org.eclipse.birt.report.engine.api.impl.ScalarParameterDefn;
  */
 public class ReportParameter {
 
-    public static final SimpleDateFormat DATETIME_FORMAT=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss.SSS");
 
-    public static final SimpleDateFormat DATE_FORMAT=new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+            "yyyy-MM-dd");
 
-    public static final SimpleDateFormat TIME_FORMAT=new SimpleDateFormat("hh:mm:ss");
+    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
+            "hh:mm:ss");
 
     protected int type;
 
@@ -52,20 +55,20 @@ public class ReportParameter {
 
     protected boolean required;
 
-    protected boolean editable=true;
+    protected boolean editable = true;
 
     public ReportParameter(IParameterDefn paramDef) {
-        this(paramDef,null);
+        this(paramDef, null);
     }
 
     public ReportParameter(IParameterDefn paramDef, String value) {
 
-        type=paramDef.getDataType();
-        name=paramDef.getName();
-        displayName=paramDef.getDisplayName();
+        type = paramDef.getDataType();
+        name = paramDef.getName();
+        displayName = paramDef.getDisplayName();
         help = paramDef.getHelpText();
         required = paramDef.isRequired();
-        if (value!=null && value.isEmpty()) {
+        if (value != null && value.isEmpty()) {
             stringValue = value;
         } else {
             if (paramDef instanceof ScalarParameterDefn) {
@@ -85,31 +88,29 @@ public class ReportParameter {
     }
 
     public void setValue(Date value) {
-        if (type==IParameterDefn.TYPE_DATE) {
+        if (type == IParameterDefn.TYPE_DATE) {
             stringValue = DATE_FORMAT.format(value);
-        }
-        else if (type==IParameterDefn.TYPE_DATE_TIME) {
+        } else if (type == IParameterDefn.TYPE_DATE_TIME) {
             stringValue = DATETIME_FORMAT.format(value);
-        }
-        else if (type==IParameterDefn.TYPE_TIME) {
+        } else if (type == IParameterDefn.TYPE_TIME) {
             stringValue = TIME_FORMAT.format(value);
         }
     }
 
     public void setValue(Integer value) {
-        if (type==IParameterDefn.TYPE_INTEGER) {
+        if (type == IParameterDefn.TYPE_INTEGER) {
             stringValue = value.toString();
         }
     }
 
     public void setValue(Float value) {
-        if (type==IParameterDefn.TYPE_FLOAT) {
+        if (type == IParameterDefn.TYPE_FLOAT) {
             stringValue = value.toString();
         }
     }
 
     public void setValue(Boolean value) {
-        if (type==IParameterDefn.TYPE_BOOLEAN) {
+        if (type == IParameterDefn.TYPE_BOOLEAN) {
             stringValue = value.toString();
         }
     }
@@ -120,17 +121,14 @@ public class ReportParameter {
 
     public Date getDateTimeValue() {
         try {
-            if (type==IParameterDefn.TYPE_DATE) {
+            if (type == IParameterDefn.TYPE_DATE) {
                 return DATE_FORMAT.parse(stringValue);
-            }
-            else if (type==IParameterDefn.TYPE_DATE_TIME) {
+            } else if (type == IParameterDefn.TYPE_DATE_TIME) {
                 return DATETIME_FORMAT.parse(stringValue);
-            }
-            else if (type==IParameterDefn.TYPE_TIME) {
+            } else if (type == IParameterDefn.TYPE_TIME) {
                 return TIME_FORMAT.parse(stringValue);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
         }
         return null;
     }
@@ -156,7 +154,7 @@ public class ReportParameter {
     }
 
     public String getDisplayName() {
-        if (displayName==null || displayName.isEmpty()) {
+        if (displayName == null || displayName.isEmpty()) {
             return name;
         }
         return displayName;
@@ -172,25 +170,19 @@ public class ReportParameter {
 
     public Object getObjectValue() {
 
-        if (type==IParameterDefn.TYPE_DATE) {
+        if (type == IParameterDefn.TYPE_DATE) {
             return getDateTimeValue();
-        }
-        else if (type==IParameterDefn.TYPE_DATE_TIME) {
+        } else if (type == IParameterDefn.TYPE_DATE_TIME) {
             return getDateTimeValue();
-        }
-        else if (type==IParameterDefn.TYPE_TIME) {
+        } else if (type == IParameterDefn.TYPE_TIME) {
             return getDateTimeValue();
-        }
-        else if (type==IParameterDefn.TYPE_BOOLEAN) {
+        } else if (type == IParameterDefn.TYPE_BOOLEAN) {
             return getBooleanValue();
-        }
-        else if (type==IParameterDefn.TYPE_INTEGER) {
+        } else if (type == IParameterDefn.TYPE_INTEGER) {
             return getIntegerValue();
-        }
-        else if (type==IParameterDefn.TYPE_FLOAT) {
+        } else if (type == IParameterDefn.TYPE_FLOAT) {
             return getFloatValue();
-        }
-        else if (type==IParameterDefn.TYPE_DECIMAL) {
+        } else if (type == IParameterDefn.TYPE_DECIMAL) {
             return getFloatValue();
         }
         return stringValue;
@@ -200,24 +192,19 @@ public class ReportParameter {
 
         if (value instanceof Calendar) {
             setValue((Calendar) value);
-        }
-        else if (value instanceof Date) {
+        } else if (value instanceof Date) {
             setValue((Date) value);
-        }
-        else if (value instanceof Boolean) {
+        } else if (value instanceof Boolean) {
             setValue((Boolean) value);
-        }
-        else if (value instanceof Integer) {
+        } else if (value instanceof Integer) {
             setValue((Integer) value);
-        }
-        else if (value instanceof Float) {
+        } else if (value instanceof Float) {
             setValue((Float) value);
         } else {
-            if (value!=null) {
+            if (value != null) {
                 setValue(value.toString());
-            }
-            else {
-                setValue((String)null);
+            } else {
+                setValue((String) null);
             }
         }
     }

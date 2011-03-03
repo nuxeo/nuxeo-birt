@@ -30,7 +30,8 @@ import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
  *
  * Represents a report instance that is bound to a model.
  *
- * This interface holds the main methods for managing report parameter and running the rendering.
+ * This interface holds the main methods for managing report parameter and
+ * running the rendering.
  *
  * @author Tiry (tdelprat@nuxeo.com)
  *
@@ -45,7 +46,6 @@ public interface ReportInstance {
      */
     ReportModel getModel() throws ClientException;
 
-
     /**
      * Get report parameters that can be entered by the user.
      *
@@ -57,7 +57,8 @@ public interface ReportInstance {
     List<ReportParameter> getReportUserParameters() throws Exception;
 
     /**
-     * Get All reports parameters : merging model parameters with instance parameters
+     * Get All reports parameters : merging model parameters with instance
+     * parameters
      *
      * @return
      * @throws Exception
@@ -71,7 +72,6 @@ public interface ReportInstance {
      * @throws ClientException
      */
     Map<String, String> getStoredParameters() throws ClientException;
-
 
     /**
      * Sets a parameter
@@ -97,10 +97,12 @@ public interface ReportInstance {
      * @param parameters
      * @throws Exception
      */
-    void render(IRenderOption options, Map<String, Object> parameters) throws Exception;
+    void render(IRenderOption options, Map<String, Object> parameters)
+            throws Exception;
 
     /**
      * Gives access to the underlying {@link DocumentModel}
+     *
      * @return
      */
     DocumentModel getDoc();

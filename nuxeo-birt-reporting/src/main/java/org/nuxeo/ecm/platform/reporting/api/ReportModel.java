@@ -40,7 +40,7 @@ public interface ReportModel {
 
     void setParameter(String name, Object value) throws Exception;
 
-    String getReportName() throws ClientException ;
+    String getReportName() throws ClientException;
 
     void parseParametersDefinition() throws Exception;
 

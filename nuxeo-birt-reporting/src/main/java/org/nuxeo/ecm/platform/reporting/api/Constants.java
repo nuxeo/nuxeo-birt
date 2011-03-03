@@ -31,6 +31,6 @@ public class Constants {
 
     public static final String BIRT_REPORT_MODEL_SCHEMA = "birtreportmodel";
 
-    public static final String BIRT_REPORT_INSTANCE_SCHEMA= "birtreport";
+    public static final String BIRT_REPORT_INSTANCE_SCHEMA = "birtreport";
 
 }

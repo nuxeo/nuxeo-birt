@@ -36,7 +36,8 @@ import org.eclipse.birt.report.model.api.IDesignEngineFactory;
 import org.nuxeo.common.utils.FileUtils;
 
 /**
- * This is a Singleton used to trigger BIRT deployment and get access to the Reporting and Design engine
+ * This is a Singleton used to trigger BIRT deployment and get access to the
+ * Reporting and Design engine
  *
  * @author Tiry (tdelprat@nuxeo.com)
  *
@@ -81,7 +82,8 @@ public class BirtEngine {
                     level = Level.OFF;
                 }
 
-                config.setLogConfig(configProps.getProperty("logDirectory"),level);
+                config.setLogConfig(configProps.getProperty("logDirectory"),
+                        level);
             }
 
             config.setEngineHome("");
@@ -96,8 +98,7 @@ public class BirtEngine {
                 e.printStackTrace();
             }
 
-            IReportEngineFactory factory = (IReportEngineFactory) Platform
-                    .createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
+            IReportEngineFactory factory = (IReportEngineFactory) Platform.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
             birtEngine = factory.createReportEngine(config);
 
             DesignConfig dconfig = new DesignConfig();
@@ -119,14 +120,14 @@ public class BirtEngine {
             return;
         }
         String deployPath = null;
-        if (contextDeployer!=null) {
+        if (contextDeployer != null) {
             deployPath = contextDeployer.getPlatform();
         }
         birtEngine.shutdown();
         Platform.shutdown();
         birtEngine = null;
 
-        if (deployPath!=null) {
+        if (deployPath != null) {
             FileUtils.deleteTree(new File(deployPath));
         }
     }
@@ -141,7 +142,7 @@ public class BirtEngine {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             InputStream in = null;
             in = cl.getResourceAsStream(configFile);
-            if (in!=null) {
+            if (in != null) {
                 configProps.load(in);
                 in.close();
             }

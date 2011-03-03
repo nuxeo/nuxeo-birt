@@ -52,20 +52,22 @@ public class TestAdapters extends SQLRepositoryTestCase {
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
-        if(reportPath!=null) {
+        if (reportPath != null) {
             FileUtils.deleteTree(new File(reportPath));
-            reportPath=null;
+            reportPath = null;
         }
     }
+
     protected DocumentModel createModelDoc() throws Exception {
 
-        DocumentModel model = session.createDocumentModel("/", "model", "BirtReportModel");
+        DocumentModel model = session.createDocumentModel("/", "model",
+                "BirtReportModel");
 
         File report = FileUtils.getResourceFileFromContext("reports/VCSReportWithParams.rptdesign");
 
         model.setPropertyValue("dc:title", "My model");
-        model.setPropertyValue("birtmodel:reportName", "VCSReportWithParams" );
-        model.setPropertyValue("file:content", new FileBlob(report) );
+        model.setPropertyValue("birtmodel:reportName", "VCSReportWithParams");
+        model.setPropertyValue("file:content", new FileBlob(report));
 
         model = session.createDocument(model);
         session.save();
@@ -73,12 +75,14 @@ public class TestAdapters extends SQLRepositoryTestCase {
         return model;
     }
 
-    protected DocumentModel createInstanceDoc(ReportModel model) throws Exception {
+    protected DocumentModel createInstanceDoc(ReportModel model)
+            throws Exception {
 
-        DocumentModel instance = session.createDocumentModel("/", "instance", "BirtReport");
+        DocumentModel instance = session.createDocumentModel("/", "instance",
+                "BirtReport");
 
         instance.setPropertyValue("dc:title", "My instance");
-        instance.setPropertyValue("birt:modelRef", model.getId() );
+        instance.setPropertyValue("birt:modelRef", model.getId());
 
         instance = session.createDocument(instance);
         session.save();
@@ -93,10 +97,10 @@ public class TestAdapters extends SQLRepositoryTestCase {
         ReportModel reportModel = model.getAdapter(ReportModel.class);
         assertNotNull(reportModel);
 
-        List<ReportParameter> reportParams =  reportModel.getReportParameters();
+        List<ReportParameter> reportParams = reportModel.getReportParameters();
         assertEquals(4, reportParams.size());
 
-        Map<String,String> params = reportModel.getStoredParameters();
+        Map<String, String> params = reportModel.getStoredParameters();
 
         reportModel.setParameter("modelParam", "fromModel");
 
@@ -126,11 +130,12 @@ public class TestAdapters extends SQLRepositoryTestCase {
 
         // test rendering
 
-        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append("birt-test-report-doc-" + System.currentTimeMillis()).toString();
+        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
+                "birt-test-report-doc-" + System.currentTimeMillis()).toString();
         reportPath = dirPath;
         File baseDir = new File(dirPath);
         baseDir.mkdir();
-        File imagesDir = new File(dirPath+"/images");
+        File imagesDir = new File(dirPath + "/images");
         imagesDir.mkdir();
         File result = new File(dirPath + "/report");
 

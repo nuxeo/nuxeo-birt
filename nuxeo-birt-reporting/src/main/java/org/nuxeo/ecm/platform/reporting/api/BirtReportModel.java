@@ -43,7 +43,7 @@ import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 public class BirtReportModel extends BaseBirtReportAdapter implements
         ReportModel {
 
-    protected static final String PREFIX="birtmodel";
+    protected static final String PREFIX = "birtmodel";
 
     protected transient List<IParameterDefn> cachedParamsDef = null;
 
@@ -81,24 +81,24 @@ public class BirtReportModel extends BaseBirtReportAdapter implements
 
         Map<String, String> meta = ReportHelper.getReportMetaData(getReportFileAsStream());
 
-        String name= meta.get("displayName");
-        if (name==null) {
+        String name = meta.get("displayName");
+        if (name == null) {
             name = ((Blob) doc.getPropertyValue("file:content")).getFilename();
         }
         doc.setPropertyValue(PREFIX + ":reportName", name);
 
-        if (meta.get("title")!=null) {
+        if (meta.get("title") != null) {
             doc.setPropertyValue("dc:title", meta.get("title"));
         }
-        if (meta.get("description")!=null) {
+        if (meta.get("description") != null) {
             doc.setPropertyValue("dc:description", meta.get("description"));
         }
     }
 
     protected List<IParameterDefn> getParameterDef() throws Exception {
-        if (cachedParamsDef==null) {
-           IReportRunnable report = ReportHelper.getReport(getReportFileAsStream());
-           cachedParamsDef = ReportHelper.getReportParameter(report);
+        if (cachedParamsDef == null) {
+            IReportRunnable report = ReportHelper.getReport(getReportFileAsStream());
+            cachedParamsDef = ReportHelper.getReportParameter(report);
         }
         return cachedParamsDef;
     }
@@ -112,7 +112,8 @@ public class BirtReportModel extends BaseBirtReportAdapter implements
         List<IParameterDefn> paramsDef = getParameterDef();
 
         for (IParameterDefn def : paramsDef) {
-            ReportParameter param = new ReportParameter(def, storedParams.get(def.getName()));
+            ReportParameter param = new ReportParameter(def,
+                    storedParams.get(def.getName()));
             result.add(param);
         }
         return result;
@@ -123,12 +124,13 @@ public class BirtReportModel extends BaseBirtReportAdapter implements
 
         Map<String, String> params = new HashMap<String, String>();
 
-        List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(PREFIX + ":parameters");
-        if (localParams!=null) {
+        List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(PREFIX
+                + ":parameters");
+        if (localParams != null) {
             for (Map<String, Serializable> localParam : localParams) {
-                String name = (String)localParam.get("pName");
-                String value = (String)localParam.get("pValue");
-                if (value!=null) {
+                String name = (String) localParam.get("pName");
+                String value = (String) localParam.get("pValue");
+                if (value != null) {
                     params.put(name, value);
                 }
             }

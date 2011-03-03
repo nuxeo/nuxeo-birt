@@ -29,12 +29,12 @@ import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
-import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 
 /**
- * Synchronous {@link EventListener} used to extract ReportParameters from the Birt ReportDesign file
+ * Synchronous {@link EventListener} used to extract ReportParameters from the
+ * Birt ReportDesign file
  *
  * @author Tiry (tdelprat@nuxeo.com)
  *
@@ -54,20 +54,21 @@ public class ReportParserListener implements EventListener {
 
             if (doc.hasSchema(BIRT_REPORT_MODEL_SCHEMA)) {
                 ReportModel reportModel = doc.getAdapter(ReportModel.class);
-                if (reportModel!=null) {
+                if (reportModel != null) {
                     try {
                         if (doc.getProperty("file:content").isDirty()) {
                             reportModel.parseParametersDefinition();
                             reportModel.updateMetadata();
                         }
                     } catch (Exception e) {
-                        log.error("Error while parsing report model parameters", e);
+                        log.error(
+                                "Error while parsing report model parameters",
+                                e);
                     }
                 }
-            }
-            else if (doc.hasSchema(BIRT_REPORT_INSTANCE_SCHEMA)) {
+            } else if (doc.hasSchema(BIRT_REPORT_INSTANCE_SCHEMA)) {
                 ReportInstance reportInstance = doc.getAdapter(ReportInstance.class);
-                if (reportInstance!=null) {
+                if (reportInstance != null) {
                     try {
                         reportInstance.initParameterList();
                     } catch (Exception e) {
@@ -78,6 +79,5 @@ public class ReportParserListener implements EventListener {
         }
 
     }
-
 
 }

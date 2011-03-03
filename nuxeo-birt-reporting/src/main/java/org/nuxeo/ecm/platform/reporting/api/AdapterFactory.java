@@ -23,6 +23,7 @@ import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_MODEL_S
 
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
+
 /**
  *
  * Factory for the {@link ReportModel} and {@link ReportInstance} adapters
@@ -41,7 +42,7 @@ public class AdapterFactory implements DocumentAdapterFactory {
             return null;
         }
 
-        String adapterClassName =adapterClass.getSimpleName();
+        String adapterClassName = adapterClass.getSimpleName();
 
         if (adapterClassName.equals(ReportInstance.class.getSimpleName())) {
             if (doc.hasSchema(BIRT_REPORT_INSTANCE_SCHEMA)) {

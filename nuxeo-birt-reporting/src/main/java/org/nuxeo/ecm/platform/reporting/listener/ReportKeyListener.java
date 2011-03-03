@@ -33,7 +33,8 @@ import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 
 /**
- * Synchronous {@link EventListener} used to compute unique {@link ReportInstance} keys
+ * Synchronous {@link EventListener} used to compute unique
+ * {@link ReportInstance} keys
  *
  * @author Tiry (tdelprat@nuxeo.com)
  *
@@ -54,17 +55,17 @@ public class ReportKeyListener implements EventListener {
             if (doc.hasSchema(Constants.BIRT_REPORT_INSTANCE_SCHEMA)) {
 
                 ReportInstance reportInstance = doc.getAdapter(ReportInstance.class);
-                if (reportInstance!=null) {
+                if (reportInstance != null) {
                     try {
                         // give default title if needed
                         String title = doc.getTitle();
-                        if (title==null || title.isEmpty()) {
+                        if (title == null || title.isEmpty()) {
                             title = reportInstance.getModel().getDoc().getTitle();
                             doc.setPropertyValue("dc:title", title);
                         }
                         // compute report key if needed
                         String key = reportInstance.getReportKey();
-                        if (key==null || key.isEmpty()) {
+                        if (key == null || key.isEmpty()) {
                             reportInstance.setReportKey(generateReportKey(reportInstance));
                         }
                     } catch (Exception e) {
@@ -76,15 +77,16 @@ public class ReportKeyListener implements EventListener {
 
     }
 
-    protected String generateReportKey(ReportInstance reportInstance) throws ClientException {
+    protected String generateReportKey(ReportInstance reportInstance)
+            throws ClientException {
 
         StringBuffer key = new StringBuffer();
 
         String name = reportInstance.getModel().getReportName();
-        if (name==null) {
+        if (name == null) {
             name = reportInstance.getModel().getDoc().getName();
         }
-        key.append(IdUtils.generateId(name,"_",true,20));
+        key.append(IdUtils.generateId(name, "_", true, 20));
         key.append("-");
 
         Random rnd = new Random(System.currentTimeMillis());

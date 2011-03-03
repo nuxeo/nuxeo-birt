@@ -69,17 +69,19 @@ public class ReportResource extends DefaultObject {
     }
 
     protected String getReportKey() {
-        return report.getDoc().getId() + "-" + getContext().getUserSession().getPrincipal().getName();
+        return report.getDoc().getId() + "-"
+                + getContext().getUserSession().getPrincipal().getName();
     }
 
     protected String buildTmpPath(String key) {
-        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append("birt-" + key).toString();
+        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
+                "birt-" + key).toString();
         File baseDir = new File(dirPath);
         if (baseDir.exists()) {
             return dirPath;
         }
         baseDir.mkdir();
-        File imagesDir = new File(dirPath+"/images");
+        File imagesDir = new File(dirPath + "/images");
         imagesDir.mkdir();
 
         return dirPath;
@@ -87,7 +89,8 @@ public class ReportResource extends DefaultObject {
 
     @GET
     @javax.ws.rs.Path("images/{key}/{name}")
-    public Object getImage(@PathParam("key") String key, @PathParam("name") String name) throws Exception {
+    public Object getImage(@PathParam("key") String key,
+            @PathParam("name") String name) throws Exception {
 
         String tmpPath = buildTmpPath(key);
         File imageFile = new File(tmpPath + "/images/" + name);
@@ -97,19 +100,21 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("editParams")
-    public Object editParams(@QueryParam("target") String target) throws Exception {
+    public Object editParams(@QueryParam("target") String target)
+            throws Exception {
         List<ReportParameter> params = report.getReportUserParameters();
         return getView("editParams").arg("params", params).arg("target", target);
     }
 
-    protected boolean readParams(Map<String, Object> userParams) throws Exception {
+    protected boolean readParams(Map<String, Object> userParams)
+            throws Exception {
 
         List<ReportParameter> params = report.getReportUserParameters();
-        if (params.size()>0) {
+        if (params.size() > 0) {
             FormData data = getContext().getForm();
-            if (data!=null) {
+            if (data != null) {
                 for (ReportParameter param : params) {
-                    if (data.getString(param.getName())!=null) {
+                    if (data.getString(param.getName()) != null) {
                         String strValue = data.getString(param.getName());
                         param.setValue(strValue);
                         Object value = param.getObjectValue();
@@ -117,7 +122,7 @@ public class ReportResource extends DefaultObject {
                     }
                 }
             }
-            if (userParams.size()<params.size()) {
+            if (userParams.size() < params.size()) {
                 return false;
             }
         }
@@ -187,8 +192,8 @@ public class ReportResource extends DefaultObject {
 
         report.render(options, userParams);
 
-        return Response.ok(new FileInputStream(reportFile), MediaType.APPLICATION_OCTET_STREAM).build();
+        return Response.ok(new FileInputStream(reportFile),
+                MediaType.APPLICATION_OCTET_STREAM).build();
     }
-
 
 }

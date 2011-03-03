@@ -50,12 +50,14 @@ import com.sun.facelets.tag.jsf.ComponentHandler;
  * @author Tiry (tdelprat@nuxeo.com)
  *
  */
-public class HtmlReportParameterWidgetTypeHandler extends AbstractWidgetTypeHandler {
+public class HtmlReportParameterWidgetTypeHandler extends
+        AbstractWidgetTypeHandler {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public FaceletHandler getFaceletHandler(FaceletContext ctx, TagConfig tagConfig, Widget widget, FaceletHandler[] subHandlers)
+    public FaceletHandler getFaceletHandler(FaceletContext ctx,
+            TagConfig tagConfig, Widget widget, FaceletHandler[] subHandlers)
             throws WidgetException {
 
         FaceletHandlerHelper helper = new FaceletHandlerHelper(ctx, tagConfig);
@@ -68,22 +70,21 @@ public class HtmlReportParameterWidgetTypeHandler extends AbstractWidgetTypeHand
         ReportInstance reportInstance = doc.getAdapter(ReportInstance.class);
         List<ReportParameter> reportParams = null;
         try {
-            if (reportInstance!=null) {
+            if (reportInstance != null) {
                 reportParams = reportInstance.getReportParameters();
             } else {
                 ReportModel reportModel = doc.getAdapter(ReportModel.class);
                 reportParams = reportModel.getReportParameters();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new WidgetException("Unable to resolve report parameters", e);
         }
 
         TagAttributes attributes = helper.getTagAttributes(widgetId, widget);
         FaceletHandler leaf = new LeafFaceletHandler();
 
-        FaceletHandler[] handlers = new FaceletHandler[reportParams.size()*4];
-        int idx=0;
+        FaceletHandler[] handlers = new FaceletHandler[reportParams.size() * 4];
+        int idx = 0;
         int row = 0;
         for (ReportParameter param : reportParams) {
 
@@ -92,7 +93,8 @@ public class HtmlReportParameterWidgetTypeHandler extends AbstractWidgetTypeHand
             attrs.add(helper.createIdAttribute("paramName" + idx));
             attrs.add(helper.createAttribute("value", param.getName()));
             ComponentHandler pName = helper.getHtmlComponentHandler(
-                    FaceletHandlerHelper.getTagAttributes(attrs), leaf, HtmlOutputText.COMPONENT_TYPE, null);
+                    FaceletHandlerHelper.getTagAttributes(attrs), leaf,
+                    HtmlOutputText.COMPONENT_TYPE, null);
 
             // value
             List<TagAttribute> attrs2 = new ArrayList<TagAttribute>();
@@ -100,24 +102,26 @@ public class HtmlReportParameterWidgetTypeHandler extends AbstractWidgetTypeHand
             String globalEL = attributes.get("value").getValue();
 
             String locator = "[" + row + "]['pValue']}";
-            String value=globalEL.replace("}", locator);
-            if (value==null) {
-                value="unset";
+            String value = globalEL.replace("}", locator);
+            if (value == null) {
+                value = "unset";
             }
             ComponentHandler pValue = null;
             if (BuiltinWidgetModes.EDIT.equals(mode) && param.isEditable()) {
                 attrs2.add(helper.createAttribute("value", value));
                 pValue = helper.getHtmlComponentHandler(
-                        FaceletHandlerHelper.getTagAttributes(attrs2), leaf, HtmlInputText.COMPONENT_TYPE, null);
-            }
-            else {
+                        FaceletHandlerHelper.getTagAttributes(attrs2), leaf,
+                        HtmlInputText.COMPONENT_TYPE, null);
+            } else {
                 if (!param.isEditable()) {
-                    attrs2.add(helper.createAttribute("value", param.getStringValue()));
+                    attrs2.add(helper.createAttribute("value",
+                            param.getStringValue()));
                 } else {
                     attrs2.add(helper.createAttribute("value", value));
                 }
                 pValue = helper.getHtmlComponentHandler(
-                        FaceletHandlerHelper.getTagAttributes(attrs2), leaf, HtmlOutputText.COMPONENT_TYPE, null);
+                        FaceletHandlerHelper.getTagAttributes(attrs2), leaf,
+                        HtmlOutputText.COMPONENT_TYPE, null);
             }
 
             // spacer 1
@@ -126,7 +130,8 @@ public class HtmlReportParameterWidgetTypeHandler extends AbstractWidgetTypeHand
             attrs3.add(helper.createAttribute("value", "&nbsp;:&nbsp;"));
             attrs3.add(helper.createAttribute("escape", "false"));
             ComponentHandler spacer = helper.getHtmlComponentHandler(
-                    FaceletHandlerHelper.getTagAttributes(attrs3), leaf, HtmlOutputText.COMPONENT_TYPE, null);
+                    FaceletHandlerHelper.getTagAttributes(attrs3), leaf,
+                    HtmlOutputText.COMPONENT_TYPE, null);
 
             // spacer 2
             List<TagAttribute> attrs4 = new ArrayList<TagAttribute>();
@@ -134,14 +139,15 @@ public class HtmlReportParameterWidgetTypeHandler extends AbstractWidgetTypeHand
             attrs4.add(helper.createAttribute("value", "<br/>"));
             attrs4.add(helper.createAttribute("escape", "false"));
             ComponentHandler spacer2 = helper.getHtmlComponentHandler(
-                    FaceletHandlerHelper.getTagAttributes(attrs4), leaf, HtmlOutputText.COMPONENT_TYPE, null);
+                    FaceletHandlerHelper.getTagAttributes(attrs4), leaf,
+                    HtmlOutputText.COMPONENT_TYPE, null);
 
-            handlers[idx]=pName;
-            handlers[idx+1]=spacer;
-            handlers[idx+2]=pValue;
-            handlers[idx+3]=spacer2;
-            idx=idx+4;
-            row+=1;
+            handlers[idx] = pName;
+            handlers[idx + 1] = spacer;
+            handlers[idx + 2] = pValue;
+            handlers[idx + 3] = spacer2;
+            idx = idx + 4;
+            row += 1;
         }
         return new CompositeFaceletHandler(handlers);
     }

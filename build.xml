@@ -20,6 +20,7 @@
     <echo message="ant build              => Build Nuxeo BIRT" />
     <echo message="ant build-with-tests   => Build and Test Nuxeo BIRT" />
     <echo message="ant deploy-tomcat      => Build Nuxeo BIRT and deploy it on a Tomcat instance" />
+    <echo message="ant web-tomcat         => Copy web files to a live Tomcat" />
   </target>
 
   <target name="build" depends="build-unix,build-windows" description="Build Nuxeo BIRT"/>
@@ -65,6 +66,14 @@
       <fileset dir="${basedir}">
         <include name="**/target/*.jar" />
         <exclude name="**/target/*-sources.jar" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="web-tomcat">
+    <copy todir="${tomcat.nuxeo.war.dir}" overwrite="true">
+      <fileset dir="${basedir}">
+        <include name="**/src/main/**nuxeo.war/**" />
       </fileset>
     </copy>
   </target>

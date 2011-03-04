@@ -62,7 +62,6 @@ public class SupportedDBHelper {
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         URL url = cl.getResource(className);
-
         if (url == null) {
             return null;
         }
@@ -70,7 +69,6 @@ public class SupportedDBHelper {
     }
 
     public static List<String> getDriverJars() {
-
         List<String> jars = new ArrayList<String>();
         for (String name : getMapping().keySet()) {
             String jar = getDriverJar(name);
@@ -80,4 +78,5 @@ public class SupportedDBHelper {
         }
         return jars;
     }
+
 }

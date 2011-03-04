@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.eclipse.birt.report.engine.api.impl.ScalarParameterDefn;
 
@@ -33,6 +35,8 @@ import org.eclipse.birt.report.engine.api.impl.ScalarParameterDefn;
  *
  */
 public class ReportParameter {
+
+    private static final Log log = LogFactory.getLog(ReportParameter.class);
 
     public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss.SSS");
@@ -62,7 +66,6 @@ public class ReportParameter {
     }
 
     public ReportParameter(IParameterDefn paramDef, String value) {
-
         type = paramDef.getDataType();
         name = paramDef.getName();
         displayName = paramDef.getDisplayName();
@@ -129,6 +132,9 @@ public class ReportParameter {
                 return TIME_FORMAT.parse(stringValue);
             }
         } catch (Exception e) {
+            String message = String.format(
+                    "Error while parsing the '%s' date value", stringValue);
+            log.error(message, e);
         }
         return null;
     }
@@ -169,7 +175,6 @@ public class ReportParameter {
     }
 
     public Object getObjectValue() {
-
         if (type == IParameterDefn.TYPE_DATE) {
             return getDateTimeValue();
         } else if (type == IParameterDefn.TYPE_DATE_TIME) {
@@ -189,7 +194,6 @@ public class ReportParameter {
     }
 
     public void setObjectValue(Object value) {
-
         if (value instanceof Calendar) {
             setValue((Calendar) value);
         } else if (value instanceof Date) {

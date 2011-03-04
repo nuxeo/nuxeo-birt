@@ -57,14 +57,10 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     @Override
     public List<ReportInstance> getReportInstanceByModelName(
             CoreSession session, String reportModelName) throws ClientException {
-
         String uuid = getReportModelByName(session, reportModelName).getId();
-
         String query = "select * from BirtReport where birt:modelRef='" + uuid
                 + "'";
-
         DocumentModelList reports = session.query(query);
-
         List<ReportInstance> result = new ArrayList<ReportInstance>();
         for (DocumentModel doc : reports) {
             ReportInstance report = doc.getAdapter(ReportInstance.class);
@@ -72,50 +68,37 @@ public class ReportComponent extends DefaultComponent implements ReportService {
                 result.add(report);
             }
         }
-
         return result;
     }
 
     @Override
     public ReportInstance getReportInstanceByKey(CoreSession session, String key)
             throws ClientException {
-
         String query = "select * from BirtReport where birt:reportKey='" + key
                 + "'";
-
         DocumentModelList reports = session.query(query);
-
-        if (reports.size() == 0) {
+        if (reports.isEmpty()) {
             return null;
         }
-
         return reports.get(0).getAdapter(ReportInstance.class);
     }
 
     @Override
     public ReportModel getReportModelByName(CoreSession session,
             String reportModelName) throws ClientException {
-
         String query = "select * from BirtReportModel where birtmodel:reportName='"
                 + reportModelName + "'";
-
         DocumentModelList reports = session.query(query);
-
-        if (reports.size() == 0) {
+        if (reports.isEmpty()) {
             return null;
         }
-
         return reports.get(0).getAdapter(ReportModel.class);
-
     }
 
     public List<ReportModel> getReportAvailableModels(CoreSession session)
             throws ClientException {
-
         String query = "select * from BirtReportModel";
-
         DocumentModelList reports = session.query(query);
-
         List<ReportModel> result = new ArrayList<ReportModel>();
         for (DocumentModel doc : reports) {
             ReportModel report = doc.getAdapter(ReportModel.class);
@@ -123,7 +106,7 @@ public class ReportComponent extends DefaultComponent implements ReportService {
                 result.add(report);
             }
         }
-
         return result;
     }
+
 }

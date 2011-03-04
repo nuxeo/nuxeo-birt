@@ -46,7 +46,6 @@ public class ReportContext {
             List<ReportParameter> reportParams, DocumentModel doc)
             throws Exception {
         for (ReportParameter param : reportParams) {
-
             if (param.getName().equals(USER_NAME)) {
                 param.setValue(doc.getCoreSession().getPrincipal().getName());
             } else if (param.getName().equals(DOC_TYPE)) {

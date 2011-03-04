@@ -68,7 +68,6 @@ public abstract class BaseBirtReportAdapter {
     @SuppressWarnings("unchecked")
     public void setParameter(String name, Object value, boolean save)
             throws Exception {
-
         List<ReportParameter> reportParams = getReportParameters();
         ReportParameter targetParameter = null;
         for (ReportParameter reportParam : reportParams) {
@@ -85,7 +84,6 @@ public abstract class BaseBirtReportAdapter {
 
         targetParameter.setObjectValue(value);
         String stringValue = targetParameter.getStringValue();
-
         List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(getPrefix()
                 + ":parameters");
         if (localParams == null) {
@@ -93,10 +91,8 @@ public abstract class BaseBirtReportAdapter {
         }
 
         boolean addParam = true;
-
         for (Map<String, Serializable> localParam : localParams) {
             String pName = (String) localParam.get("pName");
-            // String pValue = (String)localParam.get("pValue");
             if (name.equals(pName)) {
                 localParam.put("pValue", stringValue);
                 addParam = false;

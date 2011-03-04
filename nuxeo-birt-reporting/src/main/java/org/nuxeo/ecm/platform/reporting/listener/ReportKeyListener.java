@@ -45,15 +45,12 @@ public class ReportKeyListener implements EventListener {
 
     @Override
     public void handleEvent(Event event) throws ClientException {
-
         EventContext ctx = event.getContext();
         if (ctx instanceof DocumentEventContext) {
             DocumentEventContext docCtx = (DocumentEventContext) ctx;
-
             DocumentModel doc = docCtx.getSourceDocument();
 
             if (doc.hasSchema(Constants.BIRT_REPORT_INSTANCE_SCHEMA)) {
-
                 ReportInstance reportInstance = doc.getAdapter(ReportInstance.class);
                 if (reportInstance != null) {
                     try {
@@ -74,18 +71,16 @@ public class ReportKeyListener implements EventListener {
                 }
             }
         }
-
     }
 
     protected String generateReportKey(ReportInstance reportInstance)
             throws ClientException {
-
-        StringBuffer key = new StringBuffer();
-
         String name = reportInstance.getModel().getReportName();
         if (name == null) {
             name = reportInstance.getModel().getDoc().getName();
         }
+
+        StringBuffer key = new StringBuffer();
         key.append(IdUtils.generateId(name, "_", true, 20));
         key.append("-");
 
@@ -94,4 +89,5 @@ public class ReportKeyListener implements EventListener {
 
         return key.toString();
     }
+
 }

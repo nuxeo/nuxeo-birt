@@ -18,6 +18,8 @@
 
 package org.nuxeo.ecm.platform.reporting.seam;
 
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -43,13 +46,14 @@ import org.nuxeo.runtime.api.Framework;
  * @author Tiry (tdelprat@nuxeo.com)
  *
  */
-@Name("reportAction")
+@Name("reportActions")
 @Scope(ScopeType.EVENT)
-public class ReportActionBean implements Serializable {
+@Install(precedence = FRAMEWORK)
+public class ReportActions implements Serializable {
 
     private static final long serialVersionUID = -1155863420157051403L;
 
-    protected static final Log log = LogFactory.getLog(ReportActionBean.class);
+    protected static final Log log = LogFactory.getLog(ReportActions.class);
 
     @In(create = true)
     protected transient CoreSession documentManager;
@@ -65,10 +69,10 @@ public class ReportActionBean implements Serializable {
         }
     }
 
-    public ReportModel getReportModel(String uuid) {
+    public ReportModel getReportModel(String docId) {
         try {
             DocumentModel reportModelDoc = documentManager.getDocument(new IdRef(
-                    uuid));
+                    docId));
             return reportModelDoc.getAdapter(ReportModel.class);
         } catch (Exception e) {
             return null;

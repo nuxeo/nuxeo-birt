@@ -1,10 +1,6 @@
 <?xml version="1.0"?>
 <fragment version="1">
 
-
-  <!-- AT: mixing filters and mappings for clarity, does not change
-    resulting web.xml file -->
-
   <extension target="web#SERVLET">
     <servlet>
       <servlet-name>Nuxeo BIRT Servlet</servlet-name>
@@ -25,4 +21,3 @@
   </install>
 
 </fragment>
-

@@ -20,7 +20,6 @@ package org.nuxeo.ecm.platform.reporting.report;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -73,13 +72,11 @@ public class ReportHelper {
 
     public static Map<String, String> getReportMetaData(InputStream stream)
             throws Exception {
-
-        Map<String, String> meta = new HashMap<String, String>();
-
         IDesignEngine dEngine = BirtEngine.getBirtDesignEngine();
         SessionHandle sh = dEngine.newSessionHandle(ULocale.ENGLISH);
         ReportDesignHandle designHandle = sh.openDesign((String) null, stream);
 
+        Map<String, String> meta = new HashMap<String, String>();
         meta.put("title", designHandle.getTitle());
         meta.put("author", designHandle.getAuthor());
         meta.put("description", designHandle.getDescription());
@@ -91,31 +88,20 @@ public class ReportHelper {
 
     public static IReportRunnable getNuxeoReport(InputStream stream,
             String repositoryName) throws Exception {
-
         IDesignEngine dEngine = BirtEngine.getBirtDesignEngine();
         SessionHandle sh = dEngine.newSessionHandle(ULocale.ENGLISH);
         ReportDesignHandle designHandle = sh.openDesign((String) null, stream);
 
         for (Iterator i = designHandle.getDataSources().iterator(); i.hasNext();) {
-
             OdaDataSourceHandle dsh = (OdaDataSourceHandle) i.next();
-
             NuxeoDSConfig newConfig = DSHelper.getReplacementDS(dsh.getName(),
                     repositoryName);
-
             if (newConfig != null) {
-
                 OdaDataSource ds = (OdaDataSource) dsh.getElement();
-
                 log.debug("Editing ODA datasource " + ds.getName());
-
                 List<IElementPropertyDefn> propNames = ds.getPropertyDefns();
                 for (IElementPropertyDefn propName : propNames) {
                     ElementPropertyDefn prop = ds.getPropertyDefn(propName.getName());
-                    // Object propValue =
-                    // ds.getProperty(designHandle.getModule(), prop);
-                    // System.out.println(propName.getName() + ":" + propValue);
-
                     if (propName.getName().equals("odaDriverClass")) {
                         log.debug(" ->changing odaDriverClass to "
                                 + newConfig.getDriverClass());
@@ -141,8 +127,7 @@ public class ReportHelper {
 
         IReportRunnable modifiedReport = BirtEngine.getBirtEngine().openReportDesign(
                 designHandle);
-
-        // Can we really ?
+        // Can we really?
         sh.closeAll(false);
 
         return modifiedReport;
@@ -150,16 +135,12 @@ public class ReportHelper {
 
     public static List<IParameterDefn> getReportParameter(IReportRunnable report)
             throws EngineException {
-
         List<IParameterDefn> params = new ArrayList<IParameterDefn>();
         IGetParameterDefinitionTask task = BirtEngine.getBirtEngine().createGetParameterDefinitionTask(
                 report);
-        Collection paramDefns = task.getParameterDefns(false);
-        Iterator iter = paramDefns.iterator();
-        while (iter.hasNext()) {
-            Object p = iter.next();
-            if (p instanceof IParameterDefn) {
-                IParameterDefn param = (IParameterDefn) p;
+        for (Object paramDefn : task.getParameterDefns(false)) {
+            if (paramDefn instanceof IParameterDefn) {
+                IParameterDefn param = (IParameterDefn) paramDefn;
                 params.add(param);
             }
         }

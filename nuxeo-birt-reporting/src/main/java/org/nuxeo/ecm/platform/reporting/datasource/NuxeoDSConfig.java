@@ -59,8 +59,7 @@ public class NuxeoDSConfig {
     }
 
     protected String getProp(Map<String, String> properties, String name) {
-        String value = Framework.expandVars(properties.get(name));
-        return value;
+        return Framework.expandVars(properties.get(name));
     }
 
     public String getDriverClass() {
@@ -82,7 +81,6 @@ public class NuxeoDSConfig {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-
         sb.append("username:");
         sb.append(userName);
         sb.append("\npassword:");
@@ -91,7 +89,7 @@ public class NuxeoDSConfig {
         sb.append(driverClass);
         sb.append("\nurl:");
         sb.append(url);
-
         return sb.toString();
     }
+
 }

@@ -68,7 +68,7 @@ public class HtmlReportParameterWidgetTypeHandler extends
         DocumentModel doc = (DocumentModel) ctx.getAttribute(docVar);
 
         ReportInstance reportInstance = doc.getAdapter(ReportInstance.class);
-        List<ReportParameter> reportParams = null;
+        List<ReportParameter> reportParams;
         try {
             if (reportInstance != null) {
                 reportParams = reportInstance.getReportParameters();
@@ -106,7 +106,7 @@ public class HtmlReportParameterWidgetTypeHandler extends
             if (value == null) {
                 value = "unset";
             }
-            ComponentHandler pValue = null;
+            ComponentHandler pValue;
             if (BuiltinWidgetModes.EDIT.equals(mode) && param.isEditable()) {
                 attrs2.add(helper.createAttribute("value", value));
                 pValue = helper.getHtmlComponentHandler(

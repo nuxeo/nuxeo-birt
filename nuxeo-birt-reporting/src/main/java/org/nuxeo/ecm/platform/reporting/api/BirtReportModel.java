@@ -27,9 +27,9 @@ import java.util.Map;
 
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
-import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.platform.reporting.report.ReportHelper;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 
@@ -61,16 +61,12 @@ public class BirtReportModel extends BaseBirtReportAdapter implements
     }
 
     public InputStream getReportFileAsStream() throws Exception {
-
-        Blob reportBlob = (Blob) doc.getPropertyValue("file:content");
-
-        return reportBlob.getStream();
+        BlobHolder bh = doc.getAdapter(BlobHolder.class);
+        return bh.getBlob().getStream();
     }
 
     public void parseParametersDefinition() throws Exception {
-
         List<IParameterDefn> paramsDef = getParameterDef();
-
         for (IParameterDefn def : paramsDef) {
             ReportParameter param = new ReportParameter(def);
             setParameter(param, false);
@@ -78,12 +74,12 @@ public class BirtReportModel extends BaseBirtReportAdapter implements
     }
 
     public void updateMetadata() throws Exception {
-
         Map<String, String> meta = ReportHelper.getReportMetaData(getReportFileAsStream());
 
         String name = meta.get("displayName");
         if (name == null) {
-            name = ((Blob) doc.getPropertyValue("file:content")).getFilename();
+            BlobHolder bh = doc.getAdapter(BlobHolder.class);
+            name = bh.getBlob().getFilename();
         }
         doc.setPropertyValue(PREFIX + ":reportName", name);
 
@@ -104,13 +100,10 @@ public class BirtReportModel extends BaseBirtReportAdapter implements
     }
 
     public List<ReportParameter> getReportParameters() throws Exception {
-
-        List<ReportParameter> result = new ArrayList<ReportParameter>();
-
         Map<String, String> storedParams = getStoredParameters();
-
         List<IParameterDefn> paramsDef = getParameterDef();
 
+        List<ReportParameter> result = new ArrayList<ReportParameter>();
         for (IParameterDefn def : paramsDef) {
             ReportParameter param = new ReportParameter(def,
                     storedParams.get(def.getName()));
@@ -121,11 +114,9 @@ public class BirtReportModel extends BaseBirtReportAdapter implements
 
     @SuppressWarnings("unchecked")
     public Map<String, String> getStoredParameters() throws ClientException {
-
-        Map<String, String> params = new HashMap<String, String>();
-
         List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(PREFIX
                 + ":parameters");
+        Map<String, String> params = new HashMap<String, String>();
         if (localParams != null) {
             for (Map<String, Serializable> localParam : localParams) {
                 String name = (String) localParam.get("pName");

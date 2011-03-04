@@ -37,25 +37,20 @@ public class AdapterFactory implements DocumentAdapterFactory {
     @SuppressWarnings("unchecked")
     @Override
     public Object getAdapter(DocumentModel doc, Class adapterClass) {
-
         if (doc == null) {
             return null;
         }
 
         String adapterClassName = adapterClass.getSimpleName();
-
         if (adapterClassName.equals(ReportInstance.class.getSimpleName())) {
             if (doc.hasSchema(BIRT_REPORT_INSTANCE_SCHEMA)) {
                 return new BirtReportInstance(doc);
             }
-        }
-
-        if (adapterClassName.equals(ReportModel.class.getSimpleName())) {
+        } else if (adapterClassName.equals(ReportModel.class.getSimpleName())) {
             if (doc.hasSchema(BIRT_REPORT_MODEL_SCHEMA)) {
                 return new BirtReportModel(doc);
             }
         }
-
         return null;
     }
 

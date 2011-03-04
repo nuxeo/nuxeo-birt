@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.platform.reporting.engine.ReportComponent">
+  <implementation
+    class="org.nuxeo.ecm.platform.reporting.engine.ReportComponent" />
+
+  <service>
+    <provide interface="org.nuxeo.ecm.platform.reporting.api.ReportService" />
+  </service>
+
+</component>

@@ -43,24 +43,19 @@ public class DSHelper {
     protected static Map<String, NuxeoDSConfig> detectedDS;
 
     public static Map<String, NuxeoDSConfig> getDSForRepos() throws Exception {
-
         if (detectedDS == null) {
             Map<String, NuxeoDSConfig> configs = new HashMap<String, NuxeoDSConfig>();
 
             RepositoryManager rm = Framework.getLocalService(RepositoryManager.class);
             for (Repository repo : rm.getRepositories()) {
-
                 Object repoImpl = RepositoryResolver.getRepository(repo.getName());
-
-                RepositoryDescriptor desc = null;
-
+                RepositoryDescriptor desc;
                 if (repoImpl instanceof RepositoryImpl) {
                     RepositoryImpl sqlRepo = (RepositoryImpl) repoImpl;
                     desc = sqlRepo.getRepositoryDescriptor();
                 } else {
                     ConnectionFactoryImpl cf = (ConnectionFactoryImpl) RepositoryResolver.getRepository(repo.getName());
                     ManagedConnectionFactoryImpl mcf = cf.getManagedConnectionFactory();
-
                     Field field = mcf.getClass().getDeclaredField("repository");
                     field.setAccessible(true);
                     RepositoryImpl sqlRepositoryImpl = (RepositoryImpl) field.get(mcf);
@@ -69,10 +64,8 @@ public class DSHelper {
 
                 NuxeoDSConfig config = new NuxeoDSConfig(desc.xaDataSourceName,
                         desc.properties);
-
                 configs.put(repo.getName(), config);
             }
-
             detectedDS = configs;
         }
         return detectedDS;
@@ -80,7 +73,6 @@ public class DSHelper {
 
     public static NuxeoDSConfig getDefaultRepoDS(String repositoryName)
             throws Exception {
-
         Map<String, NuxeoDSConfig> configs = getDSForRepos();
 
         if (configs.size() == 0) {
@@ -98,19 +90,14 @@ public class DSHelper {
 
     public static NuxeoDSConfig getReplacementDS(String birtDSName,
             String repositoryName) throws Exception {
-
         String name = birtDSName.toLowerCase();
-
         if (name.equals("nuxeo") || name.equals("nuxeovcs")) {
             return getDefaultRepoDS(repositoryName);
         }
-
         if (name.startsWith("nuxeo-")) {
             name = name.replace("nuxeo-", "");
         }
-
         Map<String, NuxeoDSConfig> configs = getDSForRepos();
-
         return configs.get(name);
     }
 

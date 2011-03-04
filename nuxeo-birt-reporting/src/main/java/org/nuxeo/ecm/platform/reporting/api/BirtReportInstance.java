@@ -54,16 +54,12 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
 
     @Override
     public ReportModel getModel() throws ClientException {
-
         String modelUUID = (String) doc.getPropertyValue(PREFIX + ":modelRef");
-
         IdRef modelRef = new IdRef(modelUUID);
-
         if (!getSession().exists(modelRef)) {
             // !!!
             return null;
         }
-
         DocumentModel model = getSession().getDocument(modelRef);
 
         return model.getAdapter(ReportModel.class);
@@ -113,19 +109,21 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
         ReportContext.setContextualParameters(params, doc);
 
         List<ReportParameter> userParams = new ArrayList<ReportParameter>();
-
         for (ReportParameter param : params) {
             if (param.getStringValue() == null
                     || param.getStringValue().isEmpty()) {
                 userParams.add(param);
             }
         }
-
         return userParams;
     }
 
     public void initParameterList() throws Exception {
-        if (doc.getProperty(PREFIX + ":modelRef").isDirty()) {
+        String oldModelRef = (String) doc.getPropertyValue(PREFIX + ":oldModelRef");
+        String modelRef = (String) doc.getPropertyValue(PREFIX + ":modelRef");
+
+        if (oldModelRef == null || oldModelRef.isEmpty() || !oldModelRef.equals(modelRef)) {
+            doc.setPropertyValue(PREFIX + ":oldModelRef", modelRef);
             // get model params
             List<ReportParameter> params = getModel().getReportParameters();
             // remove all stored params
@@ -142,18 +140,10 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
     @SuppressWarnings("unchecked")
     public void render(IRenderOption options, Map<String, Object> userParameters)
             throws Exception {
-
-        InputStream report = getModel().getReportFileAsStream();
-
-        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(report,
-                doc.getRepositoryName());
-
         // get Stored params
         List<ReportParameter> params = getReportParameters();
-
         // get contextual parameters
         ReportContext.setContextualParameters(params, doc);
-
         // override with user supplied parameters
         for (ReportParameter param : params) {
             if (userParameters.containsKey(param.getName())) {
@@ -161,24 +151,23 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
             }
         }
 
-        HashMap birtParams = new HashMap();
+        Map<String, Object> birtParams = new HashMap<String, Object>();
         for (ReportParameter param : params) {
             birtParams.put(param.getName(), param.getObjectValue());
         }
 
+        InputStream report = getModel().getReportFileAsStream();
+        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(report,
+                doc.getRepositoryName());
         IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
                 nuxeoReport);
-
         task.setParameterValues(birtParams);
         task.setRenderOption(options);
-
         task.run();
         task.close();
-
     }
 
     public String getReportKey() {
-
         try {
             return (String) doc.getPropertyValue(PREFIX + ":reportKey");
         } catch (Exception e) {
@@ -194,4 +183,5 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
     protected String getPrefix() {
         return PREFIX;
     }
+
 }

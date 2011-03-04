@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="org.nuxeo.platform.birt.reporting.types.web">
 
-  <require>org.nuxeo.ecm.platform.types.TypeService</require>
-  <require>org.nuxeo.ecm.platform.reporting.engine.ReportComponent</require>
-
-  <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
-
-    <type id="BirtReport" coretype="BirtReport">
+  <extension target="org.nuxeo.ecm.platform.types.TypeService"
+    point="types">
+    <type id="BirtReport">
       <label>Birt Report</label>
       <icon>/icons/picturebook.gif</icon>
       <bigIcon>/icons/picturebook_100.png</bigIcon>
@@ -18,8 +15,7 @@
         <layout>birtReport</layout>
       </layouts>
     </type>
-
-    <type id="BirtReportModel" coretype="BirtReportModel">
+    <type id="BirtReportModel">
       <label>Birt Report Model</label>
       <icon>/icons/picturebook.gif</icon>
       <bigIcon>/icons/picturebook_100.png</bigIcon>
@@ -33,20 +29,18 @@
       </layouts>
     </type>
 
-    <type id="Folder" coretype="Folder">
+    <type id="Folder">
       <subtypes>
         <type>BirtReport</type>
         <type>BirtReportModel</type>
       </subtypes>
     </type>
-
-    <type id="Workspace" coretype="Workspace">
+    <type id="Workspace">
       <subtypes>
         <type>BirtReport</type>
         <type>BirtReportModel</type>
       </subtypes>
     </type>
-
   </extension>
 
 </component>

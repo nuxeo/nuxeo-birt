@@ -108,7 +108,6 @@ public class ReportResource extends DefaultObject {
 
     protected boolean readParams(Map<String, Object> userParams)
             throws Exception {
-
         List<ReportParameter> params = report.getReportUserParameters();
         if (params.size() > 0) {
             FormData data = getContext().getForm();
@@ -140,7 +139,6 @@ public class ReportResource extends DefaultObject {
     @Produces("text/html")
     @javax.ws.rs.Path("html")
     public Object html() throws Exception {
-
         Map<String, Object> userParams = new HashMap<String, Object>();
         if (!readParams(userParams)) {
             return redirect(getPath() + "/editParams?target=html");
@@ -159,7 +157,6 @@ public class ReportResource extends DefaultObject {
         options.setImageDirectory(tmpPath + "/images");
 
         report.render(options, userParams);
-
         return Response.ok(new FileInputStream(reportFile), MediaType.TEXT_HTML).build();
     }
 
@@ -174,7 +171,6 @@ public class ReportResource extends DefaultObject {
     @Produces("application/pdf")
     @javax.ws.rs.Path("pdf")
     public Object pdf() throws Exception {
-
         Map<String, Object> userParams = new HashMap<String, Object>();
         if (!readParams(userParams)) {
             return redirect(getPath() + "/editParams?target=pdf");
@@ -191,7 +187,6 @@ public class ReportResource extends DefaultObject {
         options.setOutputStream(out);
 
         report.render(options, userParams);
-
         return Response.ok(new FileInputStream(reportFile),
                 MediaType.APPLICATION_OCTET_STREAM).build();
     }

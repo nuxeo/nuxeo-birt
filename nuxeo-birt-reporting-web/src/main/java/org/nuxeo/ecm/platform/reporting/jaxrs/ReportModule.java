@@ -72,23 +72,18 @@ public class ReportModule extends ModuleRoot {
     @Path("list")
     @Produces("text/html")
     public Object listReports() {
-
-        // get report list by model
-
+        // TODO get report list by model
         return null;
     }
 
     @Path(value = "{reportIdOrName}")
     public Object getReport(@PathParam("reportIdOrName") String reportIdOrName)
             throws ClientException {
-
         ReportInstance report = findReport(reportIdOrName);
         if (report == null) {
             return Response.status(404).build();
         }
-
         return ctx.newObject("report", report);
-
     }
 
 }

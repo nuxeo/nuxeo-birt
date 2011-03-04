@@ -49,7 +49,6 @@ public class ReportParserListener implements EventListener {
         EventContext ctx = event.getContext();
         if (ctx instanceof DocumentEventContext) {
             DocumentEventContext docCtx = (DocumentEventContext) ctx;
-
             DocumentModel doc = docCtx.getSourceDocument();
 
             if (doc.hasSchema(BIRT_REPORT_MODEL_SCHEMA)) {
@@ -77,7 +76,6 @@ public class ReportParserListener implements EventListener {
                 }
             }
         }
-
     }
 
 }

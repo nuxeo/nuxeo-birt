@@ -4,10 +4,10 @@
   <extension target="org.nuxeo.ecm.platform.types.TypeService"
     point="types">
     <type id="BirtReport">
-      <label>Birt Report</label>
+      <label>BirtReport</label>
       <icon>/icons/picturebook.gif</icon>
       <bigIcon>/icons/picturebook_100.png</bigIcon>
-      <description>BIRT Report</description>
+      <description>BirtReport.description</description>
       <default-view>view_documents</default-view>
       <category>Reporting</category>
       <layouts mode="any">
@@ -16,10 +16,10 @@
       </layouts>
     </type>
     <type id="BirtReportModel">
-      <label>Birt Report Model</label>
+      <label>BirtReportModel</label>
       <icon>/icons/picturebook.gif</icon>
       <bigIcon>/icons/picturebook_100.png</bigIcon>
-      <description>BIRT report model</description>
+      <description>BirtReportModel.description</description>
       <default-view>view_documents</default-view>
       <category>Reporting</category>
       <layouts mode="any">

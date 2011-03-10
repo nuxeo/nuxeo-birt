@@ -6,3 +6,4 @@ Bundle-Category: web,stateless
 Nuxeo-Component: OSGI-INF/reports-types-contrib.xml,
  OSGI-INF/layout-contrib.xml,
  OSGI-INF/actions-contrib.xml
+Nuxeo-WebModule: org.nuxeo.ecm.webengine.app.WebEngineModule

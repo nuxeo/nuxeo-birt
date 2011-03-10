@@ -42,6 +42,7 @@ import org.nuxeo.runtime.api.Framework;
  * @author Tiry (tdelprat@nuxeo.com)
  *
  */
+@Path("/reports")
 @WebObject(type = "reports")
 public class ReportModule extends ModuleRoot {
 

@@ -5,14 +5,14 @@
   <parent>
     <groupId>org.nuxeo.ecm.platform</groupId>
     <artifactId>nuxeo-features-parent</artifactId>
-    <version>5.4.1-SNAPSHOT</version>
+    <version>5.4.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>nuxeo-birt-parent</artifactId>
   <name>Nuxeo Birt Reporting Parent</name>
   <description>Nuxeo Birt Reporting Parent</description>
   <packaging>pom</packaging>
-  <version>5.4.1-SNAPSHOT</version>
+  <version>5.4.2-SNAPSHOT</version>
 
   <modules>
     <module>nuxeo-birt-reporting</module>
@@ -20,7 +20,7 @@
   </modules>
 
   <properties>
-    <nuxeo.birt.version>5.4.1-SNAPSHOT</nuxeo.birt.version>
+    <nuxeo.birt.version>5.4.2-SNAPSHOT</nuxeo.birt.version>
   </properties>
 
   <dependencyManagement>

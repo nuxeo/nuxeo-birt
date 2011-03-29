@@ -7,3 +7,5 @@ gen
 .settings
 .project
 build.properties
+*.iml
+*.log

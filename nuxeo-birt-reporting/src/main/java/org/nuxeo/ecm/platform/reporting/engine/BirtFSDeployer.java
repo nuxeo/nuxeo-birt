@@ -75,7 +75,9 @@ public class BirtFSDeployer implements IPlatformContext {
             File dataDir = Environment.getDefault().getData();
             if (Framework.isTestModeSet()) {
                 // runtime path will be removed too soon.
-                String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
+                String jarDestination = System.getProperty("java.io.tmpdir").contains("+") ?
+                        "/tmp" : System.getProperty("java.io.tmpdir");
+                String dirPath = new Path(jarDestination).append(
                         "birt-fs" + System.currentTimeMillis()).toString();
                 dataDir = new File(dirPath);
                 dataDir.mkdir();

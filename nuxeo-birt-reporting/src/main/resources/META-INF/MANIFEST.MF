@@ -7,4 +7,5 @@ Nuxeo-Component: OSGI-INF/schema-contrib.xml,
  OSGI-INF/adapter-contrib.xml,
  OSGI-INF/event-contrib.xml,
  OSGI-INF/report-service.xml,
- OSGI-INF/life-cycle-contrib.xml
+ OSGI-INF/life-cycle-contrib.xml,
+ OSGI-INF/content-template-contrib.xml

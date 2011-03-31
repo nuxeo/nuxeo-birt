@@ -22,4 +22,12 @@
     <delete path="${bundle.fileName}.tmp" />
   </install>
 
+  <extension target="faces-config#NAVIGATION">
+    <navigation-case>
+      <from-outcome>adm_view_documents</from-outcome>
+      <to-view-id>/adm_view_documents.xhtml</to-view-id>
+      <redirect />
+    </navigation-case>
+  </extension>
+
 </fragment>

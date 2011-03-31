@@ -18,8 +18,6 @@
 
 package org.nuxeo.ecm.platform.reporting.seam;
 
-import static org.jboss.seam.annotations.Install.FRAMEWORK;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +34,13 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 import org.nuxeo.ecm.platform.reporting.api.ReportService;
+import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
 import org.nuxeo.runtime.api.Framework;
+
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
 
 /**
  * Seam Bean used to manage Edit form
@@ -47,7 +49,7 @@ import org.nuxeo.runtime.api.Framework;
  *
  */
 @Name("reportActions")
-@Scope(ScopeType.EVENT)
+@Scope(ScopeType.PAGE)
 @Install(precedence = FRAMEWORK)
 public class ReportActions implements Serializable {
 
@@ -55,8 +57,17 @@ public class ReportActions implements Serializable {
 
     protected static final Log log = LogFactory.getLog(ReportActions.class);
 
+    protected DocumentModel currentCreationReportModel = null;
+
+    protected boolean showForm = false;
+
+    protected String defaultPath = null;
+
     @In(create = true)
     protected transient CoreSession documentManager;
+
+    @In(create = true)
+    protected transient DocumentActions documentActions;
 
     @Factory(value = "reportModels", scope = ScopeType.EVENT, autoCreate = true)
     public List<ReportModel> getAvailableModels() {
@@ -79,4 +90,45 @@ public class ReportActions implements Serializable {
         }
     }
 
+    public DocumentModel getBareReportModel() throws ClientException {
+        return documentManager.createDocumentModel(
+                Constants.BIRT_REPORT_MODEL_TYPE);
+    }
+
+    public DocumentModel getCurrentCreationReportModel() throws ClientException {
+        if (currentCreationReportModel == null) {
+            currentCreationReportModel = getBareReportModel();
+        }
+        return currentCreationReportModel;
+    }
+
+    public void saveDocument() throws ClientException {
+        documentActions.saveDocument(currentCreationReportModel);
+        resetDocument();
+        toggleForm();
+    }
+
+    private void resetDocument() {
+        currentCreationReportModel = null;
+    }
+
+    public String getDefaultPath() throws Exception {
+        if (defaultPath == null) {
+            defaultPath = Framework.getService(ReportService.class).getReportModelRoot();
+        }
+        return defaultPath;
+    }
+
+    public boolean isShowForm() {
+        return showForm;
+    }
+
+    public void toggleForm() {
+        showForm = !showForm;
+    }
+
+    public void toggleAndReset() {
+        toggleForm();
+        resetDocument();
+    }
 }

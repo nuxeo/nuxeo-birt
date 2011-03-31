@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.platform.birt.reporting.contentTemplate">
+
+  <require>org.nuxeo.ecm.platform.content.template.service.ContentTemplateService.defaultContrib</require>
+
+  <extension
+    target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService"
+    point="factoryBinding">
+    <factoryBinding name="ReportingRootFactory" factoryName="SimpleTemplateFactory"
+      targetType="Root" append="true">
+      <template>
+        <templateItem typeName="ReportingRoot" id="reporting"
+          title="ReportingRoot" description="BIRT Reporting root">
+            <acl>
+              <ace principal="Everyone" permission="Everything" granted="true"/>
+            </acl>
+          </templateItem>
+      </template>
+    </factoryBinding>
+  </extension>
+
+</component>

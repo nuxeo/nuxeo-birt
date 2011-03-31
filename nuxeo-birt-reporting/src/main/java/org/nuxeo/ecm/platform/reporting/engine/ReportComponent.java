@@ -84,6 +84,11 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
+    public String getReportModelRoot() {
+        return "/reporting";
+    }
+
+    @Override
     public ReportModel getReportModelByName(CoreSession session,
             String reportModelName) throws ClientException {
         String query = "select * from BirtReportModel where birtmodel:reportName='"

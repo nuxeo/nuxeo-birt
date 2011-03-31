@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.platform.birt.reporting.contentView">
+
+  <extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService"
+    point="contentViews">
+
+    <contentView name="list_reportModel">
+
+      <title>label.contentview.birt_report_model_list</title>
+      <translateTitle>true</translateTitle>
+      <showTitle>true</showTitle>
+
+      <coreQueryPageProvider>
+        <property name="coreSession">#{documentManager}</property>
+        <pattern>
+          select * from Document WHERE ecm:path STARTSWITH ?
+          AND ecm:currentLifeCycleState != 'deleted'
+        </pattern>
+        <parameter>#{reportActions.defaultPath}</parameter>
+        <sort column="dc:title" ascending="true" />
+        <pageSize>20</pageSize>
+      </coreQueryPageProvider>
+
+      <showPageSizeSelector>true</showPageSizeSelector>
+      <useGlobalPageSize>true</useGlobalPageSize>
+      <refresh>
+        <event>documentChanged</event>
+        <event>documentCreated</event>
+      </refresh>
+      <cacheSize>10</cacheSize>
+
+      <resultLayouts>
+        <layout name="document_listing_ajax" title="document_listing"
+          translateTitle="true" iconPath="/icons/document_listing_icon.png"
+          showCSVExport="true" showPDFExport="true" />
+      </resultLayouts>
+    </contentView>
+  </extension>
+</component>

@@ -5,5 +5,7 @@ Bundle-SymbolicName: org.nuxeo.ecm.platform.birt.reporting.web;singleton:=true
 Bundle-Category: web,stateless
 Nuxeo-Component: OSGI-INF/reports-types-contrib.xml,
  OSGI-INF/layout-contrib.xml,
- OSGI-INF/actions-contrib.xml
+ OSGI-INF/actions-contrib.xml,
+ OSGI-INF/content-view-contrib.xml,
+ OSGI-INF/theme-contrib.xml
 Nuxeo-WebModule: org.nuxeo.ecm.webengine.app.WebEngineModule

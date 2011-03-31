@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<component name="org.nuxeo.platform.birt.reporting.theme">
+
+  <require>org.nuxeo.theme.nuxeo.connect</require>
+
+  <!-- application settings -->
+  <extension target="org.nuxeo.theme.services.ThemeService"
+    point="applications">
+
+    <application root="${org.nuxeo.ecm.contextPath}"
+      template-engine="jsf-facelets">
+
+      <view id="/adm_view_documents.xhtml">
+        <theme>admin/default</theme>
+      </view>
+    </application>
+
+  </extension>
+</component>

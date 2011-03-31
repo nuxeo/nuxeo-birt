@@ -16,6 +16,10 @@
       <facet name="Commentable" />
       <facet name="Versionable" />
     </doctype>
+    <doctype name="ReportingRoot" extends="Folder">
+      <facet name="SuperSpace"/>
+      <facet name="HiddenInNavigation"/>
+    </doctype>
   </extension>
 
 </component>

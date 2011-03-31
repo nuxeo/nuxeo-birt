@@ -1,0 +1,57 @@
+<a4j:outputPanel xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:nxl="http://nuxeo.org/nxforms/layout"
+  xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:c="http://java.sun.com/jstl/core"
+  id="createReportModel">
+
+  <a4j:status>
+    <f:facet name="start">
+      <h:outputText
+        value="#{messages['label.nuxeo.connect.communicating.with.server']}" />
+      <h:graphicImage value="/img/big_loading.gif" />
+    </f:facet>
+  </a4j:status>
+
+  <f:subview id="reportForm" rendered="#{!reportActions.showForm}">
+    <h3>
+      <h:outputText value="#{messages['title.create.document']} #{messages['BirtReportModel']}" />
+    </h3>
+    <h:form enctype="multipart/form-data" id="document_create">
+    <nxl:documentLayout mode="create" value="#{reportActions.currentCreationReportModel}" />
+    <input type="hidden" name="parentDocumentPath" value="#{reportActions.defaultPath}" />
+    <p class="buttonsGadget">
+      <a4j:commandButton styleClass="button" value="#{messages['command.create']}"
+        action="#{reportActions.saveDocument}" id="button_create"
+        reRender="createReportModel" />
+      <a4j:commandButton styleClass="button" value="#{messages['command.cancel']}"
+        action="#{reportActions.toggleAndReset()}" immediate="true"
+        reRender="createReportModel" />
+    </p>
+  </h:form>
+  </f:subview>
+
+  <f:subview id="reportViewContent" rendered="#{reportActions.showForm}">
+    <div class="actionBar">
+      <h:form>
+        <a4j:commandButton action="#{reportActions.toggleForm()}"
+          value="#{messages['label.birt.reporting.create.model']}"
+          immediate="true" reRender="createReportModel" />
+      </h:form>
+    </div>
+
+    <a4j:status>
+      <f:facet name="start">
+        <h:outputText
+          value="#{messages['label.nuxeo.connect.communicating.with.server']}" />
+        <h:graphicImage value="/img/big_loading.gif" />
+      </f:facet>
+    </a4j:status>
+
+    <nxu:set var="contentViewName" value="list_reportModel">
+      <ui:decorate template="/incl/content_view.xhtml" />
+    </nxu:set>
+  </f:subview>
+</a4j:outputPanel>

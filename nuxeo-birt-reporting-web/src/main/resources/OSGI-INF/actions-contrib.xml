@@ -2,18 +2,32 @@
 <component name="org.nuxeo.platform.birt.reporting.actions">
 
   <require>org.nuxeo.ecm.platform.preview.actions</require>
+  <require>org.nuxeo.ecm.platform.comment.actions</require>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
 
     <action id="TAB_BIRT_PREVIEW" link="/incl/tabs/birt_preview.xhtml"
-      enabled="true" order="200" label="label.document.preview">
+      enabled="true" order="0" label="label.document.preview">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>view_preview_report</filter-id>
     </action>
 
+    <!-- Hide tabs for ReportModel -->
+    <action id="TAB_MY_SUBSCRIPTIONS">
+      <filter-id>denyForReportModel</filter-id>
+    </action>
+
+    <action id="TAB_MANAGE_SUBSCRIPTIONS">
+      <filter-id>denyForReportModel</filter-id>
+    </action>
+
+    <action id="TAB_RELATIONS">
+      <filter-id>denyForReportModel</filter-id>
+    </action>
+
     <!-- Admin center actions -->
     <action id="BirtModel" link="view_admin-fragment.xhtml" label="adm.report.models"
-      order="60">
+      order="45">
       <category>NUXEO_ADMIN</category>
       <filter-id>only_for_manager</filter-id>
     </action>
@@ -47,7 +61,7 @@
     </filter>
 
     <filter id="denyFilesTab" append="true">
-      <rule grant="true">
+      <rule grant="false">
         <type>BirtReportModel</type>
       </rule>
     </filter>
@@ -64,23 +78,11 @@
       </rule>
     </filter>
 
-    <filter id="canAddComment" append="true">
+    <filter id="commentable" append="true">
       <rule grant="false">
         <type>BirtReportModel</type>
       </rule>
     </filter>
-
-    <action id="TAB_MY_SUBSCRIPTIONS">
-      <filter-id>denyForReportModel</filter-id>
-    </action>
-
-    <action id="TAB_MANAGE_SUBSCRIPTIONS">
-      <filter-id>denyForReportModel</filter-id>
-    </action>
-
-    <action id="TAB_RELATIONS">
-      <filter-id>denyForReportModel</filter-id>
-    </action>
   </extension>
 
 </component>

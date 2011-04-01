@@ -21,6 +21,7 @@ package org.nuxeo.ecm.platform.reporting.api;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,20 +152,29 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
             }
         }
 
-        Map<String, Object> birtParams = new HashMap<String, Object>();
-        for (ReportParameter param : params) {
-            birtParams.put(param.getName(), param.getObjectValue());
-        }
-
         InputStream report = getModel().getReportFileAsStream();
         IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(report,
                 doc.getRepositoryName());
         IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
                 nuxeoReport);
+        Map<String, Object> birtParams = computeParametersForBirt(params);
         task.setParameterValues(birtParams);
         task.setRenderOption(options);
         task.run();
         task.close();
+    }
+
+    protected Map<String, Object> computeParametersForBirt(List<ReportParameter> parameters) {
+        Map<String, Object> birtParameters = new HashMap<String, Object>();
+        for (ReportParameter param : parameters) {
+            Object value = param.getObjectValue();
+            if (value instanceof Date) {
+                Date date = (Date) value;
+                value = new java.sql.Date(date.getTime());
+            }
+            birtParameters.put(param.getName(), value);
+        }
+        return birtParameters;
     }
 
     public String getReportKey() {

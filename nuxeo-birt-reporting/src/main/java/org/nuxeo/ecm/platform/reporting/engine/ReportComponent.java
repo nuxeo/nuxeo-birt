@@ -45,6 +45,8 @@ public class ReportComponent extends DefaultComponent implements ReportService {
 
     protected static final Log log = LogFactory.getLog(ReportComponent.class);
 
+    public static final String BIRT_REPORTS_CONTAINER_PATH = "/report-models";
+
     @Override
     public void activate(ComponentContext context) throws Exception {
     }
@@ -84,8 +86,8 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
-    public String getReportModelRoot() {
-        return "/reporting";
+    public String getReportModelsContainer() {
+        return BIRT_REPORTS_CONTAINER_PATH;
     }
 
     @Override

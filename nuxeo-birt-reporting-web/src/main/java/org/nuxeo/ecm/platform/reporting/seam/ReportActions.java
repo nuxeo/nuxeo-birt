@@ -18,6 +18,8 @@
 
 package org.nuxeo.ecm.platform.reporting.seam;
 
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +36,20 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.PathRef;
+import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.security.ACE;
+import org.nuxeo.ecm.core.api.security.ACL;
+import org.nuxeo.ecm.core.api.security.ACP;
+import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.core.api.security.impl.ACLImpl;
+import org.nuxeo.ecm.core.api.security.impl.ACPImpl;
 import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 import org.nuxeo.ecm.platform.reporting.api.ReportService;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
 import org.nuxeo.runtime.api.Framework;
-
-import static org.jboss.seam.annotations.Install.FRAMEWORK;
 
 /**
  * Seam Bean used to manage Edit form
@@ -57,17 +66,20 @@ public class ReportActions implements Serializable {
 
     protected static final Log log = LogFactory.getLog(ReportActions.class);
 
-    protected DocumentModel currentCreationReportModel = null;
-
-    protected boolean showForm = false;
-
-    protected String defaultPath = null;
-
     @In(create = true)
     protected transient CoreSession documentManager;
 
     @In(create = true)
     protected transient DocumentActions documentActions;
+
+    @In(create = true)
+    protected transient UserManager userManager;
+
+    protected String reportsContainerPath = null;
+
+    protected DocumentModel newReportModel = null;
+
+    protected boolean showForm = false;
 
     @Factory(value = "reportModels", scope = ScopeType.EVENT, autoCreate = true)
     public List<ReportModel> getAvailableModels() {
@@ -91,32 +103,50 @@ public class ReportActions implements Serializable {
     }
 
     public DocumentModel getBareReportModel() throws ClientException {
-        return documentManager.createDocumentModel(
-                Constants.BIRT_REPORT_MODEL_TYPE);
+        return documentManager.createDocumentModel(Constants.BIRT_REPORT_MODEL_TYPE);
     }
 
-    public DocumentModel getCurrentCreationReportModel() throws ClientException {
-        if (currentCreationReportModel == null) {
-            currentCreationReportModel = getBareReportModel();
+    public DocumentModel getNewReportModel() throws ClientException {
+        if (newReportModel == null) {
+            newReportModel = getBareReportModel();
         }
-        return currentCreationReportModel;
+        return newReportModel;
     }
 
     public void saveDocument() throws ClientException {
-        documentActions.saveDocument(currentCreationReportModel);
+        createReportsModelContainerIfNeeded();
+        documentActions.saveDocument(newReportModel);
         resetDocument();
         toggleForm();
     }
 
-    private void resetDocument() {
-        currentCreationReportModel = null;
+    protected void createReportsModelContainerIfNeeded() throws ClientException {
+        String path = getReportModelsContainerPath();
+        if (!documentManager.exists(new PathRef(path))) {
+            createReportsModelContainer(path);
+        }
     }
 
-    public String getDefaultPath() throws Exception {
-        if (defaultPath == null) {
-            defaultPath = Framework.getService(ReportService.class).getReportModelRoot();
+    protected void createReportsModelContainer(String path)
+            throws ClientException {
+        new UnrestrictedReportModelsContainerCreator(documentManager, path).runUnrestricted();
+    }
+
+    protected void resetDocument() {
+        newReportModel = null;
+    }
+
+    public String getReportModelsContainerPath() throws ClientException {
+        if (reportsContainerPath == null) {
+            ReportService reportService;
+            try {
+                reportService = Framework.getService(ReportService.class);
+                reportsContainerPath = reportService.getReportModelsContainer();
+            } catch (Exception e) {
+                log.error("Unable to retrieve ReportService", e);
+            }
         }
-        return defaultPath;
+        return reportsContainerPath;
     }
 
     public boolean isShowForm() {
@@ -131,4 +161,40 @@ public class ReportActions implements Serializable {
         toggleForm();
         resetDocument();
     }
+
+    public class UnrestrictedReportModelsContainerCreator extends
+            UnrestrictedSessionRunner {
+
+        protected String reportModelsContainerPath;
+
+        protected UnrestrictedReportModelsContainerCreator(CoreSession session,
+                String reportModelsContainerPath) {
+            super(session);
+            this.reportModelsContainerPath = reportModelsContainerPath;
+        }
+
+        @Override
+        public void run() throws ClientException {
+            if (!session.exists(new PathRef(reportModelsContainerPath))) {
+                DocumentModel doc = session.createDocumentModel(
+                        session.getRootDocument().getPathAsString(),
+                        reportModelsContainerPath.substring(1),
+                        Constants.BIRT_REPORT_MODELS_ROOT_TYPE);
+                doc.setPropertyValue("dc:title", "Report Models");
+                doc = session.createDocument(doc);
+
+                ACP acp = new ACPImpl();
+                ACL acl = new ACLImpl();
+                for (String administratorGroup : userManager.getAdministratorsGroups()) {
+                    ACE ace = new ACE(administratorGroup,
+                            SecurityConstants.EVERYTHING, true);
+                    acl.add(ace);
+                }
+                acp.addACL(acl);
+                doc.setACP(acp, true);
+                session.save();
+            }
+        }
+    }
+
 }

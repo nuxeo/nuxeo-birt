@@ -5,27 +5,26 @@
   xmlns:nxl="http://nuxeo.org/nxforms/layout"
   xmlns:nxu="http://nuxeo.org/nxweb/util"
   xmlns:c="http://java.sun.com/jstl/core"
-  id="createReportModel">
+  id="reportsModelPanel">
 
-  <f:subview id="reportForm" rendered="#{reportActions.showForm}">
+  <f:subview id="createReportModelView" rendered="#{reportActions.showForm}">
     <h3>
       <h:outputText value="#{messages['title.create.document']} #{messages['BirtReportModel']}" />
     </h3>
     <h:form enctype="multipart/form-data" id="document_create">
-    <nxl:documentLayout mode="create" value="#{reportActions.currentCreationReportModel}" />
-    <input type="hidden" name="parentDocumentPath" value="#{reportActions.defaultPath}" />
-    <p class="buttonsGadget">
-      <h:commandButton styleClass="button" value="#{messages['command.create']}"
-        action="#{reportActions.saveDocument}" id="button_create"
-        reRender="createReportModel" />
-      <a4j:commandButton styleClass="button" value="#{messages['command.cancel']}"
-        action="#{reportActions.toggleAndReset()}" immediate="true"
-        reRender="createReportModel" />
-    </p>
-  </h:form>
+      <nxl:documentLayout mode="create" value="#{reportActions.newReportModel}" />
+      <input type="hidden" name="parentDocumentPath" value="#{reportActions.reportModelsContainerPath}" />
+      <p class="buttonsGadget">
+        <h:commandButton styleClass="button" value="#{messages['command.create']}"
+          action="#{reportActions.saveDocument}" id="button_create" />
+        <a4j:commandButton styleClass="button" value="#{messages['command.cancel']}"
+          action="#{reportActions.toggleAndReset()}" immediate="true"
+          reRender="reportsModelPanel" />
+      </p>
+    </h:form>
   </f:subview>
 
-  <f:subview id="reportViewContent" rendered="#{!reportActions.showForm}">
+  <f:subview id="reportModelsListingView" rendered="#{!reportActions.showForm}">
     <style type="text/css">
       .contentViewPageSelectorDesc {
         display: inline;
@@ -35,7 +34,7 @@
       <h:form>
         <a4j:commandButton action="#{reportActions.toggleForm()}"
           value="#{messages['label.birt.reporting.create.model']}"
-          immediate="true" styleClass="button" reRender="createReportModel" />
+          immediate="true" styleClass="button" reRender="reportsModelPanel" />
       </h:form>
       <a4j:status>
         <f:facet name="start">
@@ -44,8 +43,10 @@
       </a4j:status>
     </div>
 
-    <nxu:set var="contentViewName" value="list_reportModel">
-      <ui:decorate template="/incl/content_view.xhtml" />
+    <nxu:set var="contentViewName" value="birt_report_models">
+      <ui:decorate template="/incl/content_view.xhtml">
+        <ui:define name="content_view_title"></ui:define>
+      </ui:decorate>
     </nxu:set>
   </f:subview>
 </a4j:outputPanel>

@@ -16,7 +16,7 @@
       <facet name="Commentable" />
       <facet name="Versionable" />
     </doctype>
-    <doctype name="ReportingRoot" extends="Folder">
+    <doctype name="BirtReportModelsRoot" extends="Folder">
       <facet name="SuperSpace"/>
       <facet name="HiddenInNavigation"/>
     </doctype>

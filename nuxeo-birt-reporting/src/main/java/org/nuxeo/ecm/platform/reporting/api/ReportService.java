@@ -46,5 +46,5 @@ public interface ReportService {
     ReportInstance getReportInstanceByKey(CoreSession session, String key)
             throws ClientException;
 
-    String getReportModelRoot();
+    String getReportModelsContainer();
 }

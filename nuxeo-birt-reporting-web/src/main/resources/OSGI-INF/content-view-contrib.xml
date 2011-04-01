@@ -4,7 +4,7 @@
   <extension target="org.nuxeo.ecm.platform.ui.web.ContentViewService"
     point="contentViews">
 
-    <contentView name="list_reportModel">
+    <contentView name="birt_report_models">
 
       <title>label.contentview.birt_report_model_list</title>
       <translateTitle>true</translateTitle>
@@ -13,10 +13,10 @@
       <coreQueryPageProvider>
         <property name="coreSession">#{documentManager}</property>
         <pattern>
-          select * from Document WHERE ecm:path STARTSWITH ?
+          SELECT * FROM Document WHERE ecm:path STARTSWITH ?
           AND ecm:currentLifeCycleState != 'deleted'
         </pattern>
-        <parameter>#{reportActions.defaultPath}</parameter>
+        <parameter>#{reportActions.reportModelsContainerPath}</parameter>
         <sort column="dc:title" ascending="true" />
         <pageSize>20</pageSize>
       </coreQueryPageProvider>

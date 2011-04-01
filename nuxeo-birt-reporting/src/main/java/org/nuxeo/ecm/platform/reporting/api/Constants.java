@@ -25,6 +25,8 @@ public class Constants {
         // Constants class
     }
 
+    public static final String BIRT_REPORT_MODELS_ROOT_TYPE = "BirtReportModelsRoot";
+
     public static final String BIRT_REPORT_MODEL_TYPE = "BirtReportModel";
 
     public static final String BIRT_REPORT_INSTANCE_TYPE = "BirtReport";

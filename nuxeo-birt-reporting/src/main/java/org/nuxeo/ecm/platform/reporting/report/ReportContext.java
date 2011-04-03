@@ -18,9 +18,14 @@
 
 package org.nuxeo.ecm.platform.reporting.report;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.nuxeo.ecm.core.api.ClientException;import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.DocumentModel;
 
 /**
  * Holds the logic to extract parameters from the Document Context.
@@ -42,9 +47,9 @@ public class ReportContext {
 
     public static final String CURRENT_REPOSITORY = "currentRepository";
 
-    public static final String CURRENT_SUPERSPACE_PATH = "currentSuperspacePath";
+    public static final String CURRENT_SUPERSPACE_PATH = "currentSuperSpacePath";
 
-    public static final String CURRENT_SUPERSPACE_ID = "currentSuperspaceId";
+    public static final String CURRENT_SUPERSPACE_ID = "currentSuperSpaceId";
 
     public static final String CURRENT_WORKSPACE_PATH = "currentWorkspacePath";
 
@@ -52,53 +57,66 @@ public class ReportContext {
 
     public static final String CURRENT_DOMAIN_PATH = "currentDomainPath";
 
-    public static final String CURRENT_DOMAIN_ID = "currentDomainPath";
+    public static final String CURRENT_DOMAIN_ID = "currentDomainId";
+
+    public static final Pattern PATTERN_TO_CHECK = Pattern.compile("\\$(\\w+)\\$");
 
     public static void setContextualParameters(
             List<ReportParameter> reportParams, DocumentModel doc)
             throws Exception {
-        DocumentModel currentDomain = getFirstParentWithType(doc, DOMAIN_DOCUMENT_TYPE);
-        DocumentModel currentWorkspace = getFirstParentWithType(doc, WORKSPACE_DOCUMENT_TYPE);
-        DocumentModel currentSuperSpace = getCurrentSuperSpace(doc);
-
-        for (ReportParameter param : reportParams) {
-            if (param.getName().equals(USER_NAME)) {
-                param.setValue(doc.getCoreSession().getPrincipal().getName());
-            } else if (param.getName().equals(DOC_TYPE)) {
-                param.setValue(doc.getType());
-            } else if (param.getName().equals(CURRENT_PATH)) {
-                param.setValue(doc.getPathAsString());
-            } else if (param.getName().equals(CURRENT_REPOSITORY)) {
-                param.setValue(doc.getRepositoryName());
-            } else if (param.getName().equals(CURRENT_DOMAIN_PATH)) {
-                if (currentDomain != null) {
-                    param.setValue(currentDomain.getPathAsString());
-                }
-            } else if (param.getName().equals(CURRENT_DOMAIN_ID)) {
-                if (currentDomain != null) {
-                    param.setValue(currentDomain.getId());
-                }
-            } else if (param.getName().equals(CURRENT_WORKSPACE_PATH)) {
-                if (currentWorkspace != null) {
-                    param.setValue(currentWorkspace.getPathAsString());
-                }
-            } else if (param.getName().equals(CURRENT_WORKSPACE_ID)) {
-                if (currentWorkspace != null) {
-                    param.setValue(currentWorkspace.getId());
-                }
-            } else if (param.getName().equals(CURRENT_SUPERSPACE_PATH)) {
-                if (currentSuperSpace != null) {
-                    param.setValue(currentSuperSpace.getPathAsString());
-                }
-            } else if (param.getName().equals(CURRENT_SUPERSPACE_ID)) {
-                if (currentSuperSpace != null) {
-                    param.setValue(currentSuperSpace.getId());
+        Map<String, String> contextualParameters = buildContextualParametersMap(doc);
+        for (ReportParameter parameter : reportParams) {
+            String value = parameter.getStringValue();
+            if (value != null) {
+                Matcher matcher = PATTERN_TO_CHECK.matcher(value);
+                if (matcher.matches()) {
+                    String parameterName = matcher.group(1);
+                    if (contextualParameters.containsKey(parameterName)) {
+                        parameter.setValue(contextualParameters.get(parameterName));
+                    }
                 }
             }
         }
     }
 
-    private static DocumentModel getFirstParentWithType(DocumentModel doc, String type) throws ClientException {
+    private static Map<String, String> buildContextualParametersMap(
+            DocumentModel doc) throws ClientException {
+        Map<String, String> contextualParameters = new HashMap<String, String>();
+        contextualParameters.put(USER_NAME,
+                doc.getCoreSession().getPrincipal().getName());
+        contextualParameters.put(DOC_TYPE, doc.getType());
+        contextualParameters.put(CURRENT_PATH, doc.getPathAsString());
+        contextualParameters.put(CURRENT_REPOSITORY, doc.getRepositoryName());
+
+        DocumentModel currentDomain = getFirstParentWithType(doc,
+                DOMAIN_DOCUMENT_TYPE);
+        if (currentDomain != null) {
+            contextualParameters.put(CURRENT_DOMAIN_ID, currentDomain.getId());
+            contextualParameters.put(CURRENT_DOMAIN_PATH,
+                    currentDomain.getPathAsString());
+        }
+
+        DocumentModel currentWorkspace = getFirstParentWithType(doc,
+                WORKSPACE_DOCUMENT_TYPE);
+        if (currentWorkspace != null) {
+            contextualParameters.put(CURRENT_WORKSPACE_ID,
+                    currentWorkspace.getId());
+            contextualParameters.put(CURRENT_WORKSPACE_PATH,
+                    currentWorkspace.getPathAsString());
+        }
+
+        DocumentModel currentSuperSpace = getCurrentSuperSpace(doc);
+        if (currentSuperSpace != null) {
+            contextualParameters.put(CURRENT_SUPERSPACE_ID,
+                    currentSuperSpace.getId());
+            contextualParameters.put(CURRENT_SUPERSPACE_PATH,
+                    currentSuperSpace.getPathAsString());
+        }
+        return contextualParameters;
+    }
+
+    private static DocumentModel getFirstParentWithType(DocumentModel doc,
+            String type) throws ClientException {
         List<DocumentModel> parents = doc.getCoreSession().getParentDocuments(
                 doc.getRef());
         for (DocumentModel parent : parents) {
@@ -109,7 +127,8 @@ public class ReportContext {
         return null;
     }
 
-    private static DocumentModel getCurrentSuperSpace(DocumentModel doc) throws ClientException {
+    private static DocumentModel getCurrentSuperSpace(DocumentModel doc)
+            throws ClientException {
         return doc.getCoreSession().getSuperSpace(doc);
     }
 

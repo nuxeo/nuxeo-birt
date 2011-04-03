@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
@@ -141,7 +142,7 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
         options.setBaseImageURL("images");
         options.setImageDirectory(imagesDir.getAbsolutePath());
 
-        HashMap inputValues = new HashMap();
+        Map inputValues = new HashMap();
         inputValues.put("docType", "Folder");
         task.setParameterValues(inputValues);
 

@@ -149,6 +149,7 @@ public class TestAdapters extends SQLRepositoryTestCase {
         options.setImageDirectory(imagesDir.getAbsolutePath());
 
         Map<String, Object> userParams = new HashMap<String, Object>();
+        userParams.put("docType", "$docType$");
         userParams.put("userParam", "fromUser");
         reportInstance.render(options, userParams);
 
@@ -179,6 +180,7 @@ public class TestAdapters extends SQLRepositoryTestCase {
         DocumentModel instance = createInstanceDoc(reportModel);
         ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
         assertNotNull(reportInstance);
+        reportInstance.setParameter("docType", "$docType$");
 
         List<ReportParameter> allParams = reportInstance.getReportParameters();
         assertEquals(4, allParams.size());

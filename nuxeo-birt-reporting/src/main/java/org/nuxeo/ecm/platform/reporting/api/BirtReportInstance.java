@@ -143,14 +143,14 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
             throws Exception {
         // get Stored params
         List<ReportParameter> params = getReportParameters();
-        // get contextual parameters
-        ReportContext.setContextualParameters(params, doc);
-        // override with user supplied parameters
+        // fill with user supplied parameters
         for (ReportParameter param : params) {
             if (userParameters.containsKey(param.getName())) {
                 param.setObjectValue(userParameters.get(param.getName()));
             }
         }
+        // replace values by contextual parameters if needed
+        ReportContext.setContextualParameters(params, doc);
 
         InputStream report = getModel().getReportFileAsStream();
         IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(report,

@@ -73,6 +73,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.nuxeo.ecm.core</groupId>
+      <artifactId>nuxeo-core-convert-plugins</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.eclipse.birt</groupId>
       <artifactId>org.mozilla.javascript</artifactId>
       <scope>test</scope>
@@ -86,6 +92,12 @@
       <groupId>org.eclipse.birt</groupId>
       <artifactId>birt-runtime-all</artifactId>
       <type>zip</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

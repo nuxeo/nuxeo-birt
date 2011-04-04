@@ -15,14 +15,17 @@
     <!-- Hide tabs for ReportModel -->
     <action id="TAB_MY_SUBSCRIPTIONS">
       <filter-id>denyForReportModel</filter-id>
+      <filter-id>denyForReportInstance</filter-id>
     </action>
 
     <action id="TAB_MANAGE_SUBSCRIPTIONS">
       <filter-id>denyForReportModel</filter-id>
+      <filter-id>denyForReportInstance</filter-id>
     </action>
 
     <action id="TAB_RELATIONS">
       <filter-id>denyForReportModel</filter-id>
+      <filter-id>denyForReportInstance</filter-id>
     </action>
 
     <!-- Admin center actions -->
@@ -53,6 +56,12 @@
       </rule>
     </filter>
 
+    <filter id="denyForReportInstance">
+      <rule grant="false">
+        <type>BirtReport</type>
+      </rule>
+    </filter>
+
     <filter id="view_preview" append="true">
       <rule grant="false">
         <type>BirtReport</type>
@@ -62,24 +71,28 @@
 
     <filter id="denyFilesTab" append="true">
       <rule grant="false">
+        <type>BirtReport</type>
         <type>BirtReportModel</type>
       </rule>
     </filter>
 
     <filter id="rights" append="true">
       <rule grant="true">
+        <type>BirtReport</type>
         <type>BirtReportModel</type>
       </rule>
     </filter>
 
     <filter id="publish_document" append="true">
       <rule grant="false">
+        <type>BirtReport</type>
         <type>BirtReportModel</type>
       </rule>
     </filter>
 
     <filter id="commentable" append="true">
       <rule grant="false">
+        <type>BirtReport</type>
         <type>BirtReportModel</type>
       </rule>
     </filter>

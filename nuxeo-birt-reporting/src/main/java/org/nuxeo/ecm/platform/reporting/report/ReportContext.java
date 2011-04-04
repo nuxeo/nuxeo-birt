@@ -59,7 +59,7 @@ public class ReportContext {
 
     public static final String CURRENT_DOMAIN_ID = "currentDomainId";
 
-    public static final Pattern PATTERN_TO_CHECK = Pattern.compile("\\$(\\w+)\\$");
+    public static final Pattern PATTERN_TO_CHECK = Pattern.compile("\\$\\{(\\w+)\\}");
 
     public static void setContextualParameters(
             List<ReportParameter> reportParams, DocumentModel doc)

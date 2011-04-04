@@ -60,10 +60,10 @@ public class TestContextualParameters {
         DocumentModel instance = createReportInsideWorkspace();
         ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
 
-        reportInstance.setParameter("docType", "$docType$");
-        reportInstance.setParameter("modelParam", "$currentDomainId$");
-        reportInstance.setParameter("instanceParam", "$currentWorkspaceId$");
-        reportInstance.setParameter("userParam", "$currentSuperSpaceId$");
+        reportInstance.setParameter("docType", "${docType}");
+        reportInstance.setParameter("modelParam", "${currentDomainId}");
+        reportInstance.setParameter("instanceParam", "${currentWorkspaceId}");
+        reportInstance.setParameter("userParam", "${currentSuperSpaceId}");
 
         List<ReportParameter> reportParameters = reportInstance.getReportParameters();
         ReportContext.setContextualParameters(reportParameters, instance);
@@ -121,19 +121,19 @@ public class TestContextualParameters {
         DocumentModel instance = createReportOutsideWorkspace();
         ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
 
-        reportInstance.setParameter("docType", "$docType$");
-        reportInstance.setParameter("modelParam", "$currentDomainId$");
-        reportInstance.setParameter("instanceParam", "$currentWorkspaceId$");
-        reportInstance.setParameter("userParam", "$currentSuperSpaceId$");
+        reportInstance.setParameter("docType", "${docType}");
+        reportInstance.setParameter("modelParam", "${currentDomainId}");
+        reportInstance.setParameter("instanceParam", "${currentWorkspaceId}");
+        reportInstance.setParameter("userParam", "${currentSuperSpaceId}");
 
         List<ReportParameter> reportParameters = reportInstance.getReportParameters();
         ReportContext.setContextualParameters(reportParameters, instance);
 
         assertEquals(instance.getType(),
                 reportParameters.get(0).getStringValue());
-        assertEquals("$currentDomainId$",
+        assertEquals("${currentDomainId}",
                 reportParameters.get(1).getStringValue());
-        assertEquals("$currentWorkspaceId$",
+        assertEquals("${currentWorkspaceId}",
                 reportParameters.get(2).getStringValue());
         assertEquals(session.getRootDocument().getId(),
                 reportParameters.get(3).getStringValue());
@@ -144,9 +144,9 @@ public class TestContextualParameters {
         DocumentModel instance = createReportInsideWorkspace();
         ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
 
-        reportInstance.setParameter("docType", "$docType$");
-        reportInstance.setParameter("modelParam", "$currentDomainPath$");
-        reportInstance.setParameter("instanceParam", "$unknownParameter$");
+        reportInstance.setParameter("docType", "${docType}");
+        reportInstance.setParameter("modelParam", "${currentDomainPath}");
+        reportInstance.setParameter("instanceParam", "${unknownParameter}");
 
         List<ReportParameter> reportParameters = reportInstance.getReportParameters();
         ReportContext.setContextualParameters(reportParameters, instance);
@@ -157,7 +157,7 @@ public class TestContextualParameters {
                 reportParameters.get(0).getStringValue());
         assertEquals(domain.getPathAsString(),
                 reportParameters.get(1).getStringValue());
-        assertEquals("$unknownParameter$",
+        assertEquals("${unknownParameter}",
                 reportParameters.get(2).getStringValue());
     }
 

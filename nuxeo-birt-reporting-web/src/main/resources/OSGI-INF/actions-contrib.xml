@@ -3,6 +3,7 @@
 
   <require>org.nuxeo.ecm.platform.preview.actions</require>
   <require>org.nuxeo.ecm.platform.comment.actions</require>
+  <require>org.nuxeo.connect.client.actions</require>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
 
@@ -15,14 +16,17 @@
     <!-- Hide tabs for ReportModel -->
     <action id="TAB_MY_SUBSCRIPTIONS">
       <filter-id>denyForReportModel</filter-id>
+      <filter-id>denyForReportInstance</filter-id>
     </action>
 
     <action id="TAB_MANAGE_SUBSCRIPTIONS">
       <filter-id>denyForReportModel</filter-id>
+      <filter-id>denyForReportInstance</filter-id>
     </action>
 
     <action id="TAB_RELATIONS">
       <filter-id>denyForReportModel</filter-id>
+      <filter-id>denyForReportInstance</filter-id>
     </action>
 
     <!-- Admin center actions -->
@@ -35,6 +39,13 @@
     <action id="TAB_VIEW_REPORT_MODELS" link="/incl/birt/report_content_view.xhtml"
       label="tab.report.models" order="10">
       <category>NUXEO_ADMIN_BirtModel</category>
+      <filter-id>only_for_manager</filter-id>
+    </action>
+
+    <!-- Override Admin center actions -->
+    <action id="AdminMain" link="#{adminViews.enter()}" label="action.admin.center"
+      order="30">
+      <category>USER_SERVICES</category>
       <filter-id>only_for_manager</filter-id>
     </action>
   </extension>
@@ -53,6 +64,12 @@
       </rule>
     </filter>
 
+    <filter id="denyForReportInstance">
+      <rule grant="false">
+        <type>BirtReport</type>
+      </rule>
+    </filter>
+
     <filter id="view_preview" append="true">
       <rule grant="false">
         <type>BirtReport</type>
@@ -62,24 +79,28 @@
 
     <filter id="denyFilesTab" append="true">
       <rule grant="false">
+        <type>BirtReport</type>
         <type>BirtReportModel</type>
       </rule>
     </filter>
 
     <filter id="rights" append="true">
       <rule grant="true">
+        <type>BirtReport</type>
         <type>BirtReportModel</type>
       </rule>
     </filter>
 
     <filter id="publish_document" append="true">
       <rule grant="false">
+        <type>BirtReport</type>
         <type>BirtReportModel</type>
       </rule>
     </filter>
 
     <filter id="commentable" append="true">
       <rule grant="false">
+        <type>BirtReport</type>
         <type>BirtReportModel</type>
       </rule>
     </filter>

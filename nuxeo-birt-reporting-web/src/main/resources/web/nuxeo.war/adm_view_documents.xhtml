@@ -7,6 +7,7 @@
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:nxu="http://nuxeo.org/nxweb/util"
+  xmlns:nxd="http://nuxeo.org/nxweb/document"
   xmlns:nxl="http://nuxeo.org/nxforms/layout"
   xmlns:a4j="https://ajax4jsf.dev.java.net/ajax">
 
@@ -21,13 +22,41 @@
         <td class="adminContentColumn">
           <!-- view document layout -->
           <div>
-            <nxl:documentLayout documentMode="header" mode="view"
-              value="#{currentDocument}" defaultLayout="document_header"
-              includeAnyMode="false" />
+
+          <h:panelGroup rendered="#{currentDocument.version}">
+            <h1>
+            <h:outputText value="#{nxd:titleOrId(versionedActions.sourceDocument)}"/>
+            (
+            <h:outputText value="#{messages['label.version']}" />
+            <h:outputText value=" #{currentDocument.uid.major_version}"/>.
+            <h:outputText value="#{currentDocument.uid.minor_version}"/>)
+            </h1>
+
+          </h:panelGroup>
+          <h:panelGroup rendered="#{! currentDocument.version}">
+            <h1>
+              <h:outputText value="#{nxd:titleOrId(currentDocument)}"/>
+              <span title="uid: #{currentDocument.id}">
+                <nxd:restDocumentLink document="#{currentDocument}" pattern="id">
+                  <nxu:graphicImage value="/icons/permalink.png"
+                    style="vertical-align:middle"
+                    alt="#{messages['label.permalink']}"
+                    title="#{messages['label.permalink']}"/>
+                </nxd:restDocumentLink>
+             </span>
+            </h1>
+
+          </h:panelGroup>
+            <ui:include src="/incl/message_banner.xhtml"/>
+
+            <p class="currentDocumentDescription">
+              <h:outputText value="#{currentDocument.dublincore.description}"/>
+            </p>
 
             <ui:include src="/incl/document_action_tabs.xhtml"/>
             <div style="clear:both"></div>
             <div class="tabsContent">
+
               <ui:include src="#{webActions.currentTabAction.link}"/>
             </div>
 

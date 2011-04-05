@@ -24,7 +24,7 @@
       <category>Reporting</category>
       <layouts mode="any">
         <layout>heading</layout>
-        <layout>file</layout>
+        <layout>report_file</layout>
         <layout>birtReportModel</layout>
       </layouts>
     </type>

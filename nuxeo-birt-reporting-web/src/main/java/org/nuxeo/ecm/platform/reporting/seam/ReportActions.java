@@ -18,11 +18,15 @@
 
 package org.nuxeo.ecm.platform.reporting.seam;
 
-import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.jboss.seam.annotations.Install.FRAMEWORK;import static org.nuxeo.ecm.platform.ui.web.component.file.InputFileMimetypeValidator.MIMETYPE_AUTHORIZED_EXTENSIONS_MESSAGE_ID;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,9 +51,14 @@ import org.nuxeo.ecm.core.api.security.impl.ACPImpl;
 import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 import org.nuxeo.ecm.platform.reporting.api.ReportService;
+import org.nuxeo.ecm.platform.ui.web.component.file.InputFileChoice;
+import org.nuxeo.ecm.platform.ui.web.component.file.InputFileInfo;
+import org.nuxeo.ecm.platform.ui.web.component.file.InputFileMimetypeValidator;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
 import org.nuxeo.runtime.api.Framework;
+
+import com.sun.faces.util.MessageFactory;
 
 /**
  * Seam Bean used to manage Edit form
@@ -160,6 +169,28 @@ public class ReportActions implements Serializable {
     public void toggleAndReset() {
         toggleForm();
         resetDocument();
+    }
+
+    public void validateReportExtension(FacesContext context,
+            UIComponent component, Object value) {
+        if (value instanceof InputFileInfo) {
+            InputFileInfo info = (InputFileInfo) value;
+            InputFileChoice choice = info.getConvertedChoice();
+            if (InputFileChoice.tempKeep != choice
+                    && InputFileChoice.upload != choice) {
+                return;
+            }
+            String filename = info.getConvertedFilename();
+            if (filename != null) {
+                if (!filename.endsWith(".rptdesign")) {
+                    throw new ValidatorException(
+                            MessageFactory.getMessage(
+                                    context,
+                                    MIMETYPE_AUTHORIZED_EXTENSIONS_MESSAGE_ID,
+                                    ".rptdesign"));
+                }
+            }
+        }
     }
 
     public class UnrestrictedReportModelsContainerCreator extends

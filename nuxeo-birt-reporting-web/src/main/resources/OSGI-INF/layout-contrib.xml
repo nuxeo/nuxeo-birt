@@ -110,6 +110,42 @@
         </widgetModes>
       </widget>
     </layout>
+
+    <layout name="report_file">
+      <templates>
+        <template mode="any">/layouts/layout_default_template.xhtml</template>
+      </templates>
+      <rows>
+        <row>
+          <widget>report_file</widget>
+        </row>
+      </rows>
+    </layout>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+    point="widgets">
+
+    <widget name="report_file" type="template">
+      <labels>
+        <label mode="any">label.file.content</label>
+      </labels>
+      <translated>true</translated>
+      <fields>
+        <field>file:content</field>
+        <field>file:filename</field>
+      </fields>
+      <widgetModes>
+        <mode value="full_edit">edit</mode>
+        <mode value="edit">edit</mode>
+        <mode value="view">view</mode>
+        <mode value="view">preview</mode>
+      </widgetModes>
+      <properties mode="any">
+        <property name="template">/widgets/report_file_widget.xhtml</property>
+      </properties>
+    </widget>
+
   </extension>
 
 </component>

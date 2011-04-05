@@ -42,6 +42,17 @@
       <filter-id>only_for_manager</filter-id>
     </action>
 
+    <action id="CURRENT_SELECTION_REPORTS_TRASH" link="#{deleteActions.deleteSelection}"
+      label="command.trashDocs" icon="" help="comand.trashDocs.help"
+      confirm="if( !confirmDeleteDocuments() ) return false;">
+      <category>CURRENT_SELECTION_REPORTS_LIST</category>
+      <filter id="canDelete">
+        <rule grant="true">
+          <condition>#{deleteActions.canDelete}</condition>
+        </rule>
+      </filter>
+    </action>
+
     <!-- Override Admin center actions -->
     <action id="AdminMain" link="#{adminViews.enter()}" label="action.admin.center"
       order="30">

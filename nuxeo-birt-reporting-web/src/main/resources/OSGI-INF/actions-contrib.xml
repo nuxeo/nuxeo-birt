@@ -5,7 +5,6 @@
   <require>org.nuxeo.ecm.platform.comment.actions</require>
 
   <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
-
     <action id="TAB_BIRT_PREVIEW" link="/incl/tabs/birt_preview.xhtml"
       enabled="true" order="0" label="label.document.preview">
       <category>VIEW_ACTION_LIST</category>
@@ -39,6 +38,17 @@
       label="tab.report.models" order="10">
       <category>NUXEO_ADMIN_BirtModel</category>
       <filter-id>only_for_manager</filter-id>
+    </action>
+
+    <action id="CURRENT_SELECTION_REPORTS_TRASH" link="#{deleteActions.deleteSelection}"
+      label="command.trashDocs" icon="" help="comand.trashDocs.help"
+      confirm="if( !confirmDeleteDocuments() ) return false;">
+      <category>CURRENT_SELECTION_REPORTS_LIST</category>
+      <filter id="canDelete">
+        <rule grant="true">
+          <condition>#{deleteActions.canDelete}</condition>
+        </rule>
+      </filter>
     </action>
   </extension>
 

@@ -27,6 +27,7 @@
         <event>documentChanged</event>
         <event>documentCreated</event>
       </refresh>
+      <cacheKey>#{reportActions.reportModelsContainerPath}</cacheKey>
       <cacheSize>10</cacheSize>
 
       <resultLayouts>
@@ -34,6 +35,9 @@
           translateTitle="true" iconPath="/icons/document_listing_icon.png"
           showCSVExport="true" showPDFExport="true" />
       </resultLayouts>
+
+      <selectionList>CURRENT_SELECTION</selectionList>
+      <actions category="CURRENT_SELECTION_REPORTS_LIST" />
     </contentView>
   </extension>
 </component>

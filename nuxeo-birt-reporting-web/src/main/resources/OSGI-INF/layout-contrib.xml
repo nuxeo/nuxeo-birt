@@ -93,6 +93,7 @@
           <property name="required">false</property>
         </properties>
         <widgetModes>
+          <mode value="create">hidden</mode>
           <mode value="edit">view</mode>
         </widgetModes>
       </widget>

@@ -20,6 +20,7 @@ package org.nuxeo.ecm.platform.reporting.engine;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -75,8 +76,8 @@ public class BirtFSDeployer implements IPlatformContext {
             File dataDir = Environment.getDefault().getData();
             if (Framework.isTestModeSet()) {
                 // runtime path will be removed too soon.
-                String jarDestination = System.getProperty("java.io.tmpdir").contains("+") ?
-                        "/tmp" : System.getProperty("java.io.tmpdir");
+                String jarDestination = System.getProperty("java.io.tmpdir").contains(
+                        "+") ? "/tmp" : System.getProperty("java.io.tmpdir");
                 String dirPath = new Path(jarDestination).append(
                         "birt-fs" + System.currentTimeMillis()).toString();
                 dataDir = new File(dirPath);
@@ -110,14 +111,24 @@ public class BirtFSDeployer implements IPlatformContext {
         URL url = Thread.currentThread().getContextClassLoader().getResource(
                 resourcePath);
         if ("jar".equals(url.getProtocol())) {
-            String jarPath = url.getFile().split("!")[0].replace("file:", "");
-            InputStream zipStream = ZipUtils.getEntryContentAsStream(new File(
-                    jarPath), BIRT_ZIP_NAME);
+            URL jarURL = new URL(url.getFile().split("!")[0]);
+            InputStream zipStream = ZipUtils.getEntryContentAsStream(
+                    getFileFromURL(jarURL), BIRT_ZIP_NAME);
             ZipUtils.unzip(zipStream, dir);
         } else { // unziped jar (unit tests)
             File source = new File(url.toURI());
             ZipUtils.unzip(source, dir);
         }
+    }
+
+    protected File getFileFromURL(URL url) {
+        File file;
+        try {
+            file = new File(url.toURI());
+        } catch (URISyntaxException e) {
+            file = new File(url.getPath());
+        }
+        return file;
     }
 
 }

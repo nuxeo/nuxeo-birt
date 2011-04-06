@@ -12,7 +12,7 @@
   <name>Nuxeo Birt Reporting Parent</name>
   <description>Nuxeo Birt Reporting Parent</description>
   <packaging>pom</packaging>
-  <version>5.4.1-SNAPSHOT</version>
+  <version>5.4.1</version>
 
   <modules>
     <module>nuxeo-birt-reporting</module>
@@ -20,7 +20,7 @@
   </modules>
 
   <properties>
-    <nuxeo.birt.version>5.4.1-SNAPSHOT</nuxeo.birt.version>
+    <nuxeo.birt.version>5.4.1</nuxeo.birt.version>
   </properties>
 
   <dependencyManagement>

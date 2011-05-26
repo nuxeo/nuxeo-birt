@@ -24,8 +24,7 @@
       <showPageSizeSelector>true</showPageSizeSelector>
       <useGlobalPageSize>true</useGlobalPageSize>
       <refresh>
-        <event>documentChanged</event>
-        <event>documentCreated</event>
+        <event>documentChildrenChanged</event>
       </refresh>
       <cacheKey>#{reportActions.reportModelsContainerPath}</cacheKey>
       <cacheSize>10</cacheSize>

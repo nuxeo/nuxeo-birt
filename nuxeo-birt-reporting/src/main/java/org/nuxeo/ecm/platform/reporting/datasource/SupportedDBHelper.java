@@ -42,11 +42,14 @@ public class SupportedDBHelper {
 
     public static final String PGSQL = "postgresql";
 
+    public static final String MSSQL = "mssql";
+
     public static Map<String, String> getMapping() {
         if (driverMapping == null) {
             driverMapping = new HashMap<String, String>();
             driverMapping.put(H2, "org.h2.Driver");
             driverMapping.put(PGSQL, "org.postgresql.Driver");
+            driverMapping.put(MSSQL, "net.sourceforge.jtds.jdbc.Driver");
         }
         return driverMapping;
     }

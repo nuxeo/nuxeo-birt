@@ -42,6 +42,8 @@ public class NuxeoDSConfig {
 
     public static final String PG_PREFIX = "org.postgresql";
 
+    public static final String MSSQL_PREFIX = "net.sourceforge.jtds";
+
     public NuxeoDSConfig(String dataSourceName, Map<String, String> properties) {
         if (dataSourceName.startsWith(H2_PREFIX)) {
             userName = getProp(properties, "User");
@@ -55,6 +57,13 @@ public class NuxeoDSConfig {
                     + ":" + getProp(properties, "PortNumber") + "/"
                     + getProp(properties, "DatabaseName");
             driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.PGSQL);
+        } else if (dataSourceName.startsWith(MSSQL_PREFIX)) {
+            userName = getProp(properties, "User");
+            password = getProp(properties, "Password");
+            url = "jdbc:jtds:sqlserver://" + getProp(properties, "ServerName")
+                    + ":" + getProp(properties, "PortNumber") + "/"
+                    + getProp(properties, "DatabaseName") + ";useCursors=true";
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MSSQL);
         }
     }
 

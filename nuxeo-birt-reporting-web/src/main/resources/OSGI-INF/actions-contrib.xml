@@ -36,7 +36,7 @@
 
     <action id="TAB_VIEW_REPORT_MODELS" link="/incl/birt/report_content_view.xhtml"
       label="tab.report.models" order="10">
-      <category>NUXEO_ADMIN_BirtModel</category>
+      <category>BirtModel_sub_tab</category>
       <filter-id>only_for_manager</filter-id>
     </action>
 

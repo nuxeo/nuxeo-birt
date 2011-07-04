@@ -44,6 +44,10 @@ public class NuxeoDSConfig {
 
     public static final String MSSQL_PREFIX = "net.sourceforge.jtds";
 
+    public static final String MYSQL_PREFIX = "com.mysql.jdbc";
+
+    public static final String ORACLE_PREFIX = "oracle.jdbc.driver";
+
     public NuxeoDSConfig(String dataSourceName, Map<String, String> properties) {
         if (dataSourceName.startsWith(H2_PREFIX)) {
             userName = getProp(properties, "User");
@@ -64,6 +68,16 @@ public class NuxeoDSConfig {
                     + ":" + getProp(properties, "PortNumber") + "/"
                     + getProp(properties, "DatabaseName") + ";useCursors=true";
             driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MSSQL);
+        } else if (dataSourceName.startsWith(MYSQL_PREFIX)) {
+            userName = getProp(properties, "User");
+            password = getProp(properties, "Password");
+            url = getProp(properties, "URL");
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MYSQL);
+        } else if (dataSourceName.startsWith(ORACLE_PREFIX)) {
+            userName = getProp(properties, "User");
+            password = getProp(properties, "Password");
+            url = getProp(properties, "URL");
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.ORACLE);
         }
     }
 

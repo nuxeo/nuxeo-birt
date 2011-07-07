@@ -122,11 +122,12 @@ public class ReportActions implements Serializable {
         return newReportModel;
     }
 
-    public void saveDocument() throws ClientException {
+    public String saveDocument() throws ClientException {
         createReportsModelContainerIfNeeded();
-        documentActions.saveDocument(newReportModel);
+        String view = documentActions.saveDocument(newReportModel);
         resetDocument();
         toggleForm();
+        return view;
     }
 
     protected void createReportsModelContainerIfNeeded() throws ClientException {

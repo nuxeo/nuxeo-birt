@@ -2,11 +2,10 @@
 
 <component name="org.nuxeo.platform.birt.reporting.theme">
 
-  <require>org.nuxeo.theme.nuxeo.connect</require>
+  <require>org.nuxeo.ecm.admin.center.theme</require>
 
   <!-- application settings -->
-  <extension target="org.nuxeo.theme.services.ThemeService"
-    point="applications">
+  <extension target="org.nuxeo.theme.services.ThemeService" point="applications">
 
     <application root="${org.nuxeo.ecm.contextPath}"
       template-engine="jsf-facelets">

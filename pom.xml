@@ -100,4 +100,10 @@
     </repository>
   </repositories>
 
+  <scm>
+    <connection>scm:git:git://github.com/nuxeo/nuxeo-birt.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:nuxeo/nuxeo-birt.git</developerConnection>
+    <url>https://github.com/nuxeo/nuxeo-birt</url>
+  </scm>
+
 </project>

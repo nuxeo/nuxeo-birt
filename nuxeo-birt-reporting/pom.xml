@@ -52,7 +52,6 @@
       <artifactId>nuxeo-webengine-core</artifactId>
     </dependency>
 
-
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
@@ -73,10 +72,13 @@
 
     <dependency>
       <groupId>org.nuxeo.ecm.core</groupId>
+      <artifactId>nuxeo-core-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-convert-plugins</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.eclipse.birt</groupId>
       <artifactId>org.mozilla.javascript</artifactId>
@@ -93,7 +95,6 @@
       <type>zip</type>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>mail</artifactId>

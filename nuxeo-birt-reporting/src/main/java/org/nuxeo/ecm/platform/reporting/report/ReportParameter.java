@@ -38,14 +38,11 @@ public class ReportParameter {
 
     private static final Log log = LogFactory.getLog(ReportParameter.class);
 
-    public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss.SSS");
+    public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
-            "yyyy-MM-dd");
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
 
-    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
-            "hh:mm:ss");
+    public static final String TIME_FORMAT = "hh:mm:ss";
 
     protected int type;
 
@@ -92,11 +89,11 @@ public class ReportParameter {
 
     public void setValue(Date value) {
         if (type == IParameterDefn.TYPE_DATE) {
-            stringValue = DATE_FORMAT.format(value);
+            stringValue = new SimpleDateFormat(DATE_FORMAT).format(value);
         } else if (type == IParameterDefn.TYPE_DATE_TIME) {
-            stringValue = DATETIME_FORMAT.format(value);
+            stringValue = new SimpleDateFormat(DATETIME_FORMAT).format(value);
         } else if (type == IParameterDefn.TYPE_TIME) {
-            stringValue = TIME_FORMAT.format(value);
+            stringValue = new SimpleDateFormat(TIME_FORMAT).format(value);
         }
     }
 
@@ -125,11 +122,11 @@ public class ReportParameter {
     public Date getDateTimeValue() {
         try {
             if (type == IParameterDefn.TYPE_DATE) {
-                return DATE_FORMAT.parse(stringValue);
+                return new SimpleDateFormat(DATE_FORMAT).parse(stringValue);
             } else if (type == IParameterDefn.TYPE_DATE_TIME) {
-                return DATETIME_FORMAT.parse(stringValue);
+                return new SimpleDateFormat(DATETIME_FORMAT).parse(stringValue);
             } else if (type == IParameterDefn.TYPE_TIME) {
-                return TIME_FORMAT.parse(stringValue);
+                return new SimpleDateFormat(TIME_FORMAT).parse(stringValue);
             }
         } catch (Exception e) {
             String message = String.format(

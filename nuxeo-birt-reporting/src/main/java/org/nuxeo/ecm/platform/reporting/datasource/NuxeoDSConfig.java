@@ -69,11 +69,19 @@ public class NuxeoDSConfig {
         driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.H2);
     }
 
+    protected String getIntegerProp(Map<String, String> properties, String name) {
+        String value = getProp(properties, name);
+        if (value != null) {
+            return value;
+        }
+        return getProp(properties, name+"/Integer");
+    }
+    
     protected void initForPostgreSQL(Map<String, String> properties) {
         userName = getProp(properties, "User");
         password = getProp(properties, "Password");
         url = "jdbc:postgresql://" + getProp(properties, "ServerName") + ":"
-                + getProp(properties, "PortNumber") + "/"
+                + getIntegerProp(properties, "PortNumber") + "/"
                 + getProp(properties, "DatabaseName");
         driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.PGSQL);
     }
@@ -82,7 +90,7 @@ public class NuxeoDSConfig {
         userName = getProp(properties, "User");
         password = getProp(properties, "Password");
         url = "jdbc:jtds:sqlserver://" + getProp(properties, "ServerName")
-                + ":" + getProp(properties, "PortNumber") + "/"
+                + ":" + getIntegerProp(properties, "PortNumber") + "/"
                 + getProp(properties, "DatabaseName") + ";useCursors=true";
         driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MSSQL);
     }
@@ -102,7 +110,11 @@ public class NuxeoDSConfig {
     }
 
     protected String getProp(Map<String, String> properties, String name) {
-        return Framework.expandVars(properties.get(name));
+        final String value = properties.get(name);
+        if (value == null) {
+            return null;
+        }
+        return Framework.expandVars(value);
     }
 
     public String getDriverClass() {

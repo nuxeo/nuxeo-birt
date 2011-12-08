@@ -89,12 +89,12 @@ public class BirtFSDeployer implements IPlatformContext {
                 copyResources(BIRT_ZIP_NAME, birtPlatformFolder);
                 if (!Framework.isTestModeSet()) {
                     // also need to copy the JDBC drivers
-                    List<String> driverJars = SupportedDBHelper.getDriverJars();
-                    String targetPath = birtPlatformFolder.getAbsolutePath()
-                            + JDBC_JAR_DIR;
-                    for (String driverJar : driverJars) {
-                        FileUtils.copyFile(new File(driverJar), new File(
-                                targetPath));
+                    final File targetDir = new File(birtPlatformFolder, JDBC_JAR_DIR);
+                    for (URL jarLocation : SupportedDBHelper.getDriverJars()) {
+                        Path path = new Path(jarLocation.getFile());
+                        String name = path.lastSegment();
+                        File targetFile = new File(targetDir, name);
+                        FileUtils.copyToFile(jarLocation.openStream(), targetFile);
                     }
                 }
             } catch (Exception e) {
@@ -110,12 +110,16 @@ public class BirtFSDeployer implements IPlatformContext {
             throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource(
                 resourcePath);
-        if ("jar".equals(url.getProtocol())) {
+        final String protocol = url.getProtocol();
+        if ("jar".equals(protocol)) {
             URL jarURL = new URL(url.getFile().split("!")[0]);
             InputStream zipStream = ZipUtils.getEntryContentAsStream(
                     getFileFromURL(jarURL), BIRT_ZIP_NAME);
             ZipUtils.unzip(zipStream, dir);
-        } else { // unziped jar (unit tests)
+        } else if ("vfszip".equals(protocol)){
+            InputStream zipStream = url.openStream();
+            ZipUtils.unzip(zipStream, dir);
+        } else {// unziped jar (unit tests)
             File source = new File(url.toURI());
             ZipUtils.unzip(source, dir);
         }

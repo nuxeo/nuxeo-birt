@@ -9,8 +9,8 @@
   </parent>
 
   <artifactId>nuxeo-birt-reporting-web</artifactId>
-  <name>Nuxeo Birt Reporting integration Web Layer</name>
-  <description>Nuxeo Birt Reporting integration Web Layer</description>
+  <name>Nuxeo Birt Reporting Web Layer</name>
+  <description>Nuxeo Birt Reporting Web Layer</description>
 
   <properties>
     <birt.version>2.6.1</birt.version>
@@ -74,38 +74,34 @@
 
   <build>
     <plugins>
-      <!-- APT plugin for annotation preprocessing -->
-      <plugin>
-        <groupId>org.apache.myfaces.tobago</groupId>
-        <artifactId>maven-apt-plugin</artifactId>
+         <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
-            <id>generate-bindings</id>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- end APT plugin -->
-      <plugin>
-        <groupId>org.nuxeo.build</groupId>
-        <artifactId>nuxeo-distribution-tools</artifactId>
-        <configuration>
-          <buildFiles>
-            <buildFile>${basedir}/src/main/assemble/assembly.xml</buildFile>
-          </buildFiles>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
+            <id>copy-runtime</id>
             <phase>prepare-package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.eclipse.birt</groupId>
+                  <artifactId>birt-runtime-web</artifactId>
+                  <version>2.6.1</version>
+                  <type>zip</type>
+                </artifactItem>
+              </artifactItems>
+              <excludes>coreapi.jar,engineapi.jar,com.ibm.icu*.jar,modelapi*.jar,scriptapi.jar,org.w3c.css.sac*.jar,flute.jar,js.jar,commons-cli*.jar</excludes>
+              <outputDirectory>
+                ${project.build.outputDirectory}/web/nuxeo.war/WEB-INF/lib
+              </outputDirectory>
+            </configuration>
           </execution>
-        </executions>
-      </plugin>
-    </plugins>
+ 	</executions>
+ 	</plugin>
+	</plugins>
   </build>
 
 </project>

@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.core.framework.IPlatformContext;
 import org.eclipse.birt.core.framework.Platform;
@@ -44,6 +46,8 @@ import org.nuxeo.common.utils.FileUtils;
  */
 public class BirtEngine {
 
+    private static Log log = LogFactory.getLog(BirtEngine.class);
+    
     private static IReportEngine birtEngine = null;
 
     private static IDesignEngine birtDesignEngine = null;
@@ -95,7 +99,7 @@ public class BirtEngine {
             try {
                 Platform.startup(config);
             } catch (BirtException e) {
-                e.printStackTrace();
+                log.error("Cannot startup birt", e);
             }
 
             IReportEngineFactory factory = (IReportEngineFactory) Platform.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);

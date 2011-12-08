@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.datasource;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,12 +28,12 @@ import java.util.Map;
 /**
  * Helper class to find JDBC jar from the database type. Since BIRT used ODA to
  * wrap JDBC we must provide the JDBC JAR.
- *
+ * 
  * This class directly finds the target Class in the server ClassLoader and
  * extract the associated Jar.
- *
+ * 
  * @author Tiry (tdelprat@nuxeo.com)
- *
+ * 
  */
 public class SupportedDBHelper {
 
@@ -64,23 +65,31 @@ public class SupportedDBHelper {
         return getMapping().get(name);
     }
 
-    public static String getDriverJar(String name) {
+    public static URL getDriverJar(String name) throws MalformedURLException {
         String javaName = getDriver(name);
-        String className = javaName.replace(".", "/");
-        className = className + ".class";
+        String classPath = javaName.replace(".", "/");
+        classPath = classPath + ".class";
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        URL url = cl.getResource(className);
+        URL url = cl.getResource(classPath);
         if (url == null) {
             return null;
         }
-        return url.getFile().split("!")[0].replace("file:", "");
+        String protocol = url.getProtocol();
+        String file = url.getFile();
+        if ("vfszip".equals(protocol)) {
+            return new URL("vfszip:"+ file.substring(0,file.length() - classPath.length() - 1));
+        } else if ("jar".equals(protocol)) {
+            return new URL(file.substring(0, file.length() - classPath.length() - 2));
+        } else {
+            throw new Error("Cannot loate jar location of '" + name +"' JDBC Driver, unsupported protocol '" + protocol + "'");
+        }
     }
 
-    public static List<String> getDriverJars() {
-        List<String> jars = new ArrayList<String>();
+    public static List<URL> getDriverJars() throws MalformedURLException {
+        List<URL> jars = new ArrayList<URL>();
         for (String name : getMapping().keySet()) {
-            String jar = getDriverJar(name);
+            URL jar = getDriverJar(name);
             if (jar != null) {
                 jars.add(jar);
             }

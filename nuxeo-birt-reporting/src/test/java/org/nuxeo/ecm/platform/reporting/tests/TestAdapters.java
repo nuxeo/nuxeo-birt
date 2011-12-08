@@ -51,6 +51,7 @@ public class TestAdapters extends SQLRepositoryTestCase {
 
     @Override
     public void tearDown() throws Exception {
+        closeSession();
         super.tearDown();
         if (reportPath != null) {
             FileUtils.deleteTree(new File(reportPath));

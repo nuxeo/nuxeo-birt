@@ -28,12 +28,12 @@ import java.util.Map;
 /**
  * Helper class to find JDBC jar from the database type. Since BIRT used ODA to
  * wrap JDBC we must provide the JDBC JAR.
- * 
+ *
  * This class directly finds the target Class in the server ClassLoader and
  * extract the associated Jar.
- * 
+ *
  * @author Tiry (tdelprat@nuxeo.com)
- * 
+ *
  */
 public class SupportedDBHelper {
 
@@ -56,7 +56,7 @@ public class SupportedDBHelper {
             driverMapping.put(PGSQL, "org.postgresql.Driver");
             driverMapping.put(MSSQL, "net.sourceforge.jtds.jdbc.Driver");
             driverMapping.put(MYSQL, "com.mysql.jdbc.Driver");
-            driverMapping.put(ORACLE, "oracle.jdbc.driver.OracleDriver");
+            driverMapping.put(ORACLE, "oracle.jdbc.OracleDriver");
         }
         return driverMapping;
     }

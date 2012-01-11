@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.tests;
 
+import static org.junit.Assert.*;
 import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_INSTANCE_TYPE;
 
 import java.io.File;
@@ -27,37 +28,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.inject.Inject;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.FileUtils;
 import org.nuxeo.common.utils.Path;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
-import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
+import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
+import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
-public class TestAdapters extends SQLRepositoryTestCase {
+@RunWith(FeaturesRunner.class)
+@Features(CoreFeature.class)
+@Deploy({ "org.nuxeo.ecm.platform.birt.reporting" })
+public class TestAdapters {
 
     String reportPath = null;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        deployBundle("org.nuxeo.ecm.platform.birt.reporting");
-        openSession();
-    }
-
-    @Override
-    public void tearDown() throws Exception {
-        closeSession();
-        super.tearDown();
-        if (reportPath != null) {
-            FileUtils.deleteTree(new File(reportPath));
-            reportPath = null;
-        }
-    }
+    @Inject
+    protected CoreSession session;
 
     protected DocumentModel createModelDoc() throws Exception {
 
@@ -76,6 +74,15 @@ public class TestAdapters extends SQLRepositoryTestCase {
         return model;
     }
 
+
+    @After
+    public void cleanUpTempForlder() {
+        if (reportPath != null) {
+            FileUtils.deleteTree(new File(reportPath));
+            reportPath = null;
+        }
+    }
+
     protected DocumentModel createInstanceDoc(ReportModel model)
             throws Exception {
 
@@ -91,6 +98,41 @@ public class TestAdapters extends SQLRepositoryTestCase {
         return instance;
     }
 
+
+    @Test
+    public void testParams() throws Exception {
+
+        DocumentModel model = createModelDoc();
+        ReportModel reportModel = model.getAdapter(ReportModel.class);
+        assertNotNull(reportModel);
+
+        // create instance
+        DocumentModel instance = createInstanceDoc(reportModel);
+        ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
+        assertNotNull(reportInstance);
+        reportInstance.setParameter("docType", "$docType$");
+
+        List<ReportParameter> allParams = reportInstance.getReportParameters();
+        assertEquals(4, allParams.size());
+
+        List<ReportParameter> userParams = reportInstance.getReportUserParameters();
+        assertEquals(3, userParams.size());
+
+        reportModel.setParameter("modelParam", "fromModel");
+        session.save();
+
+        userParams = reportInstance.getReportUserParameters();
+        assertEquals(2, userParams.size());
+
+        reportInstance.setParameter("instanceParam", "fromInstance");
+        session.save();
+
+        userParams = reportInstance.getReportUserParameters();
+        assertEquals(1, userParams.size());
+
+    }
+
+    @Test
     public void testAdapters() throws Exception {
 
         DocumentModel model = createModelDoc();
@@ -168,38 +210,6 @@ public class TestAdapters extends SQLRepositoryTestCase {
         // query result
         assertTrue(generatedHtml.contains(model.getId()));
         assertTrue(generatedHtml.contains(instance.getId()));
-
-    }
-
-    public void testParams() throws Exception {
-
-        DocumentModel model = createModelDoc();
-        ReportModel reportModel = model.getAdapter(ReportModel.class);
-        assertNotNull(reportModel);
-
-        // create instance
-        DocumentModel instance = createInstanceDoc(reportModel);
-        ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
-        assertNotNull(reportInstance);
-        reportInstance.setParameter("docType", "$docType$");
-
-        List<ReportParameter> allParams = reportInstance.getReportParameters();
-        assertEquals(4, allParams.size());
-
-        List<ReportParameter> userParams = reportInstance.getReportUserParameters();
-        assertEquals(3, userParams.size());
-
-        reportModel.setParameter("modelParam", "fromModel");
-        session.save();
-
-        userParams = reportInstance.getReportUserParameters();
-        assertEquals(2, userParams.size());
-
-        reportInstance.setParameter("instanceParam", "fromInstance");
-        session.save();
-
-        userParams = reportInstance.getReportUserParameters();
-        assertEquals(1, userParams.size());
 
     }
 }

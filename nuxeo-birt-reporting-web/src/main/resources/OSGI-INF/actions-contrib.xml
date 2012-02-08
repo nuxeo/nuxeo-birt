@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="org.nuxeo.platform.birt.reporting.actions">
 
+  <require>org.nuxeo.ecm.platform.actions</require>
   <require>org.nuxeo.ecm.platform.preview.actions</require>
   <require>org.nuxeo.ecm.platform.comment.actions</require>
 

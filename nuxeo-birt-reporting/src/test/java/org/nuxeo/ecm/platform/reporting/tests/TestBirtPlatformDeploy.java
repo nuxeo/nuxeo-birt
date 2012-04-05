@@ -25,6 +25,10 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 
+import org.junit.After;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
@@ -33,6 +37,7 @@ import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
 import org.eclipse.birt.report.engine.api.PDFRenderOption;
+
 import org.nuxeo.common.utils.FileUtils;
 import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.platform.reporting.engine.BirtEngine;
@@ -43,6 +48,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
 
     String reportPath = null;
 
+    @Test
     public void testDeploy() {
         IReportEngine engine = BirtEngine.getBirtEngine();
         assertNotNull(engine);
@@ -51,7 +57,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
         System.out.println(engine.getConfig());
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
         super.tearDown();
         if (reportPath != null) {
@@ -60,6 +66,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
         }
     }
 
+    @Test
     public void testLoadReport() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/test1.rptdesign");
@@ -71,6 +78,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
 
     }
 
+    @Test
     public void testGetReportParameters() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/test1.rptdesign");
@@ -87,6 +95,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
         }
     }
 
+    @Test
     public void testReportHtmlRendering() throws Exception {
         File report = FileUtils.getResourceFileFromContext("reports/test.rptdesign");
         IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(
@@ -122,6 +131,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
 
     }
 
+    @Test
     public void testReportHtmlRenderingWithParams() throws Exception {
         File report = FileUtils.getResourceFileFromContext("reports/test1.rptdesign");
 
@@ -164,6 +174,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
 
     }
 
+    @Test
     public void testReportPDFRenderingWithParams() throws Exception {
         File report = FileUtils.getResourceFileFromContext("reports/test1.rptdesign");
 

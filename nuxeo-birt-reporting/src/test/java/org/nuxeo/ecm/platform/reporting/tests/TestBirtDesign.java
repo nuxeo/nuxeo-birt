@@ -25,10 +25,16 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Before;
+import org.junit.After;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
+
 import org.nuxeo.common.utils.FileUtils;
 import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -44,7 +50,7 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
 
     DocumentModel file1 = null;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
         super.setUp();
         openSession();
@@ -61,7 +67,7 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
 
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
         closeSession();
         super.tearDown();
@@ -71,6 +77,7 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
         }
     }
 
+    @Test
     public void testNuxeoReport() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/testNX2.rptdesign");
@@ -114,6 +121,7 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
 
     }
 
+    @Test
     public void testNuxeoReportWithParams() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/simpleVCSReport.rptdesign");

@@ -4,9 +4,9 @@
   <xs:complexType name="parameter">
     <xs:sequence>
       <xs:element name="pName" type="xs:string" minOccurs="0"
-        maxOccurs="unbounded" />
+        maxOccurs="1" />
       <xs:element name="pValue" type="xs:string" minOccurs="0"
-        maxOccurs="unbounded" />
+        maxOccurs="1" />
     </xs:sequence>
   </xs:complexType>
 

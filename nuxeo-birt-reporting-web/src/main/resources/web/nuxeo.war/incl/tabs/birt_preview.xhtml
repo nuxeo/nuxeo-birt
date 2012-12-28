@@ -7,6 +7,10 @@
   xmlns:nxdir="http://nuxeo.org/nxdirectory"
   xmlns:nxu="http://nuxeo.org/nxweb/util">
 
-<iframe src="#{baseURL}site/reports/#{currentDocument.id}/html"  height="600px" width="100%" scrolling="auto" />
+<A href="#{baseURL}site/reports/#{currentDocument.id}/html" target="#{currentDocument.id}_html"> <h:outputText value="#{messages['label.birt.view.html']}" /></A> <br/>
+<A href="#{baseURL}site/reports/#{currentDocument.id}/pdf" target="#{currentDocument.id}_pdf"> <h:outputText value="#{messages['label.birt.view.pdf']}" /></A> <br/>
+
+<h:outputText value="#{messages['label.birt.preview.html']}" /> :
+<iframe src="#{baseURL}site/reports/#{currentDocument.id}/html"  height="600px" width="100%" scrolling="auto" border="0"/>
 
 </div>

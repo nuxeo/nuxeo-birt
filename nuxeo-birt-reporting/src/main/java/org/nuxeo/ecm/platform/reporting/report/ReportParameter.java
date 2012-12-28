@@ -26,13 +26,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.eclipse.birt.report.engine.api.impl.ScalarParameterDefn;
+import org.nuxeo.ecm.core.api.ClientException;
 
 /**
- *
+ * 
  * Wraps Birt Report parameters to manage Cast and Conversions
- *
+ * 
  * @author Tiry (tdelprat@nuxeo.com)
- *
+ * 
  */
 public class ReportParameter {
 
@@ -58,6 +59,8 @@ public class ReportParameter {
 
     protected boolean editable = true;
 
+    protected boolean error;
+
     public ReportParameter(IParameterDefn paramDef) {
         this(paramDef, null);
     }
@@ -81,6 +84,63 @@ public class ReportParameter {
 
     public void setValue(String value) {
         stringValue = value;
+    }
+
+    public boolean setAndValidateValue(String value) {
+        if (value == null) {
+            return false;
+        }
+        try {
+            if (type == IParameterDefn.TYPE_DATE) {
+                new SimpleDateFormat(DATE_FORMAT).parse(value);
+            } else if (type == IParameterDefn.TYPE_DATE_TIME) {
+                new SimpleDateFormat(DATETIME_FORMAT).parse(value);
+            } else if (type == IParameterDefn.TYPE_TIME) {
+                new SimpleDateFormat(TIME_FORMAT).parse(value);
+            } else if (type == IParameterDefn.TYPE_INTEGER) {
+                Integer.parseInt(value);
+            } else if (type == IParameterDefn.TYPE_FLOAT) {
+                Float.parseFloat(value);
+            } else if (type == IParameterDefn.TYPE_BOOLEAN) {
+                Boolean.parseBoolean(value);
+            } else {
+                if (value.trim().isEmpty()) {
+                    return false;
+                }
+            }
+            stringValue = value;
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getTypeName() {
+        if (type == IParameterDefn.TYPE_DATE) {
+            return "Date";
+        } else if (type == IParameterDefn.TYPE_DATE_TIME) {
+            return "DateTime";
+        } else if (type == IParameterDefn.TYPE_TIME) {
+            return "Time";
+        } else if (type == IParameterDefn.TYPE_INTEGER) {
+            return "Integer";
+        } else if (type == IParameterDefn.TYPE_FLOAT) {
+            return "Float";
+        } else if (type == IParameterDefn.TYPE_BOOLEAN) {
+            return "Boolean";
+        }
+        return "String";
+    }
+
+    public String getTypeFormat() {
+        if (type == IParameterDefn.TYPE_DATE) {
+            return DATE_FORMAT;
+        } else if (type == IParameterDefn.TYPE_DATE_TIME) {
+            return DATETIME_FORMAT;
+        } else if (type == IParameterDefn.TYPE_TIME) {
+            return TIME_FORMAT;
+        }
+        return null;
     }
 
     public void setValue(Calendar value) {
@@ -221,6 +281,14 @@ public class ReportParameter {
     @Override
     public String toString() {
         return "" + name + ":" + type + "(" + stringValue + ")";
+    }
+
+    public boolean isError() {
+        return error;
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
     }
 
 }

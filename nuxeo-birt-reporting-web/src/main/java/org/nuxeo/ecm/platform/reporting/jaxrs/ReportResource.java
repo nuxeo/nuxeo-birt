@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +47,11 @@ import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
 
 /**
  * JAX-RS Resource to represent a {@link ReportInstance}.
- *
+ * 
  * Provides html and PDF views
- *
+ * 
  * @author Tiry (tdelprat@nuxeo.com)
- *
+ * 
  */
 @WebObject(type = "report")
 public class ReportResource extends DefaultObject {
@@ -89,8 +90,9 @@ public class ReportResource extends DefaultObject {
 
     @GET
     @javax.ws.rs.Path("images/{key}/{name}")
-    public Object getImage(@PathParam("key") String key,
-            @PathParam("name") String name) throws Exception {
+    public Object getImage(@PathParam("key")
+    String key, @PathParam("name")
+    String name) throws Exception {
 
         String tmpPath = buildTmpPath(key);
         File imageFile = new File(tmpPath + "/images/" + name);
@@ -100,14 +102,29 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("editParams")
-    public Object editParams(@QueryParam("target") String target)
-            throws Exception {
+    public Object editParams(@QueryParam("target")
+    String target, @QueryParam("errors")
+    String errors) throws Exception {
         List<ReportParameter> params = report.getReportUserParameters();
+
+        if (errors != null) {
+            String[] errs = errors.split(",");
+            for (String err : errs) {
+                if (!err.isEmpty()) {
+                    for (ReportParameter p : params) {
+                        if (p.getName().equals(err)) {
+                            p.setError(true);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         return getView("editParams").arg("params", params).arg("target", target);
     }
 
-    protected boolean readParams(Map<String, Object> userParams)
-            throws Exception {
+    protected boolean readParams(Map<String, Object> userParams,
+            List<String> paramsInError) throws Exception {
         List<ReportParameter> params = report.getReportUserParameters();
         if (params.size() > 0) {
             FormData data = getContext().getForm();
@@ -115,13 +132,19 @@ public class ReportResource extends DefaultObject {
                 for (ReportParameter param : params) {
                     if (data.getString(param.getName()) != null) {
                         String strValue = data.getString(param.getName());
-                        param.setValue(strValue);
-                        Object value = param.getObjectValue();
-                        userParams.put(param.getName(), value);
+
+                        if (param.setAndValidateValue(strValue)) {
+                            Object value = param.getObjectValue();
+                            userParams.put(param.getName(), value);
+                        } else {
+                            paramsInError.add(param.getName());
+                        }
+                    } else {
+                        paramsInError.add(param.getName());
                     }
                 }
             }
-            if (userParams.size() < params.size()) {
+            if (paramsInError.size() > 0) {
                 return false;
             }
         }
@@ -135,13 +158,28 @@ public class ReportResource extends DefaultObject {
         return html();
     }
 
+    protected Object validateInput(Map<String, Object> userParams, String target)
+            throws Exception {
+        List<String> errors = new ArrayList<String>();
+        if (!readParams(userParams, errors)) {
+            String errorList = "";
+            for (String err : errors) {
+                errorList = errorList + err + ",";
+            }
+            return redirect(getPath() + "/editParams?target=" + target
+                    + "&errors=" + errorList);
+        }
+        return null;
+    }
+
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("html")
     public Object html() throws Exception {
         Map<String, Object> userParams = new HashMap<String, Object>();
-        if (!readParams(userParams)) {
-            return redirect(getPath() + "/editParams?target=html");
+        Object validationError = validateInput(userParams, "html");
+        if (validationError != null) {
+            return validationError;
         }
 
         String key = getReportKey();
@@ -172,8 +210,9 @@ public class ReportResource extends DefaultObject {
     @javax.ws.rs.Path("pdf")
     public Object pdf() throws Exception {
         Map<String, Object> userParams = new HashMap<String, Object>();
-        if (!readParams(userParams)) {
-            return redirect(getPath() + "/editParams?target=pdf");
+        Object validationError = validateInput(userParams, "pdf");
+        if (validationError != null) {
+            return validationError;
         }
 
         String key = getReportKey();
@@ -188,7 +227,8 @@ public class ReportResource extends DefaultObject {
 
         report.render(options, userParams);
         return Response.ok(new FileInputStream(reportFile),
-                MediaType.APPLICATION_OCTET_STREAM).build();
+                MediaType.APPLICATION_OCTET_STREAM).header(
+                "Content-Disposition", "attachment;filename=" + key + ".pdf").build();
     }
 
 }

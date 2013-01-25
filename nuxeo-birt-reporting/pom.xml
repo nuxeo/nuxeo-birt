@@ -91,7 +91,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <forkMode>pertest</forkMode>
-          <argLine>-Xms256m -Xmx768m -XX:MaxPermSize=256m</argLine>
+          <argLine>-Xms256m -Xmx768m -XX:MaxPermSize=256m ${it.failsafe.argLine}</argLine>
         </configuration>
       </plugin>
       <plugin>

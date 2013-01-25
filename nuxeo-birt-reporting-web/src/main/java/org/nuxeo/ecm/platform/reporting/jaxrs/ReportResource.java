@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -166,6 +167,7 @@ public class ReportResource extends DefaultObject {
             for (String err : errors) {
                 errorList = errorList + err + ",";
             }
+            errorList = URLEncoder.encode(errorList, "UTF-8");
             return redirect(getPath() + "/editParams?target=" + target
                     + "&errors=" + errorList);
         }

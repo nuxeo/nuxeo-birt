@@ -34,6 +34,11 @@
         <type>BirtReport</type>
       </subtypes>
     </type>
+    <type id="OrderedFolder">
+      <subtypes>
+        <type>BirtReport</type>
+      </subtypes>
+    </type>
     <type id="Workspace">
       <subtypes>
         <type>BirtReport</type>

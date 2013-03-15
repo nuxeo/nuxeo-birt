@@ -61,7 +61,6 @@
     </dependency>
 
     <!-- tests -->
-
     <dependency>
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-test</artifactId>
@@ -76,6 +75,7 @@
       <groupId>org.eclipse.birt</groupId>
       <artifactId>birt-runtime-all</artifactId>
       <type>zip</type>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>

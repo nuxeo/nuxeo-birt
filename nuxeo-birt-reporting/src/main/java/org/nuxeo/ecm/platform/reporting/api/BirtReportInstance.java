@@ -32,6 +32,7 @@ import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.platform.reporting.engine.BirtEngine;
 import org.nuxeo.ecm.platform.reporting.report.ReportContext;
 import org.nuxeo.ecm.platform.reporting.report.ReportHelper;
@@ -56,14 +57,19 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements
     @Override
     public ReportModel getModel() throws ClientException {
         String modelUUID = (String) doc.getPropertyValue(PREFIX + ":modelRef");
-        IdRef modelRef = new IdRef(modelUUID);
-        if (!getSession().exists(modelRef)) {
-            // !!!
-            return null;
-        }
-        DocumentModel model = getSession().getDocument(modelRef);
+        final IdRef modelRef = new IdRef(modelUUID);
 
-        return model.getAdapter(ReportModel.class);
+        final DocumentModel[] docs = new DocumentModel[1];
+        new UnrestrictedSessionRunner(getSession()) {
+            @Override
+            public void run() throws ClientException {
+                DocumentModel doc = session.getDocument(modelRef);
+                doc.detach(true);
+                docs[0] = doc;
+            }
+        }.runUnrestricted();
+
+        return docs[0].getAdapter(ReportModel.class);
     }
 
     @SuppressWarnings("unchecked")

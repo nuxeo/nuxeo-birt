@@ -33,15 +33,18 @@
     <dependency>
       <groupId>org.eclipse.birt</groupId>
       <artifactId>core-api</artifactId>
+
     </dependency>
     <dependency>
-      <groupId>org.eclipse.birt</groupId>
+      <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
       <artifactId>report-engine-api</artifactId>
+
     </dependency>
     <dependency>
-      <groupId>org.eclipse.birt</groupId>
+      <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
       <artifactId>report-model-api</artifactId>
     </dependency>
+ 
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>

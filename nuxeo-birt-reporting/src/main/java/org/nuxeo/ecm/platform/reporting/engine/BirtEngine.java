@@ -92,9 +92,9 @@ public class BirtEngine {
 
             config.setEngineHome("");
 
-            contextDeployer = new BirtFSDeployer();
-            config.setBIRTHome(contextDeployer.getPlatform());
-            config.setPlatformContext(contextDeployer);
+            //contextDeployer = new BirtFSDeployer();
+            //config.setBIRTHome(contextDeployer.getPlatform());
+            //config.setPlatformContext(contextDeployer);
 
             try {
                 Platform.startup(config);

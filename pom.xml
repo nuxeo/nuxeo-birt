@@ -38,11 +38,7 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
-     <repository>
-            <id>sonatype-nexus-releases</id>
-            <name>Sonatype Nexus Releases</name>
-<url>https://oss.sonatype.org/content/repositories/releases/</url>
-      </repository>
+   
   </repositories>
 
   <scm>

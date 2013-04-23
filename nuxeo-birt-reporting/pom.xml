@@ -28,6 +28,12 @@
     <dependency>
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-storage-sql</artifactId>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>org.eclipse.equinox.common</artifactId>
+      		<groupId>org.eclipse.equinox</groupId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.core</groupId>
@@ -44,13 +50,13 @@
     <dependency>
         <groupId>com.ibm.icu</groupId>
         <artifactId>icu4j</artifactId>
-        <version>3.8.1</version>
+
     </dependency>
 
     <dependency>
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
-      <version>1.6R7</version>
+
     </dependency>
 
     <dependency>

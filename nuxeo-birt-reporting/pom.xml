@@ -11,6 +11,11 @@
   <name>Nuxeo Birt Reporting Core</name>
   <description>Nuxeo Birt Reporting integration</description>
 
+
+<properties>
+   <birt.version>4.2</birt.version>
+</properties>
+
   <dependencies>
     <dependency>
       <groupId>org.nuxeo.runtime</groupId>
@@ -30,15 +35,28 @@
     </dependency>
 
     <!-- BIRT stuffs -->
-<dependency>
-	<groupId>org.eclipse.birt.runtime</groupId>
-	<artifactId>org.eclipse.birt.runtime</artifactId>
-	<version>4.2.0</version>
-</dependency>
- 
+
+            <dependency>
+            <groupId>org.eclipse.birt.runtime</groupId>
+            <artifactId>org.eclipse.birt.runtime</artifactId>
+            <version>4.2.2</version>
+      </dependency>
     <dependency>
-      <groupId>com.ibm.icu</groupId>
-      <artifactId>icu4j</artifactId>
+        <groupId>com.ibm.icu</groupId>
+        <artifactId>icu4j</artifactId>
+        <version>3.8.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>rhino</groupId>
+      <artifactId>js</artifactId>
+      <version>1.6R7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>apache-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.2</version>
     </dependency>
 
     <!-- runtime -->

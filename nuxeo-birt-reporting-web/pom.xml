@@ -1,89 +1,64 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.nuxeo.ecm.platform</groupId>
-    <artifactId>nuxeo-birt-parent</artifactId>
-    <version>5.7-SNAPSHOT</version>
-  </parent>
+	<parent>
+		<groupId>org.nuxeo.ecm.platform</groupId>
+		<artifactId>nuxeo-birt-parent</artifactId>
+		<version>5.7-SNAPSHOT</version>
+	</parent>
 
-  <artifactId>nuxeo-birt-reporting-web</artifactId>
-  <name>Nuxeo Birt Reporting Web Layer</name>
-  <description>Nuxeo Birt Reporting Web Layer</description>
+	<artifactId>nuxeo-birt-reporting-web</artifactId>
+	<name>Nuxeo Birt Reporting Web Layer</name>
+	<description>Nuxeo Birt Reporting Web Layer</description>
 
-  <properties>
-    <birt.version>4.2</birt.version>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.nuxeo.ecm.platform</groupId>
-      <artifactId>nuxeo-birt-reporting</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.platform</groupId>
-      <artifactId>nuxeo-platform-webapp-base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.platform</groupId>
-      <artifactId>nuxeo-platform-forms-layout-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.seam</groupId>
-      <artifactId>jboss-seam</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.runtime</groupId>
-      <artifactId>nuxeo-runtime</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.core</groupId>
-      <artifactId>nuxeo-core-api</artifactId>
-    </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>org.nuxeo.ecm.platform</groupId>
+			<artifactId>nuxeo-birt-reporting</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nuxeo.ecm.platform</groupId>
+			<artifactId>nuxeo-platform-webapp-base</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nuxeo.ecm.platform</groupId>
+			<artifactId>nuxeo-platform-forms-layout-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.seam</groupId>
+			<artifactId>jboss-seam</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nuxeo.runtime</groupId>
+			<artifactId>nuxeo-runtime</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nuxeo.ecm.core</groupId>
+			<artifactId>nuxeo-core-api</artifactId>
+		</dependency>
 
 
-    <dependency>
-      <groupId>javax.faces</groupId>
-      <artifactId>jsf-api</artifactId>
-    </dependency>
+		<dependency>
+			<groupId>javax.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+		</dependency>
 
-    <!-- webengine stuffs -->
-    <dependency>
-      <groupId>org.nuxeo.ecm.webengine</groupId>
-      <artifactId>nuxeo-webengine-core</artifactId>
-    </dependency>
-  </dependencies>
+		<!-- webengine stuffs -->
+		<dependency>
+			<groupId>org.nuxeo.ecm.webengine</groupId>
+			<artifactId>nuxeo-webengine-core</artifactId>
+		</dependency>
+	</dependencies>
 
-  <build>
-    <plugins>
-         <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-runtime</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.eclipse.birt</groupId>
-                  <artifactId>birt-runtime-web</artifactId>
-                  <version>4.2</version>
-                  <type>zip</type>
-                </artifactItem>
-              </artifactItems>
-              <excludes>coreapi.jar,engineapi.jar,com.ibm.icu*.jar,modelapi*.jar,scriptapi.jar,org.w3c.css.sac*.jar,flute.jar,js.jar,commons-cli*.jar</excludes>
-              <outputDirectory>
-                ${project.build.outputDirectory}/web/nuxeo.war/WEB-INF/lib
-              </outputDirectory>
-            </configuration>
-          </execution>
- 	</executions>
- 	</plugin>
-	</plugins>
-  </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

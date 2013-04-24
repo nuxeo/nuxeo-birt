@@ -11,11 +11,6 @@
   <name>Nuxeo Birt Reporting Core</name>
   <description>Nuxeo Birt Reporting integration</description>
 
-
-<properties>
-   <birt.version>4.2</birt.version>
-</properties>
-
   <dependencies>
     <dependency>
       <groupId>org.nuxeo.runtime</groupId>
@@ -41,29 +36,16 @@
     </dependency>
 
     <!-- BIRT stuffs -->
-
-            <dependency>
-            <groupId>org.eclipse.birt.runtime</groupId>
-            <artifactId>org.eclipse.birt.runtime</artifactId>
-            <version>4.2.2</version>
-      </dependency>
     <dependency>
         <groupId>com.ibm.icu</groupId>
         <artifactId>icu4j</artifactId>
-
     </dependency>
-
     <dependency>
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
-
     </dependency>
 
-    <dependency>
-      <groupId>apache-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.2</version>
-    </dependency>
+
 
     <!-- runtime -->
 
@@ -88,12 +70,6 @@
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-convert-plugins</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>birt-runtime-all</artifactId>
-      <type>zip</type>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>

@@ -41,21 +41,6 @@
     </repository>
   </repositories>
 
-  <dependencies>
-    <dependency>
-      <groupId>apache-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <!-- Need to remove version after integration is stable -->
-      <version>1.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt.runtime</groupId>
-      <artifactId>org.eclipse.birt.runtime</artifactId>
-      <!-- Need to remove version after integration is stable -->
-      <version>4.2.2</version>
-    </dependency>
-  </dependencies>
-
   <scm>
     <connection>scm:git:git://github.com/nuxeo/nuxeo-birt.git</connection>
     <developerConnection>scm:git:ssh://git@github.com:nuxeo/nuxeo-birt.git</developerConnection>

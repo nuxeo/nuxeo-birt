@@ -30,7 +30,11 @@
       <artifactId>nuxeo-core-storage-sql-ra</artifactId>
     </dependency>
 
-    <!-- BIRT stuffs -->
+    <dependency>
+      <groupId>org.eclipse.birt.runtime</groupId>
+      <artifactId>org.eclipse.birt.runtime</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
@@ -39,17 +43,18 @@
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
     </dependency>
-
-    <!-- runtime -->
     <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>script-api</artifactId>
-      <scope>runtime</scope>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>batik-css</artifactId>
     </dependency>
     <dependency>
-      <groupId>rhino</groupId>
-      <artifactId>js</artifactId>
-      <scope>runtime</scope>
+      <groupId>net.sf.jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <version>r938</version>
+    </dependency>
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
     </dependency>
 
     <!-- tests -->

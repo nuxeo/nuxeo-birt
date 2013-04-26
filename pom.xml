@@ -13,11 +13,6 @@
   <description>Nuxeo Birt Reporting Parent</description>
   <packaging>pom</packaging>
 
-  <properties>
-    <!-- temporary workaround, to be pull up to org.nuxeo:nuxeo-ecm -->
-    <nuxeo.connect.client.version>1.4.7-SNAPSHOT</nuxeo.connect.client.version>
-  </properties>
-
   <modules>
     <module>nuxeo-birt-reporting</module>
     <module>nuxeo-birt-reporting-web</module>

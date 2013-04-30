@@ -18,7 +18,6 @@
 
 package org.nuxeo.ecm.platform.reporting.engine;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -27,7 +26,6 @@ import java.util.logging.Level;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.birt.core.exception.BirtException;
-import org.eclipse.birt.core.framework.IPlatformContext;
 import org.eclipse.birt.core.framework.Platform;
 import org.eclipse.birt.report.engine.api.EngineConfig;
 import org.eclipse.birt.report.engine.api.IReportEngine;
@@ -35,7 +33,6 @@ import org.eclipse.birt.report.engine.api.IReportEngineFactory;
 import org.eclipse.birt.report.model.api.DesignConfig;
 import org.eclipse.birt.report.model.api.IDesignEngine;
 import org.eclipse.birt.report.model.api.IDesignEngineFactory;
-import org.nuxeo.common.utils.FileUtils;
 
 /**
  * This is a Singleton used to trigger BIRT deployment and get access to the
@@ -60,7 +57,7 @@ public class BirtEngine {
         loadEngineProps();
     }
 
-    protected static IPlatformContext contextDeployer = null;
+
 
     public static synchronized IReportEngine getBirtEngine() {
         if (birtEngine == null) {
@@ -92,10 +89,6 @@ public class BirtEngine {
 
             config.setEngineHome("");
 
-            contextDeployer = new BirtFSDeployer();
-            config.setBIRTHome(contextDeployer.getPlatform());
-            config.setPlatformContext(contextDeployer);
-
             try {
                 Platform.startup(config);
             } catch (BirtException e) {
@@ -123,17 +116,11 @@ public class BirtEngine {
         if (birtEngine == null) {
             return;
         }
-        String deployPath = null;
-        if (contextDeployer != null) {
-            deployPath = contextDeployer.getPlatform();
-        }
+
         birtEngine.shutdown();
         Platform.shutdown();
         birtEngine = null;
 
-        if (deployPath != null) {
-            FileUtils.deleteTree(new File(deployPath));
-        }
     }
 
     public Object clone() throws CloneNotSupportedException {

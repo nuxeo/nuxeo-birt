@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -29,35 +30,31 @@
       <artifactId>nuxeo-core-storage-sql-ra</artifactId>
     </dependency>
 
-    <!-- BIRT stuffs -->
     <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>core-api</artifactId>
+      <groupId>org.eclipse.birt.runtime</groupId>
+      <artifactId>org.eclipse.birt.runtime</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>report-engine-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>report-model-api</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
     </dependency>
-
-    <!-- runtime -->
-
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>script-api</artifactId>
-      <scope>runtime</scope>
-    </dependency>
     <dependency>
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
-      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>batik-css</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <version>r938</version>
+    </dependency>
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
     </dependency>
 
     <!-- tests -->
@@ -70,12 +67,6 @@
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-convert-plugins</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.birt</groupId>
-      <artifactId>birt-runtime-all</artifactId>
-      <type>zip</type>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
@@ -93,32 +84,6 @@
           <forkMode>pertest</forkMode>
           <argLine>-Xms256m -Xmx768m -XX:MaxPermSize=256m ${it.failsafe.argLine}</argLine>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-installed</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.eclipse.birt</groupId>
-                  <artifactId>birt-runtime-all</artifactId>
-                  <version>2.6.1</version>
-                  <type>zip</type>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>
-                ${project.build.outputDirectory}
-              </outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

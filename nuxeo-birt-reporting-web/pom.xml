@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -10,10 +12,6 @@
   <artifactId>nuxeo-birt-reporting-web</artifactId>
   <name>Nuxeo Birt Reporting Web Layer</name>
   <description>Nuxeo Birt Reporting Web Layer</description>
-
-  <properties>
-    <birt.version>2.6.1</birt.version>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -53,37 +51,5 @@
       <artifactId>nuxeo-webengine-core</artifactId>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-         <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-runtime</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.eclipse.birt</groupId>
-                  <artifactId>birt-runtime-web</artifactId>
-                  <version>2.6.1</version>
-                  <type>zip</type>
-                </artifactItem>
-              </artifactItems>
-              <excludes>coreapi.jar,engineapi.jar,com.ibm.icu*.jar,modelapi*.jar,scriptapi.jar,org.w3c.css.sac*.jar,flute.jar,js.jar,commons-cli*.jar</excludes>
-              <outputDirectory>
-                ${project.build.outputDirectory}/web/nuxeo.war/WEB-INF/lib
-              </outputDirectory>
-            </configuration>
-          </execution>
- 	</executions>
- 	</plugin>
-	</plugins>
-  </build>
 
 </project>

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
@@ -42,20 +43,23 @@ import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.nuxeo.common.utils.Path;
 import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
+import org.nuxeo.ecm.webengine.WebEngine;
 import org.nuxeo.ecm.webengine.forms.FormData;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
 
 /**
  * JAX-RS Resource to represent a {@link ReportInstance}.
- * 
+ *
  * Provides html and PDF views
- * 
+ *
  * @author Tiry (tdelprat@nuxeo.com)
- * 
+ *
  */
 @WebObject(type = "report")
 public class ReportResource extends DefaultObject {
+
+    protected static final String USER_PARAMS_NAME = "birtUserParams";
 
     protected ReportInstance report;
 
@@ -106,7 +110,17 @@ public class ReportResource extends DefaultObject {
     public Object editParams(@QueryParam("target")
     String target, @QueryParam("errors")
     String errors) throws Exception {
+        HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> userParams = (Map<String, Object>) session.getAttribute(USER_PARAMS_NAME);
+        session.removeAttribute(USER_PARAMS_NAME);
+
         List<ReportParameter> params = report.getReportUserParameters();
+        for (ReportParameter p : params) {
+            if (userParams.containsKey(p.getName())) {
+                p.setObjectValue(userParams.get(p.getName()));
+            }
+        }
 
         if (errors != null) {
             String[] errs = errors.split(",");
@@ -114,6 +128,7 @@ public class ReportResource extends DefaultObject {
                 if (!err.isEmpty()) {
                     for (ReportParameter p : params) {
                         if (p.getName().equals(err)) {
+                            p.setObjectValue(null);
                             p.setError(true);
                             break;
                         }
@@ -163,6 +178,9 @@ public class ReportResource extends DefaultObject {
             throws Exception {
         List<String> errors = new ArrayList<String>();
         if (!readParams(userParams, errors)) {
+            HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
+            session.setAttribute(USER_PARAMS_NAME, userParams);
+
             String errorList = "";
             for (String err : errors) {
                 errorList = errorList + err + ",";

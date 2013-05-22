@@ -143,6 +143,7 @@
       </widgetModes>
       <properties mode="any">
         <property name="template">/widgets/report_file_widget.xhtml</property>
+        <property name="required">true</property>
       </properties>
     </widget>
 

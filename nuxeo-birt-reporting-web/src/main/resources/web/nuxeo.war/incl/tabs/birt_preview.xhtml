@@ -1,16 +1,29 @@
 <div xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:c="http://java.sun.com/jstl/core"
-  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-  xmlns:nxd="http://nuxeo.org/nxweb/document"
-  xmlns:nxdir="http://nuxeo.org/nxdirectory"
-  xmlns:nxu="http://nuxeo.org/nxweb/util">
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:c="http://java.sun.com/jstl/core"
+xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+xmlns:nxd="http://nuxeo.org/nxweb/document"
+xmlns:nxdir="http://nuxeo.org/nxdirectory"
+xmlns:nxu="http://nuxeo.org/nxweb/util">
 
-<A href="#{baseURL}site/reports/#{currentDocument.id}/html" target="#{currentDocument.id}_html"> <h:outputText value="#{messages['label.birt.view.html']}" /></A> <br/>
-<A href="#{baseURL}site/reports/#{currentDocument.id}/pdf" target="#{currentDocument.id}_pdf"> <h:outputText value="#{messages['label.birt.view.pdf']}" /></A> <br/>
+<a class="button" onclick="document.getElementById('birtPreviewFrame').src='#{baseURL}site/reports/#{currentDocument.id}/html?forceFormDisplay=true'; return false;"
+  href="#">
+  <h:outputText value="#{messages['label.birt.view.new.report']}" />
+</a>
 
-<h:outputText value="#{messages['label.birt.preview.html']}" /> :
-<iframe src="#{baseURL}site/reports/#{currentDocument.id}/html"  height="600px" width="100%" scrolling="auto" border="0"/>
+<h:outputLink value="#{baseURL}site/reports/#{currentDocument.id}/html?forceFormDisplay=true"
+  styleClass="button"
+  target="#{currentDocument.id}_html">
+  <h:outputText value="#{messages['label.birt.preview.html']}" />
+</h:outputLink>
+
+<h:outputLink value="#{baseURL}site/reports/#{currentDocument.id}/pdf?forceFormDisplay=true"
+  styleClass="button"
+  target="#{currentDocument.id}_pdf">
+  <h:outputText value="#{messages['label.birt.view.pdf']}" />
+</h:outputLink>
+
+<iframe id="birtPreviewFrame" src="#{baseURL}site/reports/#{currentDocument.id}/html"  height="600px" width="100%" scrolling="auto" border="0"/>
 
 </div>

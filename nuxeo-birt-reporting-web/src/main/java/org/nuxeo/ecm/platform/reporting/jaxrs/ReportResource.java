@@ -113,20 +113,31 @@ public class ReportResource extends DefaultObject {
         HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
         @SuppressWarnings("unchecked")
         Map<String, Object> userParams = (Map<String, Object>) session.getAttribute(USER_PARAMS_NAME);
-        session.removeAttribute(USER_PARAMS_NAME);
 
         List<ReportParameter> params = report.getReportUserParameters();
-        for (ReportParameter p : params) {
-            if (userParams.containsKey(p.getName())) {
-                p.setObjectValue(userParams.get(p.getName()));
+        fillReportParameters(params, userParams);
+        markReportParametersInError(params, errors);
+        return getView("editParams").arg("params", params).arg("target", target);
+    }
+
+    protected void fillReportParameters(List<ReportParameter> reportParameters,
+            Map<String, Object> userParams) {
+        if (userParams != null) {
+            for (ReportParameter p : reportParameters) {
+                if (userParams.containsKey(p.getName())) {
+                    p.setObjectValue(userParams.get(p.getName()));
+                }
             }
         }
+    }
 
+    protected void markReportParametersInError(
+            List<ReportParameter> reportParameters, String errors) {
         if (errors != null) {
             String[] errs = errors.split(",");
             for (String err : errs) {
                 if (!err.isEmpty()) {
-                    for (ReportParameter p : params) {
+                    for (ReportParameter p : reportParameters) {
                         if (p.getName().equals(err)) {
                             p.setObjectValue(null);
                             p.setError(true);
@@ -136,51 +147,54 @@ public class ReportResource extends DefaultObject {
                 }
             }
         }
-        return getView("editParams").arg("params", params).arg("target", target);
     }
 
-    protected boolean readParams(Map<String, Object> userParams,
+    protected void readParams(Map<String, Object> userParams,
             List<String> paramsInError) throws Exception {
         List<ReportParameter> params = report.getReportUserParameters();
         if (params.size() > 0) {
             FormData data = getContext().getForm();
             if (data != null) {
                 for (ReportParameter param : params) {
-                    if (data.getString(param.getName()) != null) {
-                        String strValue = data.getString(param.getName());
+                    String name = param.getName();
+                    if (data.getString(name) != null) {
+                        String strValue = data.getString(name);
 
                         if (param.setAndValidateValue(strValue)) {
                             Object value = param.getObjectValue();
-                            userParams.put(param.getName(), value);
+                            userParams.put(name, value);
                         } else {
-                            paramsInError.add(param.getName());
+                            paramsInError.add(name);
                         }
-                    } else {
-                        paramsInError.add(param.getName());
+                    } else if (!userParams.containsKey(name)) {
+                        paramsInError.add(name);
                     }
                 }
             }
-            if (paramsInError.size() > 0) {
-                return false;
-            }
         }
-        return true;
     }
 
     @POST
     @Produces("text/html")
     @javax.ws.rs.Path("html")
     public Object editAndRenderHtml() throws Exception {
-        return html();
+        return html(false);
     }
 
     protected Object validateInput(Map<String, Object> userParams, String target)
             throws Exception {
-        List<String> errors = new ArrayList<String>();
-        if (!readParams(userParams, errors)) {
-            HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
-            session.setAttribute(USER_PARAMS_NAME, userParams);
+        HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> savedUserParams = (Map<String, Object>) session.getAttribute(USER_PARAMS_NAME);
+        if (savedUserParams != null) {
+            userParams.putAll(savedUserParams);
+        }
 
+        List<String> errors = new ArrayList<String>();
+        readParams(userParams, errors);
+        saveUserParameters(userParams);
+
+        if (!errors.isEmpty()) {
             String errorList = "";
             for (String err : errors) {
                 errorList = errorList + err + ",";
@@ -195,11 +209,17 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("html")
-    public Object html() throws Exception {
+    public Object html(@QueryParam("forceFormDisplay")
+    Boolean forceFormDisplay) throws Exception {
         Map<String, Object> userParams = new HashMap<String, Object>();
         Object validationError = validateInput(userParams, "html");
+
         if (validationError != null) {
             return validationError;
+        }
+
+        if (forceFormDisplay != null && forceFormDisplay) {
+            return redirect(getPath() + "/editParams?target=html");
         }
 
         String key = getReportKey();
@@ -218,21 +238,32 @@ public class ReportResource extends DefaultObject {
         return Response.ok(new FileInputStream(reportFile), MediaType.TEXT_HTML).build();
     }
 
+    protected void saveUserParameters(Map<String, Object> userParams) {
+        HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
+        session.setAttribute(USER_PARAMS_NAME, userParams);
+    }
+
     @POST
     @Produces("application/pdf")
     @javax.ws.rs.Path("pdf")
     public Object editAndRenderPdf() throws Exception {
-        return pdf();
+        return pdf(false);
     }
 
     @GET
     @Produces("application/pdf")
     @javax.ws.rs.Path("pdf")
-    public Object pdf() throws Exception {
+    public Object pdf(@QueryParam("forceDisplayForm")
+    Boolean forceDisplayForm) throws Exception {
         Map<String, Object> userParams = new HashMap<String, Object>();
         Object validationError = validateInput(userParams, "pdf");
+
         if (validationError != null) {
             return validationError;
+        }
+
+        if (forceDisplayForm) {
+            return redirect(getPath() + "/editParams?target=pdf");
         }
 
         String key = getReportKey();
@@ -249,6 +280,16 @@ public class ReportResource extends DefaultObject {
         return Response.ok(new FileInputStream(reportFile),
                 MediaType.APPLICATION_OCTET_STREAM).header(
                 "Content-Disposition", "attachment;filename=" + key + ".pdf").build();
+    }
+
+    @GET
+    @Produces("text/html")
+    @javax.ws.rs.Path("clearParams")
+    public Object clearParams(@QueryParam("target")
+    String target) throws Exception {
+        HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
+        session.removeAttribute(USER_PARAMS_NAME);
+        return redirect(getPath() + "/editParams?target=" + target);
     }
 
 }

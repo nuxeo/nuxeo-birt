@@ -10,7 +10,8 @@
   </script>
   </head>
   <body>
-    <table>
+    <p class="specification">${Context.getMessage('label.birt.introParagraph')}</p>
+    <table class="dataTableNoborder">
       <tr>
         <td class="bigCell">
           ${Context.getMessage('label.birt.reportFormat')}
@@ -48,10 +49,10 @@
               </#list>
               <tr>
                 <td>
-                  <input type="submit" value="${Context.getMessage('label.birt.generateReport')}"/>
+                  <input class="button" type="submit" value="${Context.getMessage('label.birt.generateReport')}"/>
                 </td>
                 <td colspan="2">
-                  <a href="${This.path}/clearParams?target=${target}">${Context.getMessage('label.birt.clearParameters')}</a>
+                  <a class="link" href="${This.path}/clearParams?target=${target}">${Context.getMessage('label.birt.clearParameters')}</a>
                 </td>
               </tr>
             </table>

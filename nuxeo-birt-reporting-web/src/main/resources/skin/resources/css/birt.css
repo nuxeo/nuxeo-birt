@@ -1,60 +1,53 @@
+/* Default Styles for Birt iframe.
+   The styles are based on the UI Style Guide set. */
 
 body, html {
-    margin: 2px;
-    padding: 2px;
-}
+  font-family: 'Lucida Grande',Arial,sans-serif;
+  font-size: 100%;
+  line-height: 1.125em;
+  margin: 0;
+  padding: .3em }
 
-body {
-    font: normal 12px Verdana, sans-serif;
-}
+.specification {
+	border-bottom: 1px solid #e6e6e6;
+	color: #9a9a9a;
+	font-size: .8em;
+	margin: 0 0 1em;
+	padding: 0 0 .5em }
 
-table.main {
-    border: 0px;
-    width: 100%;
-    height: 100%;
-    border-spacing: 0px;
-    border-collapse: collapse;
-}
+.table {
+  border: 0;
+  width: 100%;
+  height: 100%;
+  border-spacing: 0;
+  border-collapse: collapse }
 
 table.main td {
-    padding: 0px;
-}
+  padding: 0 }
 
 table.header {
-    background-color:black;
-    border: 0px;
-    width: 100%;
-    border-spacing: 0px;
-    border-collapse: collapse;
-}
+  border: 0;
+  width: 100%;
+  border-spacing: 0px;
+  border-collapse: collapse }
 
 table.header td {
-    font: normal 12px Verdana, sans-serif;
     padding: 4px;
     color: white;
-    vertical-align: middle;
-}
-
-.inputErrorlabel {
-  color:red;
-}
-.inputError {
-  color:red;
-}
+    vertical-align: middle }
 
 .bigCell {
-  background-color:#F0F0F0;
-  padding:2px;
-  vertical-align: top;
-  font-weight:bold;
-}
+  font-weight: bold;
+  padding: .2em 1em .8em 0;
+  vertical-align: top; }
 
 .paramCell {
   background-color:#F0F0F0;
-  padding:2px;
-}
+  padding:2px }
 
 .paramHint {
-  font-style:italic;
-}
+  font-style:italic }
 
+.inputError,
+.inputErrorlabel {
+  color:red }

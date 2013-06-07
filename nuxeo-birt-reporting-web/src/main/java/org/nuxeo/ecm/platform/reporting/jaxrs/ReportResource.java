@@ -210,7 +210,7 @@ public class ReportResource extends DefaultObject {
     @Produces("text/html")
     @javax.ws.rs.Path("html")
     public Object html(@QueryParam("forceFormDisplay")
-    Boolean forceFormDisplay) throws Exception {
+    boolean forceFormDisplay) throws Exception {
         Map<String, Object> userParams = new HashMap<String, Object>();
         Object validationError = validateInput(userParams, "html");
 
@@ -218,7 +218,7 @@ public class ReportResource extends DefaultObject {
             return validationError;
         }
 
-        if (forceFormDisplay != null && forceFormDisplay) {
+        if (forceFormDisplay) {
             return redirect(getPath() + "/editParams?target=html");
         }
 
@@ -253,8 +253,8 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("application/pdf")
     @javax.ws.rs.Path("pdf")
-    public Object pdf(@QueryParam("forceDisplayForm")
-    Boolean forceDisplayForm) throws Exception {
+    public Object pdf(@QueryParam("forceFormDisplay")
+    boolean forceDisplayForm) throws Exception {
         Map<String, Object> userParams = new HashMap<String, Object>();
         Object validationError = validateInput(userParams, "pdf");
 

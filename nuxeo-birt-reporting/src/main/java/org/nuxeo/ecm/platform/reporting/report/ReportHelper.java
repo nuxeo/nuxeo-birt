@@ -35,13 +35,10 @@ import org.eclipse.birt.report.model.api.IDesignEngine;
 import org.eclipse.birt.report.model.api.OdaDataSourceHandle;
 import org.eclipse.birt.report.model.api.ReportDesignHandle;
 import org.eclipse.birt.report.model.api.SessionHandle;
-import org.eclipse.birt.report.model.api.metadata.IElementPropertyDefn;
 import org.eclipse.birt.report.model.elements.OdaDataSource;
-import org.eclipse.birt.report.model.metadata.ElementPropertyDefn;
-import org.nuxeo.common.utils.Base64;
-import org.nuxeo.ecm.platform.reporting.datasource.DSHelper;
-import org.nuxeo.ecm.platform.reporting.datasource.NuxeoDSConfig;
 import org.nuxeo.ecm.platform.reporting.engine.BirtEngine;
+import org.nuxeo.runtime.api.DataSourceHelper;
+import org.nuxeo.runtime.api.Framework;
 
 import com.ibm.icu.util.ULocale;
 
@@ -94,35 +91,10 @@ public class ReportHelper {
 
         for (Iterator i = designHandle.getDataSources().iterator(); i.hasNext();) {
             OdaDataSourceHandle dsh = (OdaDataSourceHandle) i.next();
-            NuxeoDSConfig newConfig = DSHelper.getReplacementDS(dsh.getName(),
-                    repositoryName);
-            if (newConfig != null) {
-                OdaDataSource ds = (OdaDataSource) dsh.getElement();
-                log.debug("Editing ODA datasource " + ds.getName());
-                List<IElementPropertyDefn> propNames = ds.getPropertyDefns();
-                for (IElementPropertyDefn propName : propNames) {
-                    ElementPropertyDefn prop = ds.getPropertyDefn(propName.getName());
-                    if (propName.getName().equals("odaDriverClass")) {
-                        log.debug(" ->changing odaDriverClass to "
-                                + newConfig.getDriverClass());
-                        ds.setProperty(prop, newConfig.getDriverClass());
-                    } else if (propName.getName().equals("odaURL")) {
-                        log.debug(" ->changing odaURL to " + newConfig.getUrl());
-                        ds.setProperty(prop, newConfig.getUrl());
-                    } else if (propName.getName().equals("odaUser")) {
-                        log.debug(" ->changing odaUser to "
-                                + newConfig.getUserName());
-                        ds.setProperty(prop, newConfig.getUserName());
-                    } else if (propName.getName().equals("odaPassword")) {
-                        if (prop.isEncryptable()) {
-                            String b64pwd = Base64.encodeBytes(newConfig.getPassword().getBytes());
-                            ds.setProperty(prop, b64pwd);
-                        } else {
-                            ds.setProperty(prop, newConfig.getPassword());
-                        }
-                    }
-                }
-            }
+            OdaDataSource ds = (OdaDataSource) dsh.getElement();
+            String dsName = Framework.getProperty("nuxeo.db.commonds");
+            dsName = DataSourceHelper.getDataSourceJNDIName(dsName);
+            ds.setProperty("odaJndiName", DataSourceHelper.getDataSourceJNDIName(dsName));
         }
 
         IReportRunnable modifiedReport = BirtEngine.getBirtEngine().openReportDesign(

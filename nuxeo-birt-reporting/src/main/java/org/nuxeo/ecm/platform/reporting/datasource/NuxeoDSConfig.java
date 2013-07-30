@@ -76,37 +76,55 @@ public class NuxeoDSConfig {
         }
         return getProp(properties, name+"/Integer");
     }
-    
+
     protected void initForPostgreSQL(Map<String, String> properties) {
         userName = getProp(properties, "User");
         password = getProp(properties, "Password");
-        url = "jdbc:postgresql://" + getProp(properties, "ServerName") + ":"
+        url = getProp(properties, "URL");
+        if (url==null) {
+            url = "jdbc:postgresql://" + getProp(properties, "ServerName") + ":"
                 + getIntegerProp(properties, "PortNumber") + "/"
                 + getProp(properties, "DatabaseName");
-        driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.PGSQL);
+        }
+        driverClass = getProp(properties, "Driver");
+        if (driverClass==null) {
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.PGSQL);
+        }
     }
 
     protected void initForMSSQL(Map<String, String> properties) {
         userName = getProp(properties, "User");
         password = getProp(properties, "Password");
-        url = "jdbc:jtds:sqlserver://" + getProp(properties, "ServerName")
+        url = getProp(properties, "URL");
+        if (url==null) {
+            url = "jdbc:jtds:sqlserver://" + getProp(properties, "ServerName")
                 + ":" + getIntegerProp(properties, "PortNumber") + "/"
                 + getProp(properties, "DatabaseName") + ";useCursors=true";
-        driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MSSQL);
+        }
+        driverClass = getProp(properties, "Driver");
+        if (driverClass==null) {
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MSSQL);
+        }
     }
 
     protected void initForMySQL(Map<String, String> properties) {
         userName = getProp(properties, "User");
         password = getProp(properties, "Password");
         url = getProp(properties, "URL");
-        driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MYSQL);
+        driverClass = getProp(properties, "Driver");
+        if (driverClass==null) {
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MYSQL);
+        }
     }
 
     protected void initForOracle(Map<String, String> properties) {
         userName = getProp(properties, "User");
         password = getProp(properties, "Password");
         url = getProp(properties, "URL");
-        driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.ORACLE);
+        driverClass = getProp(properties, "Driver");
+        if (driverClass==null) {
+            driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.ORACLE);
+        }
     }
 
     protected String getProp(Map<String, String> properties, String name) {

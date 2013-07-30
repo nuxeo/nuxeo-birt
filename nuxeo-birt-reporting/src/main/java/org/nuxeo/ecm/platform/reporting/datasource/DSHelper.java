@@ -22,6 +22,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.nuxeo.ecm.core.api.repository.Repository;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.storage.sql.RepositoryDescriptor;
@@ -29,6 +31,7 @@ import org.nuxeo.ecm.core.storage.sql.RepositoryImpl;
 import org.nuxeo.ecm.core.storage.sql.RepositoryResolver;
 import org.nuxeo.ecm.core.storage.sql.ra.ConnectionFactoryImpl;
 import org.nuxeo.ecm.core.storage.sql.ra.ManagedConnectionFactoryImpl;
+import org.nuxeo.runtime.api.DataSourceHelper;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -62,8 +65,25 @@ public class DSHelper {
                     desc = sqlRepositoryImpl.getRepositoryDescriptor();
                 }
 
-                NuxeoDSConfig config = new NuxeoDSConfig(desc.xaDataSourceName,
-                        desc.properties);
+                NuxeoDSConfig config=null;
+                String singleDS = Framework.getProperty("nuxeo.db.singleDataSource", null);
+                if (singleDS!=null && !singleDS.isEmpty()) {
+                    // get JDBC single DataSource
+                    // fall back to nuxeo properties
+                    // since we can not fetch the required config from the DS in JNDI
+                    Map<String, String> props = new HashMap<String, String>();
+                    props.put("User", Framework.getProperty("nuxeo.db.user"));
+                    props.put("Password", Framework.getProperty("nuxeo.db.password"));
+                    props.put("Driver", Framework.getProperty("nuxeo.db.driver"));
+                    props.put("URL", Framework.getProperty("nuxeo.db.jdbc.url"));
+                    props.put("User", Framework.getProperty("nuxeo.db.user"));
+                    config = new NuxeoDSConfig(singleDS,
+                            props);
+                } else {
+                    // get XA DataSource
+                    config = new NuxeoDSConfig(desc.xaDataSourceName,
+                            desc.properties);
+                }
                 configs.put(repo.getName(), config);
             }
             detectedDS = configs;

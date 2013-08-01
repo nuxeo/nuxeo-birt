@@ -12,6 +12,13 @@
   <description>Nuxeo Birt Reporting Web Layer</description>
 
   <dependencies>
+    <!-- NXP-12166: Not needed but ensure replacement with shaded version resolve 
+      conflicts -->
+    <dependency>
+      <groupId>org.nuxeo.connect</groupId>
+      <artifactId>nuxeo-connect-client</artifactId>
+      <classifier>with-equinox</classifier>
+    </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.platform</groupId>
       <artifactId>nuxeo-birt-reporting</artifactId>

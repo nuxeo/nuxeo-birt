@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.nuxeo</groupId>
@@ -20,18 +21,31 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.nuxeo.connect</groupId>
-        <artifactId>nuxeo-connect-client</artifactId>
-        <version>${nuxeo.connect.client.version}</version>
+        <groupId>org.nuxeo.runtime</groupId>
+        <artifactId>nuxeo-launcher-commons</artifactId>
+        <version>${nuxeo.runtime.version}</version>
+        <!-- NXP-12166: Use org.nuxeo.connect:nuxeo-connect-client:jar:with-equinox
+          instead -->
         <exclusions>
-           <exclusion>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>org.eclipse.equinox.p2.cudf</artifactId>
-           </exclusion>
+          <exclusion>
+            <groupId>org.nuxeo.connect</groupId>
+            <artifactId>nuxeo-connect-client</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <dependencies>
+    <!-- NXP-12166: Not needed but ensure replacement with shaded version resolve 
+      conflicts -->
+    <dependency>
+      <groupId>org.nuxeo.connect</groupId>
+      <artifactId>nuxeo-connect-client</artifactId>
+      <classifier>with-equinox</classifier>
+    </dependency>
+  </dependencies>
+
   <repositories>
     <repository>
       <id>public</id>

@@ -74,20 +74,20 @@ public class NuxeoDSConfig {
         if (value != null) {
             return value;
         }
-        return getProp(properties, name+"/Integer");
+        return getProp(properties, name + "/Integer");
     }
 
     protected void initForPostgreSQL(Map<String, String> properties) {
         userName = getProp(properties, "User");
         password = getProp(properties, "Password");
         url = getProp(properties, "URL");
-        if (url==null) {
-            url = "jdbc:postgresql://" + getProp(properties, "ServerName") + ":"
-                + getIntegerProp(properties, "PortNumber") + "/"
-                + getProp(properties, "DatabaseName");
+        if (url == null) {
+            url = "jdbc:postgresql://" + getProp(properties, "ServerName")
+                    + ":" + getIntegerProp(properties, "PortNumber") + "/"
+                    + getProp(properties, "DatabaseName");
         }
         driverClass = getProp(properties, "Driver");
-        if (driverClass==null) {
+        if (driverClass == null) {
             driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.PGSQL);
         }
     }
@@ -96,13 +96,13 @@ public class NuxeoDSConfig {
         userName = getProp(properties, "User");
         password = getProp(properties, "Password");
         url = getProp(properties, "URL");
-        if (url==null) {
+        if (url == null) {
             url = "jdbc:jtds:sqlserver://" + getProp(properties, "ServerName")
-                + ":" + getIntegerProp(properties, "PortNumber") + "/"
-                + getProp(properties, "DatabaseName") + ";useCursors=true";
+                    + ":" + getIntegerProp(properties, "PortNumber") + "/"
+                    + getProp(properties, "DatabaseName") + ";useCursors=true";
         }
         driverClass = getProp(properties, "Driver");
-        if (driverClass==null) {
+        if (driverClass == null) {
             driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MSSQL);
         }
     }
@@ -112,7 +112,7 @@ public class NuxeoDSConfig {
         password = getProp(properties, "Password");
         url = getProp(properties, "URL");
         driverClass = getProp(properties, "Driver");
-        if (driverClass==null) {
+        if (driverClass == null) {
             driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.MYSQL);
         }
     }
@@ -122,7 +122,7 @@ public class NuxeoDSConfig {
         password = getProp(properties, "Password");
         url = getProp(properties, "URL");
         driverClass = getProp(properties, "Driver");
-        if (driverClass==null) {
+        if (driverClass == null) {
             driverClass = SupportedDBHelper.getDriver(SupportedDBHelper.ORACLE);
         }
     }

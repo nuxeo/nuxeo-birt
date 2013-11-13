@@ -5,9 +5,10 @@
   <require>org.nuxeo.ecm.platform.preview.actions</require>
   <require>org.nuxeo.ecm.platform.comment.actions</require>
 
-  <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="actions">
     <action id="TAB_BIRT_PREVIEW" link="/incl/tabs/birt_preview.xhtml"
-      enabled="true" order="0" label="label.document.preview">
+      enabled="true" order="0" label="label.document.preview" type="rest_document_link">
       <category>VIEW_ACTION_LIST</category>
       <filter-id>view_preview_report</filter-id>
     </action>
@@ -53,7 +54,8 @@
     </action>
   </extension>
 
-  <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="filters">
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService"
+    point="filters">
     <filter id="view_preview_report">
       <rule grant="true">
         <permission>Read</permission>

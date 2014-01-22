@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -12,7 +13,7 @@
   <description>Nuxeo Birt Reporting Web Layer</description>
 
   <dependencies>
-    <!-- NXP-12166: Not needed but ensure replacement with shaded version resolve 
+    <!-- NXP-12166: Not needed but ensure replacement with shaded version resolve
       conflicts -->
     <dependency>
       <groupId>org.nuxeo.connect</groupId>
@@ -43,6 +44,10 @@
       <groupId>org.nuxeo.ecm.core</groupId>
       <artifactId>nuxeo-core-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.webengine</groupId>
+      <artifactId>nuxeo-webengine-core</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.tomcat</groupId>
@@ -52,11 +57,9 @@
       <groupId>javax.faces</groupId>
       <artifactId>jsf-api</artifactId>
     </dependency>
-
-    <!-- webengine stuffs -->
     <dependency>
-      <groupId>org.nuxeo.ecm.webengine</groupId>
-      <artifactId>nuxeo-webengine-core</artifactId>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
     </dependency>
   </dependencies>
 

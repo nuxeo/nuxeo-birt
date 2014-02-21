@@ -23,6 +23,13 @@ import java.util.List;
 
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputText;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.CompositeFaceletHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttributes;
+import javax.faces.view.facelets.TagConfig;
 
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.forms.layout.api.BuiltinWidgetModes;
@@ -36,19 +43,10 @@ import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 
-import com.sun.facelets.FaceletContext;
-import com.sun.facelets.FaceletHandler;
-import com.sun.facelets.tag.CompositeFaceletHandler;
-import com.sun.facelets.tag.TagAttribute;
-import com.sun.facelets.tag.TagAttributes;
-import com.sun.facelets.tag.TagConfig;
-import com.sun.facelets.tag.jsf.ComponentHandler;
-
 /**
  * Custom Widget Handler to managing Reports parameters configuration
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class HtmlReportParameterWidgetTypeHandler extends
         AbstractWidgetTypeHandler {

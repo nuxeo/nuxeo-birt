@@ -22,7 +22,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.nuxeo.ecm.core.api.repository.Repository;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.storage.sql.RepositoryDescriptor;
 import org.nuxeo.ecm.core.storage.sql.RepositoryImpl;
@@ -47,14 +46,14 @@ public class DSHelper {
             Map<String, NuxeoDSConfig> configs = new HashMap<String, NuxeoDSConfig>();
 
             RepositoryManager rm = Framework.getLocalService(RepositoryManager.class);
-            for (Repository repo : rm.getRepositories()) {
-                Object repoImpl = RepositoryResolver.getRepository(repo.getName());
+            for (String repositoryName : rm.getRepositoryNames()) {
+                Object repoImpl = RepositoryResolver.getRepository(repositoryName);
                 RepositoryDescriptor desc;
                 if (repoImpl instanceof RepositoryImpl) {
                     RepositoryImpl sqlRepo = (RepositoryImpl) repoImpl;
                     desc = sqlRepo.getRepositoryDescriptor();
                 } else {
-                    ConnectionFactoryImpl cf = (ConnectionFactoryImpl) RepositoryResolver.getRepository(repo.getName());
+                    ConnectionFactoryImpl cf = (ConnectionFactoryImpl) RepositoryResolver.getRepository(repositoryName);
                     ManagedConnectionFactoryImpl mcf = cf.getManagedConnectionFactory();
                     Field field = mcf.getClass().getDeclaredField("repository");
                     field.setAccessible(true);
@@ -68,7 +67,7 @@ public class DSHelper {
                     // XA mode
                     NuxeoDSConfig config = new NuxeoDSConfig(
                             desc.xaDataSourceName, desc.properties);
-                    configs.put(repo.getName(), config);
+                    configs.put(repositoryName, config);
                 }
 
             }

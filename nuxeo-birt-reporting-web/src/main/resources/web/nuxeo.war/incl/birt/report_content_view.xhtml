@@ -20,7 +20,7 @@
           action="#{reportActions.saveDocument}" id="button_create" />
         <a4j:commandButton styleClass="button" value="#{messages['command.cancel']}"
           action="#{reportActions.toggleAndReset()}" immediate="true"
-          reRender="reportsModelPanel" />
+          render="reportsModelPanel" />
       </p>
     </h:form>
   </f:subview>
@@ -35,7 +35,7 @@
       <h:form>
         <a4j:commandButton action="#{reportActions.toggleForm()}"
           value="#{messages['label.birt.reporting.create.model']}"
-          immediate="true" styleClass="button" reRender="reportsModelPanel" />
+          immediate="true" styleClass="button" render="reportsModelPanel" />
       </h:form>
       <a4j:status>
         <f:facet name="start">

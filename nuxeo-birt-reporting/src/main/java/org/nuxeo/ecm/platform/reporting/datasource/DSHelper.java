@@ -18,16 +18,10 @@
 
 package org.nuxeo.ecm.platform.reporting.datasource;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.nuxeo.ecm.core.api.repository.RepositoryManager;
-import org.nuxeo.ecm.core.storage.sql.RepositoryDescriptor;
-import org.nuxeo.ecm.core.storage.sql.RepositoryImpl;
-import org.nuxeo.ecm.core.storage.sql.RepositoryResolver;
-import org.nuxeo.ecm.core.storage.sql.ra.ConnectionFactoryImpl;
-import org.nuxeo.ecm.core.storage.sql.ra.ManagedConnectionFactoryImpl;
+import org.nuxeo.ecm.core.storage.sql.coremodel.SQLRepositoryService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
@@ -44,32 +38,19 @@ public class DSHelper {
     public static Map<String, NuxeoDSConfig> getDSForRepos() throws Exception {
         if (detectedDS == null) {
             Map<String, NuxeoDSConfig> configs = new HashMap<String, NuxeoDSConfig>();
-
-            RepositoryManager rm = Framework.getLocalService(RepositoryManager.class);
-            for (String repositoryName : rm.getRepositoryNames()) {
-                Object repoImpl = RepositoryResolver.getRepository(repositoryName);
-                RepositoryDescriptor desc;
-                if (repoImpl instanceof RepositoryImpl) {
-                    RepositoryImpl sqlRepo = (RepositoryImpl) repoImpl;
-                    desc = sqlRepo.getRepositoryDescriptor();
-                } else {
-                    ConnectionFactoryImpl cf = (ConnectionFactoryImpl) RepositoryResolver.getRepository(repositoryName);
-                    ManagedConnectionFactoryImpl mcf = cf.getManagedConnectionFactory();
-                    Field field = mcf.getClass().getDeclaredField("repository");
-                    field.setAccessible(true);
-                    RepositoryImpl sqlRepositoryImpl = (RepositoryImpl) field.get(mcf);
-                    desc = sqlRepositoryImpl.getRepositoryDescriptor();
-                }
-
-                String singleDS = Framework.getProperty(
-                        "nuxeo.db.singleDataSource", null);
-                if (singleDS == null || singleDS.isEmpty()) {
-                    // XA mode
-                    NuxeoDSConfig config = new NuxeoDSConfig(
-                            desc.xaDataSourceName, desc.properties);
+            String singleDS = Framework.getProperty(
+                    "nuxeo.db.singleDataSource", null);
+            if (singleDS == null || singleDS.isEmpty()) {
+                // look for ds in repositories
+                SQLRepositoryService sqlRepositoryService = Framework.getService(SQLRepositoryService.class);
+                for (String repositoryName : sqlRepositoryService.getRepositoryNames()) {
+                    Map<String, String> properties = new HashMap<>();
+                    String xaDataSourceName = sqlRepositoryService.getRepositoryDataSourceAndProperties(
+                            repositoryName, properties);
+                    NuxeoDSConfig config = new NuxeoDSConfig(xaDataSourceName,
+                            properties);
                     configs.put(repositoryName, config);
                 }
-
             }
             detectedDS = configs;
         }

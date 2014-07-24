@@ -30,13 +30,15 @@
     </action>
 
     <!-- Admin center actions -->
-    <action id="BirtModel" link="view_admin-fragment.xhtml" label="adm.report.models"
+    <action id="BirtModel" link="/view_admin-fragment.xhtml" label="adm.report.models"
+      type="admin_rest_document_link"
       order="45">
       <category>NUXEO_ADMIN</category>
       <filter-id>only_for_manager</filter-id>
     </action>
 
     <action id="TAB_VIEW_REPORT_MODELS" link="/incl/birt/report_content_view.xhtml"
+      type="admin_rest_document_link"
       label="tab.report.models" order="10">
       <category>BirtModel_sub_tab</category>
       <filter-id>only_for_manager</filter-id>
@@ -46,7 +48,7 @@
       label="command.trashDocs" icon="" help="comand.trashDocs.help"
       confirm="if( !confirmDeleteDocuments() ) return false;">
       <category>CURRENT_SELECTION_REPORTS_LIST</category>
-      <filter id="canDelete">
+      <filter id="canDeleteBirtReports">
         <rule grant="true">
           <condition>#{deleteActions.canDelete}</condition>
         </rule>

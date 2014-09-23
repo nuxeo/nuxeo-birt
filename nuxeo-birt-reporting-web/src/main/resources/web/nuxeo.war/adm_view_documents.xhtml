@@ -13,12 +13,12 @@
   <ui:define name="body">
 
      <a4j:outputPanel id="admin_divtab" layout="block">
-      <table class="adminViewContent">
+      <table class="fullWidth">
       <tr>
-        <td class="adminTabsColumn">
+        <td>
           <ui:include src="/incl/admin_view_selector.xhtml"/>
         </td>
-        <td class="adminContentColumn">
+        <td>
           <!-- view document layout -->
           <div>
             <nxl:documentLayout documentMode="header" mode="view"
@@ -26,7 +26,7 @@
               includeAnyMode="false" />
 
             <ui:include src="/incl/document_action_tabs.xhtml"/>
-            <div style="clear:both"></div>
+            <div class="clear"></div>
             <div class="tabsContent">
               <ui:include src="#{webActions.currentTabAction.link}"/>
             </div>

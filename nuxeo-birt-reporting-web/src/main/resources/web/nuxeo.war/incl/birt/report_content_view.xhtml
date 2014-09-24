@@ -18,9 +18,10 @@
       <p class="buttonsGadget">
         <h:commandButton styleClass="button" value="#{messages['command.create']}"
           action="#{reportActions.saveDocument}" id="button_create" />
-        <a4j:commandButton styleClass="button" value="#{messages['command.cancel']}"
-          action="#{reportActions.toggleAndReset()}" immediate="true"
-          render="reportsModelPanel" />
+        <h:commandButton styleClass="button" value="#{messages['command.cancel']}"
+          action="#{reportActions.toggleAndReset()}">
+          <f:ajax execute="@this" render="reportsModelPanel" />
+        </h:commandButton>
       </p>
     </h:form>
   </f:subview>

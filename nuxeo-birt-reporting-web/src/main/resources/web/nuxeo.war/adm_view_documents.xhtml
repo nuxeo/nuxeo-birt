@@ -12,30 +12,8 @@
 
   <ui:define name="body">
 
-     <a4j:outputPanel id="admin_divtab" layout="block">
-      <table class="fullWidth">
-      <tr>
-        <td>
-          <ui:include src="/incl/admin_view_selector.xhtml"/>
-        </td>
-        <td>
-          <!-- view document layout -->
-          <div>
-            <nxl:documentLayout documentMode="header" mode="view"
-              value="#{currentDocument}" defaultLayout="document_header"
-              includeAnyMode="false" />
-
-            <ui:include src="/incl/document_action_tabs.xhtml"/>
-            <div class="clear"></div>
-            <div class="tabsContent">
-              <ui:include src="#{webActions.currentTabAction.link}"/>
-            </div>
-
-          </div>
-        </td>
-      </tr>
-      </table>
-   </a4j:outputPanel>
+     <nxl:widget name="adminCenterTabs" mode="view" value="#{currentDocument}"
+        tabContentTemplate="/home_view_documents_tab_content.xhtml" />
 
   </ui:define>
 

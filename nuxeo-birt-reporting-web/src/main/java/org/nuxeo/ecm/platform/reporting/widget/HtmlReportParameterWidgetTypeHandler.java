@@ -62,7 +62,7 @@ public class HtmlReportParameterWidgetTypeHandler extends
         String mode = widget.getMode();
         String widgetId = widget.getId();
 
-        String docVar = RenderVariables.globalVariables.document.name();
+        String docVar = RenderVariables.globalVariables.value.name();
         DocumentModel doc = (DocumentModel) ctx.getAttribute(docVar);
 
         ReportInstance reportInstance = doc.getAdapter(ReportInstance.class);

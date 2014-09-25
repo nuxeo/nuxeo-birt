@@ -18,6 +18,9 @@
 
 package org.nuxeo.ecm.platform.reporting.tests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -25,52 +28,60 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.After;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
+import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
-
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.FileUtils;
 import org.nuxeo.common.utils.Path;
+import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
+import org.nuxeo.ecm.core.test.CoreFeature;
+import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.reporting.engine.BirtEngine;
 import org.nuxeo.ecm.platform.reporting.report.ReportHelper;
+import org.nuxeo.ecm.platform.reporting.tests.TestBirtDesign.RepositoryInit;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
+@RunWith(FeaturesRunner.class)
+@Features(CoreFeature.class)
+@RepositoryConfig(init=RepositoryInit.class)
 public class TestBirtDesign extends SQLRepositoryTestCase {
 
     String reportPath = null;
 
-    DocumentModel folder1 = null;
+    protected static DocumentModel folder1 = null;
 
-    DocumentModel file1 = null;
+    protected static DocumentModel file1 = null;
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        openSession();
+    public static class RepositoryInit extends DefaultRepositoryInit {
 
-        folder1 = session.createDocumentModel("/", "folder1", "Folder");
-        folder1.setProperty("dublincore", "title", "My Super Folder");
-        folder1 = session.createDocument(folder1);
+        @Override
+        public void populate(CoreSession session) throws ClientException {
+            super.populate(session);
+            folder1 = session.createDocumentModel("/", "folder1", "Folder");
+            folder1.setProperty("dublincore", "title", "My Super Folder");
+            folder1 = session.createDocument(folder1);
 
-        file1 = session.createDocumentModel("/", "file1", "File");
-        file1.setProperty("dublincore", "title", "My Super File");
-        file1 = session.createDocument(file1);
+            file1 = session.createDocumentModel("/", "file1", "File");
+            file1.setProperty("dublincore", "title", "My Super File");
+            file1 = session.createDocument(file1);
 
-        session.save();
-
+            session.save();
+        }
     }
 
+    @Override
     @After
     public void tearDown() throws Exception {
-        closeSession();
-        super.tearDown();
         if (reportPath != null) {
             FileUtils.deleteTree(new File(reportPath));
             reportPath = null;
@@ -102,7 +113,7 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
 
         HTMLRenderOption options = new HTMLRenderOption();
         options.setImageHandler(new HTMLServerImageHandler());
-        options.setOutputFormat(HTMLRenderOption.OUTPUT_FORMAT_HTML);
+        options.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
         options.setOutputStream(out);
         options.setBaseImageURL("images");
         options.setImageDirectory(imagesDir.getAbsolutePath());
@@ -146,7 +157,7 @@ public class TestBirtDesign extends SQLRepositoryTestCase {
 
         HTMLRenderOption options = new HTMLRenderOption();
         options.setImageHandler(new HTMLServerImageHandler());
-        options.setOutputFormat(HTMLRenderOption.OUTPUT_FORMAT_HTML);
+        options.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
         options.setOutputStream(out);
         options.setBaseImageURL("images");
         options.setImageDirectory(imagesDir.getAbsolutePath());

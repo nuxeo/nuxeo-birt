@@ -36,7 +36,9 @@ import org.eclipse.birt.report.model.api.OdaDataSourceHandle;
 import org.eclipse.birt.report.model.api.ReportDesignHandle;
 import org.eclipse.birt.report.model.api.SessionHandle;
 import org.eclipse.birt.report.model.elements.OdaDataSource;
+import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.platform.reporting.engine.BirtEngine;
+import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.datasource.DataSourceHelper;
 
 import com.ibm.icu.util.ULocale;
@@ -63,7 +65,7 @@ public class ReportHelper {
 
     public static IReportRunnable getNuxeoReport(InputStream stream)
             throws Exception {
-        return getNuxeoReport(stream, null);
+        return getNuxeoReport(stream, Framework.getService(RepositoryManager.class).getDefaultRepositoryName());
     }
 
     public static Map<String, String> getReportMetaData(InputStream stream)

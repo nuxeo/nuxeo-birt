@@ -48,11 +48,11 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     public static final String BIRT_REPORTS_CONTAINER_PATH = "/report-models";
 
     @Override
-    public void activate(ComponentContext context) throws Exception {
+    public void activate(ComponentContext context) {
     }
 
     @Override
-    public void deactivate(ComponentContext context) throws Exception {
+    public void deactivate(ComponentContext context) {
         BirtEngine.destroyBirtEngine();
     }
 

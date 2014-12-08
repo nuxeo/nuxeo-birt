@@ -31,7 +31,6 @@ import org.nuxeo.ecm.core.api.DocumentModel;
  * Holds the logic to extract parameters from the Document Context.
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class ReportContext {
 
@@ -61,9 +60,7 @@ public class ReportContext {
 
     public static final Pattern PATTERN_TO_CHECK = Pattern.compile("\\$\\{(\\w+)\\}");
 
-    public static void setContextualParameters(
-            List<ReportParameter> reportParams, DocumentModel doc)
-            throws Exception {
+    public static void setContextualParameters(List<ReportParameter> reportParams, DocumentModel doc) throws Exception {
         Map<String, String> contextualParameters = buildContextualParametersMap(doc);
         for (ReportParameter parameter : reportParams) {
             String value = parameter.getStringValue();
@@ -79,46 +76,35 @@ public class ReportContext {
         }
     }
 
-    private static Map<String, String> buildContextualParametersMap(
-            DocumentModel doc) throws ClientException {
+    private static Map<String, String> buildContextualParametersMap(DocumentModel doc) throws ClientException {
         Map<String, String> contextualParameters = new HashMap<String, String>();
-        contextualParameters.put(USER_NAME,
-                doc.getCoreSession().getPrincipal().getName());
+        contextualParameters.put(USER_NAME, doc.getCoreSession().getPrincipal().getName());
         contextualParameters.put(DOC_TYPE, doc.getType());
         contextualParameters.put(CURRENT_PATH, doc.getPathAsString());
         contextualParameters.put(CURRENT_REPOSITORY, doc.getRepositoryName());
 
-        DocumentModel currentDomain = getFirstParentWithType(doc,
-                DOMAIN_DOCUMENT_TYPE);
+        DocumentModel currentDomain = getFirstParentWithType(doc, DOMAIN_DOCUMENT_TYPE);
         if (currentDomain != null) {
             contextualParameters.put(CURRENT_DOMAIN_ID, currentDomain.getId());
-            contextualParameters.put(CURRENT_DOMAIN_PATH,
-                    currentDomain.getPathAsString());
+            contextualParameters.put(CURRENT_DOMAIN_PATH, currentDomain.getPathAsString());
         }
 
-        DocumentModel currentWorkspace = getFirstParentWithType(doc,
-                WORKSPACE_DOCUMENT_TYPE);
+        DocumentModel currentWorkspace = getFirstParentWithType(doc, WORKSPACE_DOCUMENT_TYPE);
         if (currentWorkspace != null) {
-            contextualParameters.put(CURRENT_WORKSPACE_ID,
-                    currentWorkspace.getId());
-            contextualParameters.put(CURRENT_WORKSPACE_PATH,
-                    currentWorkspace.getPathAsString());
+            contextualParameters.put(CURRENT_WORKSPACE_ID, currentWorkspace.getId());
+            contextualParameters.put(CURRENT_WORKSPACE_PATH, currentWorkspace.getPathAsString());
         }
 
         DocumentModel currentSuperSpace = getCurrentSuperSpace(doc);
         if (currentSuperSpace != null) {
-            contextualParameters.put(CURRENT_SUPERSPACE_ID,
-                    currentSuperSpace.getId());
-            contextualParameters.put(CURRENT_SUPERSPACE_PATH,
-                    currentSuperSpace.getPathAsString());
+            contextualParameters.put(CURRENT_SUPERSPACE_ID, currentSuperSpace.getId());
+            contextualParameters.put(CURRENT_SUPERSPACE_PATH, currentSuperSpace.getPathAsString());
         }
         return contextualParameters;
     }
 
-    private static DocumentModel getFirstParentWithType(DocumentModel doc,
-            String type) throws ClientException {
-        List<DocumentModel> parents = doc.getCoreSession().getParentDocuments(
-                doc.getRef());
+    private static DocumentModel getFirstParentWithType(DocumentModel doc, String type) throws ClientException {
+        List<DocumentModel> parents = doc.getCoreSession().getParentDocuments(doc.getRef());
         for (DocumentModel parent : parents) {
             if (parent.getType().equals(type)) {
                 return parent;
@@ -127,8 +113,7 @@ public class ReportContext {
         return null;
     }
 
-    private static DocumentModel getCurrentSuperSpace(DocumentModel doc)
-            throws ClientException {
+    private static DocumentModel getCurrentSuperSpace(DocumentModel doc) throws ClientException {
         return doc.getCoreSession().getSuperSpace(doc);
     }
 

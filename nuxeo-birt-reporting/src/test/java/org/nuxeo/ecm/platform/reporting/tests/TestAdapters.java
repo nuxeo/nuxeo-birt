@@ -55,8 +55,7 @@ import org.nuxeo.runtime.test.runner.LocalDeploy;
 import com.google.inject.Inject;
 
 @RunWith(FeaturesRunner.class)
-@Features({ TransactionalFeature.class,
-    CoreFeature.class })
+@Features({ TransactionalFeature.class, CoreFeature.class })
 @Deploy({ "org.nuxeo.ecm.platform.birt.reporting", "org.nuxeo.runtime.datasource" })
 @LocalDeploy("org.nuxeo.ecm.platform.birt.reporting:repo-ds.xml")
 public class TestAdapters {
@@ -68,8 +67,7 @@ public class TestAdapters {
 
     protected DocumentModel createModelDoc() throws Exception {
 
-        DocumentModel model = session.createDocumentModel("/", "model",
-                "BirtReportModel");
+        DocumentModel model = session.createDocumentModel("/", "model", "BirtReportModel");
 
         File report = FileUtils.getResourceFileFromContext("reports/VCSReportWithParams.rptdesign");
 
@@ -84,7 +82,6 @@ public class TestAdapters {
         return model;
     }
 
-
     @After
     public void cleanUpTempForlder() {
         if (reportPath != null) {
@@ -93,11 +90,9 @@ public class TestAdapters {
         }
     }
 
-    protected DocumentModel createInstanceDoc(ReportModel model)
-            throws Exception {
+    protected DocumentModel createInstanceDoc(ReportModel model) throws Exception {
 
-        DocumentModel instance = session.createDocumentModel("/", "instance",
-                "BirtReport");
+        DocumentModel instance = session.createDocumentModel("/", "instance", "BirtReport");
 
         instance.setPropertyValue("dc:title", "My instance");
         instance.setPropertyValue("birt:modelRef", model.getId());
@@ -108,7 +103,6 @@ public class TestAdapters {
 
         return instance;
     }
-
 
     @Test
     public void testParams() throws Exception {

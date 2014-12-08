@@ -49,12 +49,9 @@ import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
 
 /**
- * JAX-RS Resource to represent a {@link ReportInstance}.
- *
- * Provides html and PDF views
+ * JAX-RS Resource to represent a {@link ReportInstance}. Provides html and PDF views
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 @WebObject(type = "report")
 public class ReportResource extends DefaultObject {
@@ -75,13 +72,11 @@ public class ReportResource extends DefaultObject {
     }
 
     protected String getReportKey() {
-        return report.getDoc().getId() + "-"
-                + getContext().getUserSession().getPrincipal().getName();
+        return report.getDoc().getId() + "-" + getContext().getUserSession().getPrincipal().getName();
     }
 
     protected String buildTmpPath(String key) {
-        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
-                "birt-" + key).toString();
+        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append("birt-" + key).toString();
         File baseDir = new File(dirPath);
         if (baseDir.exists()) {
             return dirPath;
@@ -95,9 +90,7 @@ public class ReportResource extends DefaultObject {
 
     @GET
     @javax.ws.rs.Path("images/{key}/{name}")
-    public Object getImage(@PathParam("key")
-    String key, @PathParam("name")
-    String name) throws Exception {
+    public Object getImage(@PathParam("key") String key, @PathParam("name") String name) throws Exception {
 
         String tmpPath = buildTmpPath(key);
         File imageFile = new File(tmpPath + "/images/" + name);
@@ -107,9 +100,7 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("editParams")
-    public Object editParams(@QueryParam("target")
-    String target, @QueryParam("errors")
-    String errors) throws Exception {
+    public Object editParams(@QueryParam("target") String target, @QueryParam("errors") String errors) throws Exception {
         HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
         @SuppressWarnings("unchecked")
         Map<String, Object> userParams = (Map<String, Object>) session.getAttribute(USER_PARAMS_NAME);
@@ -120,8 +111,7 @@ public class ReportResource extends DefaultObject {
         return getView("editParams").arg("params", params).arg("target", target);
     }
 
-    protected void fillReportParameters(List<ReportParameter> reportParameters,
-            Map<String, Object> userParams) {
+    protected void fillReportParameters(List<ReportParameter> reportParameters, Map<String, Object> userParams) {
         if (userParams != null) {
             for (ReportParameter p : reportParameters) {
                 if (userParams.containsKey(p.getName())) {
@@ -131,8 +121,7 @@ public class ReportResource extends DefaultObject {
         }
     }
 
-    protected void markReportParametersInError(
-            List<ReportParameter> reportParameters, String errors) {
+    protected void markReportParametersInError(List<ReportParameter> reportParameters, String errors) {
         if (errors != null) {
             String[] errs = errors.split(",");
             for (String err : errs) {
@@ -149,8 +138,7 @@ public class ReportResource extends DefaultObject {
         }
     }
 
-    protected void readParams(Map<String, Object> userParams,
-            List<String> paramsInError) throws Exception {
+    protected void readParams(Map<String, Object> userParams, List<String> paramsInError) throws Exception {
         List<ReportParameter> params = report.getReportUserParameters();
         if (params.size() > 0) {
             FormData data = getContext().getForm();
@@ -181,8 +169,7 @@ public class ReportResource extends DefaultObject {
         return html(false);
     }
 
-    protected Object validateInput(Map<String, Object> userParams, String target)
-            throws Exception {
+    protected Object validateInput(Map<String, Object> userParams, String target) throws Exception {
         HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
         @SuppressWarnings("unchecked")
         Map<String, Object> savedUserParams = (Map<String, Object>) session.getAttribute(USER_PARAMS_NAME);
@@ -200,8 +187,7 @@ public class ReportResource extends DefaultObject {
                 errorList = errorList + err + ",";
             }
             errorList = URLEncoder.encode(errorList, "UTF-8");
-            return redirect(getPath() + "/editParams?target=" + target
-                    + "&errors=" + errorList);
+            return redirect(getPath() + "/editParams?target=" + target + "&errors=" + errorList);
         }
         return null;
     }
@@ -209,8 +195,7 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("html")
-    public Object html(@QueryParam("forceFormDisplay")
-    boolean forceFormDisplay) throws Exception {
+    public Object html(@QueryParam("forceFormDisplay") boolean forceFormDisplay) throws Exception {
         Map<String, Object> userParams = new HashMap<String, Object>();
         Object validationError = validateInput(userParams, "html");
 
@@ -253,8 +238,7 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("application/pdf")
     @javax.ws.rs.Path("pdf")
-    public Object pdf(@QueryParam("forceFormDisplay")
-    boolean forceDisplayForm) throws Exception {
+    public Object pdf(@QueryParam("forceFormDisplay") boolean forceDisplayForm) throws Exception {
         Map<String, Object> userParams = new HashMap<String, Object>();
         Object validationError = validateInput(userParams, "pdf");
 
@@ -277,16 +261,14 @@ public class ReportResource extends DefaultObject {
         options.setOutputStream(out);
 
         report.render(options, userParams);
-        return Response.ok(new FileInputStream(reportFile),
-                MediaType.APPLICATION_OCTET_STREAM).header(
+        return Response.ok(new FileInputStream(reportFile), MediaType.APPLICATION_OCTET_STREAM).header(
                 "Content-Disposition", "attachment;filename=" + key + ".pdf").build();
     }
 
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("clearParams")
-    public Object clearParams(@QueryParam("target")
-    String target) throws Exception {
+    public Object clearParams(@QueryParam("target") String target) throws Exception {
         HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
         session.removeAttribute(USER_PARAMS_NAME);
         return redirect(getPath() + "/editParams?target=" + target);

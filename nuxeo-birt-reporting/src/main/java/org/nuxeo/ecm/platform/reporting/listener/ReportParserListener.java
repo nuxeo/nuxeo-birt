@@ -33,11 +33,9 @@ import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 
 /**
- * Synchronous {@link EventListener} used to extract ReportParameters from the
- * Birt ReportDesign file
+ * Synchronous {@link EventListener} used to extract ReportParameters from the Birt ReportDesign file
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class ReportParserListener implements EventListener {
 
@@ -60,9 +58,7 @@ public class ReportParserListener implements EventListener {
                             reportModel.updateMetadata();
                         }
                     } catch (Exception e) {
-                        log.error(
-                                "Error while parsing report model parameters",
-                                e);
+                        log.error("Error while parsing report model parameters", e);
                     }
                 }
             } else if (doc.hasSchema(BIRT_REPORT_INSTANCE_SCHEMA)) {

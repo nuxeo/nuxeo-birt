@@ -29,11 +29,10 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 
 /**
- * Base class for the {@link ReportModel} and {@link ReportInstance} adapters
- * Contains common code for Parameters management.
+ * Base class for the {@link ReportModel} and {@link ReportInstance} adapters Contains common code for Parameters
+ * management.
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public abstract class BaseBirtReportAdapter {
 
@@ -49,15 +48,13 @@ public abstract class BaseBirtReportAdapter {
 
     protected abstract String getPrefix();
 
-    public abstract List<ReportParameter> getReportParameters()
-            throws Exception;
+    public abstract List<ReportParameter> getReportParameters() throws Exception;
 
     public void setParameter(ReportParameter param) throws Exception {
         setParameter(param, true);
     }
 
-    public void setParameter(ReportParameter param, boolean save)
-            throws Exception {
+    public void setParameter(ReportParameter param, boolean save) throws Exception {
         setParameter(param.getName(), param.getStringValue(), save);
     }
 
@@ -66,8 +63,7 @@ public abstract class BaseBirtReportAdapter {
     }
 
     @SuppressWarnings("unchecked")
-    public void setParameter(String name, Object value, boolean save)
-            throws Exception {
+    public void setParameter(String name, Object value, boolean save) throws Exception {
         List<ReportParameter> reportParams = getReportParameters();
         ReportParameter targetParameter = null;
         for (ReportParameter reportParam : reportParams) {
@@ -107,8 +103,7 @@ public abstract class BaseBirtReportAdapter {
             localParams.add(newEntry);
         }
 
-        doc.setPropertyValue(getPrefix() + ":parameters",
-                (Serializable) localParams);
+        doc.setPropertyValue(getPrefix() + ":parameters", (Serializable) localParams);
         if (save) {
             doc = getSession().saveDocument(doc);
         }

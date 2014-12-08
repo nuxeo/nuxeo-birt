@@ -26,7 +26,6 @@ import org.nuxeo.runtime.api.Framework;
  * Wrapps a DataSource configuration
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class NuxeoDSConfig {
 
@@ -82,9 +81,8 @@ public class NuxeoDSConfig {
         password = getProp(properties, "Password");
         url = getProp(properties, "URL");
         if (url == null) {
-            url = "jdbc:postgresql://" + getProp(properties, "ServerName")
-                    + ":" + getIntegerProp(properties, "PortNumber") + "/"
-                    + getProp(properties, "DatabaseName");
+            url = "jdbc:postgresql://" + getProp(properties, "ServerName") + ":"
+                    + getIntegerProp(properties, "PortNumber") + "/" + getProp(properties, "DatabaseName");
         }
         driverClass = getProp(properties, "Driver");
         if (driverClass == null) {
@@ -97,9 +95,9 @@ public class NuxeoDSConfig {
         password = getProp(properties, "Password");
         url = getProp(properties, "URL");
         if (url == null) {
-            url = "jdbc:jtds:sqlserver://" + getProp(properties, "ServerName")
-                    + ":" + getIntegerProp(properties, "PortNumber") + "/"
-                    + getProp(properties, "DatabaseName") + ";useCursors=true";
+            url = "jdbc:jtds:sqlserver://" + getProp(properties, "ServerName") + ":"
+                    + getIntegerProp(properties, "PortNumber") + "/" + getProp(properties, "DatabaseName")
+                    + ";useCursors=true";
         }
         driverClass = getProp(properties, "Driver");
         if (driverClass == null) {

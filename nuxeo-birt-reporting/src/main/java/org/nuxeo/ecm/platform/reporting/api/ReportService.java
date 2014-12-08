@@ -24,27 +24,21 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 
 /**
- *
- * Service interface to do Report adapters lookups.
- *
- * Main rendering and parameter management APIS are directly hold by adapters
+ * Service interface to do Report adapters lookups. Main rendering and parameter management APIS are directly hold by
+ * adapters
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public interface ReportService {
 
-    ReportModel getReportModelByName(CoreSession session, String reportModelName)
+    ReportModel getReportModelByName(CoreSession session, String reportModelName) throws ClientException;
+
+    List<ReportInstance> getReportInstanceByModelName(CoreSession session, String reportModelName)
             throws ClientException;
 
-    List<ReportInstance> getReportInstanceByModelName(CoreSession session,
-            String reportModelName) throws ClientException;
+    List<ReportModel> getReportAvailableModels(CoreSession session) throws ClientException;
 
-    List<ReportModel> getReportAvailableModels(CoreSession session)
-            throws ClientException;
-
-    ReportInstance getReportInstanceByKey(CoreSession session, String key)
-            throws ClientException;
+    ReportInstance getReportInstanceByKey(CoreSession session, String key) throws ClientException;
 
     String getReportModelsContainer();
 }

@@ -30,14 +30,12 @@ public class BirtRepositoryInit extends DefaultRepositoryInit {
     public void populate(CoreSession session) throws ClientException {
         super.populate(session);
 
-        DocumentModel doc = session.createDocumentModel("/", "default-domain",
-                "Domain");
+        DocumentModel doc = session.createDocumentModel("/", "default-domain", "Domain");
         doc.setProperty("dublincore", "title", "Default domain");
         doc = session.createDocument(doc);
         session.saveDocument(doc);
 
-        doc = session.createDocumentModel("/default-domain/workspaces/", "workspace",
-                "Workspace");
+        doc = session.createDocumentModel("/default-domain/workspaces/", "workspace", "Workspace");
         doc.setProperty("dublincore", "title", "Workspace");
         doc = session.createDocument(doc);
         session.saveDocument(doc);

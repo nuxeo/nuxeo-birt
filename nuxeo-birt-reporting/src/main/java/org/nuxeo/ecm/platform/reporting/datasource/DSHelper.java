@@ -25,11 +25,9 @@ import org.nuxeo.ecm.core.storage.sql.coremodel.SQLRepositoryService;
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Helper class used to extract JDBC DB settings from the Live SQLRepository
- * configuration
+ * Helper class used to extract JDBC DB settings from the Live SQLRepository configuration
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class DSHelper {
 
@@ -38,17 +36,15 @@ public class DSHelper {
     public static Map<String, NuxeoDSConfig> getDSForRepos() throws Exception {
         if (detectedDS == null) {
             Map<String, NuxeoDSConfig> configs = new HashMap<String, NuxeoDSConfig>();
-            String singleDS = Framework.getProperty(
-                    "nuxeo.db.singleDataSource", null);
+            String singleDS = Framework.getProperty("nuxeo.db.singleDataSource", null);
             if (singleDS == null || singleDS.isEmpty()) {
                 // look for ds in repositories
                 SQLRepositoryService sqlRepositoryService = Framework.getService(SQLRepositoryService.class);
                 for (String repositoryName : sqlRepositoryService.getRepositoryNames()) {
                     Map<String, String> properties = new HashMap<>();
-                    String xaDataSourceName = sqlRepositoryService.getRepositoryDataSourceAndProperties(
-                            repositoryName, properties);
-                    NuxeoDSConfig config = new NuxeoDSConfig(xaDataSourceName,
+                    String xaDataSourceName = sqlRepositoryService.getRepositoryDataSourceAndProperties(repositoryName,
                             properties);
+                    NuxeoDSConfig config = new NuxeoDSConfig(xaDataSourceName, properties);
                     configs.put(repositoryName, config);
                 }
             }
@@ -57,8 +53,7 @@ public class DSHelper {
         return detectedDS;
     }
 
-    public static NuxeoDSConfig getDefaultRepoDS(String repositoryName)
-            throws Exception {
+    public static NuxeoDSConfig getDefaultRepoDS(String repositoryName) throws Exception {
         Map<String, NuxeoDSConfig> configs = getDSForRepos();
 
         if (configs.size() == 0) {
@@ -74,8 +69,7 @@ public class DSHelper {
         return configs.get(repositoryName);
     }
 
-    public static NuxeoDSConfig getReplacementDS(String birtDSName,
-            String repositoryName) throws Exception {
+    public static NuxeoDSConfig getReplacementDS(String birtDSName, String repositoryName) throws Exception {
         String name = birtDSName.toLowerCase();
         if (name.equals("nuxeo") || name.equals("nuxeovcs")) {
             return getDefaultRepoDS(repositoryName);

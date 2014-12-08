@@ -26,14 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Helper class to find JDBC jar from the database type. Since BIRT used ODA to
- * wrap JDBC we must provide the JDBC JAR.
- *
- * This class directly finds the target Class in the server ClassLoader and
- * extract the associated Jar.
+ * Helper class to find JDBC jar from the database type. Since BIRT used ODA to wrap JDBC we must provide the JDBC JAR.
+ * This class directly finds the target Class in the server ClassLoader and extract the associated Jar.
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class SupportedDBHelper {
 
@@ -78,11 +74,12 @@ public class SupportedDBHelper {
         String protocol = url.getProtocol();
         String file = url.getFile();
         if ("vfszip".equals(protocol)) {
-            return new URL("vfszip:"+ file.substring(0,file.length() - classPath.length() - 1));
+            return new URL("vfszip:" + file.substring(0, file.length() - classPath.length() - 1));
         } else if ("jar".equals(protocol)) {
             return new URL(file.substring(0, file.length() - classPath.length() - 2));
         } else {
-            throw new Error("Cannot loate jar location of '" + name +"' JDBC Driver, unsupported protocol '" + protocol + "'");
+            throw new Error("Cannot loate jar location of '" + name + "' JDBC Driver, unsupported protocol '"
+                    + protocol + "'");
         }
     }
 

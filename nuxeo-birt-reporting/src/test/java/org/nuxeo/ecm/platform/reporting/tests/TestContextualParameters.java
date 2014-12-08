@@ -47,16 +47,14 @@ import com.google.inject.Inject;
 @RunWith(FeaturesRunner.class)
 @Features(CoreFeature.class)
 @RepositoryConfig(init = BirtRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({ "org.nuxeo.ecm.core.convert.plugins",
-        "org.nuxeo.ecm.platform.birt.reporting" })
+@Deploy({ "org.nuxeo.ecm.core.convert.plugins", "org.nuxeo.ecm.platform.birt.reporting" })
 public class TestContextualParameters {
 
     @Inject
     private CoreSession session;
 
     @Test
-    public void contextualParametersShouldBeReplacedInsideWorkspace()
-            throws Exception {
+    public void contextualParametersShouldBeReplacedInsideWorkspace() throws Exception {
         DocumentModel instance = createReportInsideWorkspace();
         ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
 
@@ -68,28 +66,21 @@ public class TestContextualParameters {
         List<ReportParameter> reportParameters = reportInstance.getReportParameters();
         ReportContext.setContextualParameters(reportParameters, instance);
 
-        DocumentModel domain = session.getDocument(new PathRef(
-                "/default-domain"));
-        DocumentModel workspace = session.getDocument(new PathRef(
-                "/default-domain/workspaces/workspace"));
-        assertEquals(instance.getType(),
-                reportParameters.get(0).getStringValue());
+        DocumentModel domain = session.getDocument(new PathRef("/default-domain"));
+        DocumentModel workspace = session.getDocument(new PathRef("/default-domain/workspaces/workspace"));
+        assertEquals(instance.getType(), reportParameters.get(0).getStringValue());
         assertEquals(domain.getId(), reportParameters.get(1).getStringValue());
-        assertEquals(workspace.getId(),
-                reportParameters.get(2).getStringValue());
-        assertEquals(workspace.getId(),
-                reportParameters.get(3).getStringValue());
+        assertEquals(workspace.getId(), reportParameters.get(2).getStringValue());
+        assertEquals(workspace.getId(), reportParameters.get(3).getStringValue());
     }
 
     private DocumentModel createReportInsideWorkspace() throws ClientException {
         DocumentModel reportModel = createReportModel();
-        return createReport(reportModel.getId(),
-                "/default-domain/workspaces/workspace");
+        return createReport(reportModel.getId(), "/default-domain/workspaces/workspace");
     }
 
     private DocumentModel createReportModel() throws ClientException {
-        DocumentModel model = session.createDocumentModel("/", "model",
-                "BirtReportModel");
+        DocumentModel model = session.createDocumentModel("/", "model", "BirtReportModel");
         File report = FileUtils.getResourceFileFromContext("reports/VCSReportWithParams.rptdesign");
         model.setPropertyValue("dc:title", "My model");
         model.setPropertyValue("birtmodel:reportName", "VCSReportWithParams");
@@ -99,10 +90,8 @@ public class TestContextualParameters {
         return model;
     }
 
-    private DocumentModel createReport(String reportModelId, String path)
-            throws ClientException {
-        DocumentModel instance = session.createDocumentModel(path, "instance",
-                "BirtReport");
+    private DocumentModel createReport(String reportModelId, String path) throws ClientException {
+        DocumentModel instance = session.createDocumentModel(path, "instance", "BirtReport");
         instance.setPropertyValue("dc:title", "My instance");
         instance.setPropertyValue("birt:modelRef", reportModelId);
         instance = session.createDocument(instance);
@@ -116,8 +105,7 @@ public class TestContextualParameters {
     }
 
     @Test
-    public void contextualParametersShouldNotBeReplacedOutsideWorkspace()
-            throws Exception {
+    public void contextualParametersShouldNotBeReplacedOutsideWorkspace() throws Exception {
         DocumentModel instance = createReportOutsideWorkspace();
         ReportInstance reportInstance = instance.getAdapter(ReportInstance.class);
 
@@ -129,14 +117,10 @@ public class TestContextualParameters {
         List<ReportParameter> reportParameters = reportInstance.getReportParameters();
         ReportContext.setContextualParameters(reportParameters, instance);
 
-        assertEquals(instance.getType(),
-                reportParameters.get(0).getStringValue());
-        assertEquals("${currentDomainId}",
-                reportParameters.get(1).getStringValue());
-        assertEquals("${currentWorkspaceId}",
-                reportParameters.get(2).getStringValue());
-        assertEquals(session.getRootDocument().getId(),
-                reportParameters.get(3).getStringValue());
+        assertEquals(instance.getType(), reportParameters.get(0).getStringValue());
+        assertEquals("${currentDomainId}", reportParameters.get(1).getStringValue());
+        assertEquals("${currentWorkspaceId}", reportParameters.get(2).getStringValue());
+        assertEquals(session.getRootDocument().getId(), reportParameters.get(3).getStringValue());
     }
 
     @Test
@@ -151,14 +135,10 @@ public class TestContextualParameters {
         List<ReportParameter> reportParameters = reportInstance.getReportParameters();
         ReportContext.setContextualParameters(reportParameters, instance);
 
-        DocumentModel domain = session.getDocument(new PathRef(
-                "/default-domain"));
-        assertEquals(instance.getType(),
-                reportParameters.get(0).getStringValue());
-        assertEquals(domain.getPathAsString(),
-                reportParameters.get(1).getStringValue());
-        assertEquals("${unknownParameter}",
-                reportParameters.get(2).getStringValue());
+        DocumentModel domain = session.getDocument(new PathRef("/default-domain"));
+        assertEquals(instance.getType(), reportParameters.get(0).getStringValue());
+        assertEquals(domain.getPathAsString(), reportParameters.get(1).getStringValue());
+        assertEquals("${unknownParameter}", reportParameters.get(2).getStringValue());
     }
 
 }

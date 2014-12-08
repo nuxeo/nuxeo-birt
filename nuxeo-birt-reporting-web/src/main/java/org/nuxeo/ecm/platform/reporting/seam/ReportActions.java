@@ -18,7 +18,8 @@
 
 package org.nuxeo.ecm.platform.reporting.seam;
 
-import static org.jboss.seam.annotations.Install.FRAMEWORK;import static org.nuxeo.ecm.platform.ui.web.component.file.InputFileMimetypeValidator.MIMETYPE_AUTHORIZED_EXTENSIONS_MESSAGE_ID;
+import static org.jboss.seam.annotations.Install.FRAMEWORK;
+import static org.nuxeo.ecm.platform.ui.web.component.file.InputFileMimetypeValidator.MIMETYPE_AUTHORIZED_EXTENSIONS_MESSAGE_ID;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -64,7 +65,6 @@ import com.sun.faces.util.MessageFactory;
  * Seam Bean used to manage Edit form
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 @Name("reportActions")
 @Scope(ScopeType.PAGE)
@@ -103,8 +103,7 @@ public class ReportActions implements Serializable {
 
     public ReportModel getReportModel(String docId) {
         try {
-            DocumentModel reportModelDoc = documentManager.getDocument(new IdRef(
-                    docId));
+            DocumentModel reportModelDoc = documentManager.getDocument(new IdRef(docId));
             return reportModelDoc.getAdapter(ReportModel.class);
         } catch (Exception e) {
             return null;
@@ -137,8 +136,7 @@ public class ReportActions implements Serializable {
         }
     }
 
-    protected void createReportsModelContainer(String path)
-            throws ClientException {
+    protected void createReportsModelContainer(String path) throws ClientException {
         new UnrestrictedReportModelsContainerCreator(documentManager, path).runUnrestricted();
     }
 
@@ -172,35 +170,28 @@ public class ReportActions implements Serializable {
         resetDocument();
     }
 
-    public void validateReportExtension(FacesContext context,
-            UIComponent component, Object value) {
+    public void validateReportExtension(FacesContext context, UIComponent component, Object value) {
         if (value instanceof InputFileInfo) {
             InputFileInfo info = (InputFileInfo) value;
             InputFileChoice choice = info.getConvertedChoice();
-            if (InputFileChoice.tempKeep != choice
-                    && InputFileChoice.upload != choice) {
+            if (InputFileChoice.tempKeep != choice && InputFileChoice.upload != choice) {
                 return;
             }
             String filename = info.getConvertedFilename();
             if (filename != null) {
                 if (!filename.endsWith(".rptdesign")) {
-                    throw new ValidatorException(
-                            MessageFactory.getMessage(
-                                    context,
-                                    MIMETYPE_AUTHORIZED_EXTENSIONS_MESSAGE_ID,
-                                    ".rptdesign"));
+                    throw new ValidatorException(MessageFactory.getMessage(context,
+                            MIMETYPE_AUTHORIZED_EXTENSIONS_MESSAGE_ID, ".rptdesign"));
                 }
             }
         }
     }
 
-    public class UnrestrictedReportModelsContainerCreator extends
-            UnrestrictedSessionRunner {
+    public class UnrestrictedReportModelsContainerCreator extends UnrestrictedSessionRunner {
 
         protected String reportModelsContainerPath;
 
-        protected UnrestrictedReportModelsContainerCreator(CoreSession session,
-                String reportModelsContainerPath) {
+        protected UnrestrictedReportModelsContainerCreator(CoreSession session, String reportModelsContainerPath) {
             super(session);
             this.reportModelsContainerPath = reportModelsContainerPath;
         }
@@ -208,18 +199,15 @@ public class ReportActions implements Serializable {
         @Override
         public void run() throws ClientException {
             if (!session.exists(new PathRef(reportModelsContainerPath))) {
-                DocumentModel doc = session.createDocumentModel(
-                        session.getRootDocument().getPathAsString(),
-                        reportModelsContainerPath.substring(1),
-                        Constants.BIRT_REPORT_MODELS_ROOT_TYPE);
+                DocumentModel doc = session.createDocumentModel(session.getRootDocument().getPathAsString(),
+                        reportModelsContainerPath.substring(1), Constants.BIRT_REPORT_MODELS_ROOT_TYPE);
                 doc.setPropertyValue("dc:title", "Report Models");
                 doc = session.createDocument(doc);
 
                 ACP acp = new ACPImpl();
                 ACL acl = new ACLImpl();
                 for (String administratorGroup : userManager.getAdministratorsGroups()) {
-                    ACE ace = new ACE(administratorGroup,
-                            SecurityConstants.EVERYTHING, true);
+                    ACE ace = new ACE(administratorGroup, SecurityConstants.EVERYTHING, true);
                     acl.add(ace);
                 }
                 acp.addACL(acl);

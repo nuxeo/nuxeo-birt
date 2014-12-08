@@ -71,8 +71,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
 
         File report = FileUtils.getResourceFileFromContext("reports/test1.rptdesign");
         assertNotNull(report);
-        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(
-                report));
+        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(report));
         assertNotNull(runnableReport);
         System.out.println(runnableReport.getReportName());
 
@@ -83,8 +82,7 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
 
         File report = FileUtils.getResourceFileFromContext("reports/test1.rptdesign");
         assertNotNull(report);
-        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(
-                report));
+        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(report));
         List<IParameterDefn> params = ReportHelper.getReportParameter(runnableReport);
         assertNotNull(params);
         assertEquals(2, params.size());
@@ -98,10 +96,8 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
     @Test
     public void testReportHtmlRendering() throws Exception {
         File report = FileUtils.getResourceFileFromContext("reports/test.rptdesign");
-        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(
-                report));
-        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
-                runnableReport);
+        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(report));
+        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(runnableReport);
 
         String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
                 "birt-test-report" + System.currentTimeMillis()).toString();
@@ -135,10 +131,8 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
     public void testReportHtmlRenderingWithParams() throws Exception {
         File report = FileUtils.getResourceFileFromContext("reports/test1.rptdesign");
 
-        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(
-                report));
-        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
-                runnableReport);
+        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(report));
+        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(runnableReport);
 
         String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
                 "birt-test-report" + System.currentTimeMillis()).toString();
@@ -178,10 +172,8 @@ public class TestBirtPlatformDeploy extends NXRuntimeTestCase {
     public void testReportPDFRenderingWithParams() throws Exception {
         File report = FileUtils.getResourceFileFromContext("reports/test1.rptdesign");
 
-        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(
-                report));
-        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
-                runnableReport);
+        IReportRunnable runnableReport = ReportHelper.getReport(new FileInputStream(report));
+        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(runnableReport);
 
         String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
                 "birt-test-report" + System.currentTimeMillis()).toString();

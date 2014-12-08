@@ -34,14 +34,11 @@ import org.nuxeo.ecm.platform.reporting.report.ReportHelper;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 
 /**
- *
  * Implementation class for the {@link ReportModel} adapter interface
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
-public class BirtReportModel extends BaseBirtReportAdapter implements
-        ReportModel {
+public class BirtReportModel extends BaseBirtReportAdapter implements ReportModel {
 
     protected static final String PREFIX = "birtmodel";
 
@@ -105,8 +102,7 @@ public class BirtReportModel extends BaseBirtReportAdapter implements
 
         List<ReportParameter> result = new ArrayList<ReportParameter>();
         for (IParameterDefn def : paramsDef) {
-            ReportParameter param = new ReportParameter(def,
-                    storedParams.get(def.getName()));
+            ReportParameter param = new ReportParameter(def, storedParams.get(def.getName()));
             result.add(param);
         }
         return result;

@@ -40,7 +40,6 @@ import org.nuxeo.runtime.api.Framework;
  * Root module to give access to Report Listing and report execution
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 @Path("/reports")
 @WebObject(type = "reports")
@@ -78,8 +77,7 @@ public class ReportModule extends ModuleRoot {
     }
 
     @Path(value = "{reportIdOrName}")
-    public Object getReport(@PathParam("reportIdOrName") String reportIdOrName)
-            throws ClientException {
+    public Object getReport(@PathParam("reportIdOrName") String reportIdOrName) throws ClientException {
         ReportInstance report = findReport(reportIdOrName);
         if (report == null) {
             return Response.status(404).build();

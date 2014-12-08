@@ -25,12 +25,9 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
 
 /**
- *
- * Factory for the {@link ReportModel} and {@link ReportInstance} adapters
- * Adapters and bound to document types.
+ * Factory for the {@link ReportModel} and {@link ReportInstance} adapters Adapters and bound to document types.
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class AdapterFactory implements DocumentAdapterFactory {
 

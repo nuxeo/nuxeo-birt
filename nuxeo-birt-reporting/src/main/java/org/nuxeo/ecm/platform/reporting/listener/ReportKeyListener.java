@@ -33,11 +33,9 @@ import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 
 /**
- * Synchronous {@link EventListener} used to compute unique
- * {@link ReportInstance} keys
+ * Synchronous {@link EventListener} used to compute unique {@link ReportInstance} keys
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class ReportKeyListener implements EventListener {
 
@@ -73,8 +71,7 @@ public class ReportKeyListener implements EventListener {
         }
     }
 
-    protected String generateReportKey(ReportInstance reportInstance)
-            throws ClientException {
+    protected String generateReportKey(ReportInstance reportInstance) throws ClientException {
         String name = reportInstance.getModel().getReportName();
         if (name == null) {
             name = reportInstance.getModel().getDoc().getName();

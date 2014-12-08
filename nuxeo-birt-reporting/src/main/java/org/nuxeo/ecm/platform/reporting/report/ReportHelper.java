@@ -47,29 +47,24 @@ import com.ibm.icu.util.ULocale;
  * Helper class to make Birt API easier to use
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class ReportHelper {
 
     protected static final Log log = LogFactory.getLog(ReportHelper.class);
 
-    public static IReportRunnable getReport(String reportPath)
-            throws EngineException {
+    public static IReportRunnable getReport(String reportPath) throws EngineException {
         return BirtEngine.getBirtEngine().openReportDesign(reportPath);
     }
 
-    public static IReportRunnable getReport(InputStream stream)
-            throws EngineException {
+    public static IReportRunnable getReport(InputStream stream) throws EngineException {
         return BirtEngine.getBirtEngine().openReportDesign(stream);
     }
 
-    public static IReportRunnable getNuxeoReport(InputStream stream)
-            throws Exception {
+    public static IReportRunnable getNuxeoReport(InputStream stream) throws Exception {
         return getNuxeoReport(stream, Framework.getService(RepositoryManager.class).getDefaultRepositoryName());
     }
 
-    public static Map<String, String> getReportMetaData(InputStream stream)
-            throws Exception {
+    public static Map<String, String> getReportMetaData(InputStream stream) throws Exception {
         IDesignEngine dEngine = BirtEngine.getBirtDesignEngine();
         SessionHandle sh = dEngine.newSessionHandle(ULocale.ENGLISH);
         ReportDesignHandle designHandle = sh.openDesign((String) null, stream);
@@ -84,8 +79,7 @@ public class ReportHelper {
         return meta;
     }
 
-    public static IReportRunnable getNuxeoReport(InputStream stream,
-            String repositoryName) throws Exception {
+    public static IReportRunnable getNuxeoReport(InputStream stream, String repositoryName) throws Exception {
         IDesignEngine dEngine = BirtEngine.getBirtDesignEngine();
         SessionHandle sh = dEngine.newSessionHandle(ULocale.ENGLISH);
         ReportDesignHandle designHandle = sh.openDesign((String) null, stream);
@@ -93,24 +87,20 @@ public class ReportHelper {
         String dsName = DataSourceHelper.getDataSourceRepositoryJNDIName(repositoryName);
         for (Iterator<?> i = designHandle.getDataSources().iterator(); i.hasNext();) {
             OdaDataSourceHandle dsh = (OdaDataSourceHandle) i.next();
-                OdaDataSource ds = (OdaDataSource) dsh.getElement();
-                ds.setProperty("odaJndiName",
-                        DataSourceHelper.getDataSourceJNDIName(dsName));
+            OdaDataSource ds = (OdaDataSource) dsh.getElement();
+            ds.setProperty("odaJndiName", DataSourceHelper.getDataSourceJNDIName(dsName));
         }
 
-        IReportRunnable modifiedReport = BirtEngine.getBirtEngine().openReportDesign(
-                designHandle);
+        IReportRunnable modifiedReport = BirtEngine.getBirtEngine().openReportDesign(designHandle);
         // Can we really?
         sh.closeAll(false);
 
         return modifiedReport;
     }
 
-    public static List<IParameterDefn> getReportParameter(IReportRunnable report)
-            throws EngineException {
+    public static List<IParameterDefn> getReportParameter(IReportRunnable report) throws EngineException {
         List<IParameterDefn> params = new ArrayList<IParameterDefn>();
-        IGetParameterDefinitionTask task = BirtEngine.getBirtEngine().createGetParameterDefinitionTask(
-                report);
+        IGetParameterDefinitionTask task = BirtEngine.getBirtEngine().createGetParameterDefinitionTask(report);
         for (Object paramDefn : task.getParameterDefns(false)) {
             if (paramDefn instanceof IParameterDefn) {
                 IParameterDefn param = (IParameterDefn) paramDefn;

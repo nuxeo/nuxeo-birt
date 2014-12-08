@@ -34,12 +34,9 @@ import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.DefaultComponent;
 
 /**
- * Component Implementation of the {@link ReportService} interface.
- *
- * Mainly encapsulate NXQL queries.
+ * Component Implementation of the {@link ReportService} interface. Mainly encapsulate NXQL queries.
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class ReportComponent extends DefaultComponent implements ReportService {
 
@@ -57,11 +54,10 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
-    public List<ReportInstance> getReportInstanceByModelName(
-            CoreSession session, String reportModelName) throws ClientException {
+    public List<ReportInstance> getReportInstanceByModelName(CoreSession session, String reportModelName)
+            throws ClientException {
         String uuid = getReportModelByName(session, reportModelName).getId();
-        String query = "SELECT * FROM BirtReport WHERE birt:modelRef='" + uuid
-                + "'";
+        String query = "SELECT * FROM BirtReport WHERE birt:modelRef='" + uuid + "'";
         DocumentModelList reports = session.query(query);
         List<ReportInstance> result = new ArrayList<ReportInstance>();
         for (DocumentModel doc : reports) {
@@ -74,10 +70,8 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
-    public ReportInstance getReportInstanceByKey(CoreSession session, String key)
-            throws ClientException {
-        String query = "SELECT * FROM BirtReport WHERE birt:reportKey='" + key
-                + "'";
+    public ReportInstance getReportInstanceByKey(CoreSession session, String key) throws ClientException {
+        String query = "SELECT * FROM BirtReport WHERE birt:reportKey='" + key + "'";
         DocumentModelList reports = session.query(query);
         if (reports.isEmpty()) {
             return null;
@@ -91,10 +85,8 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
-    public ReportModel getReportModelByName(CoreSession session,
-            String reportModelName) throws ClientException {
-        String query = "SELECT * FROM BirtReportModel WHERE birtmodel:reportName='"
-                + reportModelName + "'";
+    public ReportModel getReportModelByName(CoreSession session, String reportModelName) throws ClientException {
+        String query = "SELECT * FROM BirtReportModel WHERE birtmodel:reportName='" + reportModelName + "'";
         DocumentModelList reports = session.query(query);
         if (reports.isEmpty()) {
             return null;
@@ -102,8 +94,7 @@ public class ReportComponent extends DefaultComponent implements ReportService {
         return reports.get(0).getAdapter(ReportModel.class);
     }
 
-    public List<ReportModel> getReportAvailableModels(CoreSession session)
-            throws ClientException {
+    public List<ReportModel> getReportAvailableModels(CoreSession session) throws ClientException {
         String query = "SELECT * FROM BirtReportModel WHERE ecm:currentLifeCycleState != 'deleted'";
         DocumentModelList reports = session.query(query);
         List<ReportModel> result = new ArrayList<ReportModel>();

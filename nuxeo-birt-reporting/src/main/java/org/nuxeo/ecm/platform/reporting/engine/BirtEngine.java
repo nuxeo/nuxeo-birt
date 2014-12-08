@@ -35,16 +35,14 @@ import org.eclipse.birt.report.model.api.IDesignEngine;
 import org.eclipse.birt.report.model.api.IDesignEngineFactory;
 
 /**
- * This is a Singleton used to trigger BIRT deployment and get access to the
- * Reporting and Design engine
+ * This is a Singleton used to trigger BIRT deployment and get access to the Reporting and Design engine
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public class BirtEngine {
 
     private static Log log = LogFactory.getLog(BirtEngine.class);
-    
+
     private static IReportEngine birtEngine = null;
 
     private static IDesignEngine birtDesignEngine = null;
@@ -56,8 +54,6 @@ public class BirtEngine {
     public static synchronized void initBirtConfig() {
         loadEngineProps();
     }
-
-
 
     public static synchronized IReportEngine getBirtEngine() {
         if (birtEngine == null) {
@@ -83,8 +79,7 @@ public class BirtEngine {
                     level = Level.OFF;
                 }
 
-                config.setLogConfig(configProps.getProperty("logDirectory"),
-                        level);
+                config.setLogConfig(configProps.getProperty("logDirectory"), level);
             }
 
             config.setEngineHome("");

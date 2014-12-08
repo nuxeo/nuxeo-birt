@@ -29,11 +29,9 @@ import org.eclipse.birt.report.engine.api.impl.ScalarParameterDefn;
 import org.nuxeo.ecm.core.api.ClientException;
 
 /**
- * 
  * Wraps Birt Report parameters to manage Cast and Conversions
  * 
  * @author Tiry (tdelprat@nuxeo.com)
- * 
  */
 public class ReportParameter {
 
@@ -189,8 +187,7 @@ public class ReportParameter {
                 return new SimpleDateFormat(TIME_FORMAT).parse(stringValue);
             }
         } catch (Exception e) {
-            String message = String.format(
-                    "Error while parsing the '%s' date value", stringValue);
+            String message = String.format("Error while parsing the '%s' date value", stringValue);
             log.error(message, e);
         }
         return null;

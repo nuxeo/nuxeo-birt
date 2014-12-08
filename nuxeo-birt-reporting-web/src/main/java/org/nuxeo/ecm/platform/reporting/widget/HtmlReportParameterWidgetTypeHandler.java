@@ -48,15 +48,13 @@ import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
  *
  * @author Tiry (tdelprat@nuxeo.com)
  */
-public class HtmlReportParameterWidgetTypeHandler extends
-        AbstractWidgetTypeHandler {
+public class HtmlReportParameterWidgetTypeHandler extends AbstractWidgetTypeHandler {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public FaceletHandler getFaceletHandler(FaceletContext ctx,
-            TagConfig tagConfig, Widget widget, FaceletHandler[] subHandlers)
-            throws WidgetException {
+    public FaceletHandler getFaceletHandler(FaceletContext ctx, TagConfig tagConfig, Widget widget,
+            FaceletHandler[] subHandlers) throws WidgetException {
 
         FaceletHandlerHelper helper = new FaceletHandlerHelper(ctx, tagConfig);
         String mode = widget.getMode();
@@ -90,8 +88,7 @@ public class HtmlReportParameterWidgetTypeHandler extends
             List<TagAttribute> attrs = new ArrayList<TagAttribute>();
             attrs.add(helper.createIdAttribute("paramName" + idx));
             attrs.add(helper.createAttribute("value", param.getName()));
-            ComponentHandler pName = helper.getHtmlComponentHandler(
-                    FaceletHandlerHelper.getTagAttributes(attrs), leaf,
+            ComponentHandler pName = helper.getHtmlComponentHandler(FaceletHandlerHelper.getTagAttributes(attrs), leaf,
                     HtmlOutputText.COMPONENT_TYPE, null);
 
             // value
@@ -107,18 +104,15 @@ public class HtmlReportParameterWidgetTypeHandler extends
             ComponentHandler pValue;
             if (BuiltinWidgetModes.EDIT.equals(mode) && param.isEditable()) {
                 attrs2.add(helper.createAttribute("value", value));
-                pValue = helper.getHtmlComponentHandler(
-                        FaceletHandlerHelper.getTagAttributes(attrs2), leaf,
+                pValue = helper.getHtmlComponentHandler(FaceletHandlerHelper.getTagAttributes(attrs2), leaf,
                         HtmlInputText.COMPONENT_TYPE, null);
             } else {
                 if (!param.isEditable()) {
-                    attrs2.add(helper.createAttribute("value",
-                            param.getStringValue()));
+                    attrs2.add(helper.createAttribute("value", param.getStringValue()));
                 } else {
                     attrs2.add(helper.createAttribute("value", value));
                 }
-                pValue = helper.getHtmlComponentHandler(
-                        FaceletHandlerHelper.getTagAttributes(attrs2), leaf,
+                pValue = helper.getHtmlComponentHandler(FaceletHandlerHelper.getTagAttributes(attrs2), leaf,
                         HtmlOutputText.COMPONENT_TYPE, null);
             }
 
@@ -127,18 +121,16 @@ public class HtmlReportParameterWidgetTypeHandler extends
             attrs3.add(helper.createIdAttribute("spacer1" + idx));
             attrs3.add(helper.createAttribute("value", "&nbsp;:&nbsp;"));
             attrs3.add(helper.createAttribute("escape", "false"));
-            ComponentHandler spacer = helper.getHtmlComponentHandler(
-                    FaceletHandlerHelper.getTagAttributes(attrs3), leaf,
-                    HtmlOutputText.COMPONENT_TYPE, null);
+            ComponentHandler spacer = helper.getHtmlComponentHandler(FaceletHandlerHelper.getTagAttributes(attrs3),
+                    leaf, HtmlOutputText.COMPONENT_TYPE, null);
 
             // spacer 2
             List<TagAttribute> attrs4 = new ArrayList<TagAttribute>();
             attrs4.add(helper.createIdAttribute("spacer2" + idx));
             attrs4.add(helper.createAttribute("value", "<br/>"));
             attrs4.add(helper.createAttribute("escape", "false"));
-            ComponentHandler spacer2 = helper.getHtmlComponentHandler(
-                    FaceletHandlerHelper.getTagAttributes(attrs4), leaf,
-                    HtmlOutputText.COMPONENT_TYPE, null);
+            ComponentHandler spacer2 = helper.getHtmlComponentHandler(FaceletHandlerHelper.getTagAttributes(attrs4),
+                    leaf, HtmlOutputText.COMPONENT_TYPE, null);
 
             handlers[idx] = pName;
             handlers[idx + 1] = spacer;

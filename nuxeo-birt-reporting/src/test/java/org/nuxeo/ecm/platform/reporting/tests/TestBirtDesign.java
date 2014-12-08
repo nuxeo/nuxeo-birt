@@ -54,12 +54,11 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 @RunWith(FeaturesRunner.class)
-@Features({ TransactionalFeature.class,
-        CoreFeature.class })
+@Features({ TransactionalFeature.class, CoreFeature.class })
 @RepositoryConfig(init = RepositoryInit.class)
 @Deploy("org.nuxeo.runtime.datasource")
 @LocalDeploy("org.nuxeo.ecm.platform.birt.reporting:repo-ds.xml")
-public class TestBirtDesign  {
+public class TestBirtDesign {
 
     String reportPath = null;
 
@@ -67,31 +66,17 @@ public class TestBirtDesign  {
 
     protected static DocumentModel file1 = null;
 
-    public static class RepositoryInit
-            extends
-            DefaultRepositoryInit {
+    public static class RepositoryInit extends DefaultRepositoryInit {
 
         @Override
-        public void populate(
-                CoreSession session)
-                throws ClientException {
+        public void populate(CoreSession session) throws ClientException {
             super.populate(session);
-            folder1 = session.createDocumentModel(
-                    "/", "folder1",
-                    "Folder");
-            folder1.setProperty(
-                    "dublincore",
-                    "title",
-                    "My Super Folder");
+            folder1 = session.createDocumentModel("/", "folder1", "Folder");
+            folder1.setProperty("dublincore", "title", "My Super Folder");
             folder1 = session.createDocument(folder1);
 
-            file1 = session.createDocumentModel(
-                    "/", "file1",
-                    "File");
-            file1.setProperty(
-                    "dublincore",
-                    "title",
-                    "My Super File");
+            file1 = session.createDocumentModel("/", "file1", "File");
+            file1.setProperty("dublincore", "title", "My Super File");
             file1 = session.createDocument(file1);
 
             session.save();
@@ -99,44 +84,33 @@ public class TestBirtDesign  {
     }
 
     @After
-    public void cleanFilesystem()
-            throws Exception {
+    public void cleanFilesystem() throws Exception {
         if (reportPath != null) {
-            FileUtils.deleteTree(new File(
-                    reportPath));
+            FileUtils.deleteTree(new File(reportPath));
             reportPath = null;
         }
     }
 
     @Test
-    public void testNuxeoReport()
-            throws Exception {
+    public void testNuxeoReport() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/testNX2.rptdesign");
 
-        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(
-                new FileInputStream(
-                        report));
+        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(new FileInputStream(report));
 
-        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
-                nuxeoReport);
+        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(nuxeoReport);
 
-        String dirPath = new Path(
-                System.getProperty("java.io.tmpdir")).append(
-                "birt-test-report-modified"
-                        + System.currentTimeMillis()).toString();
+        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
+                "birt-test-report-modified" + System.currentTimeMillis()).toString();
         File baseDir = new File(dirPath);
         baseDir.mkdir();
 
-        File imagesDir = new File(
-                dirPath + "/images");
+        File imagesDir = new File(dirPath + "/images");
         imagesDir.mkdir();
 
-        File result = new File(dirPath
-                + "/report");
+        File result = new File(dirPath + "/report");
 
-        OutputStream out = new FileOutputStream(
-                result);
+        OutputStream out = new FileOutputStream(result);
 
         HTMLRenderOption options = new HTMLRenderOption();
         options.setImageHandler(new HTMLServerImageHandler());
@@ -160,33 +134,25 @@ public class TestBirtDesign  {
     }
 
     @Test
-    public void testNuxeoReportWithParams()
-            throws Exception {
+    public void testNuxeoReportWithParams() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/simpleVCSReport.rptdesign");
 
-        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(new FileInputStream(
-                report));
+        IReportRunnable nuxeoReport = ReportHelper.getNuxeoReport(new FileInputStream(report));
 
-        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(
-                nuxeoReport);
+        IRunAndRenderTask task = BirtEngine.getBirtEngine().createRunAndRenderTask(nuxeoReport);
 
-        String dirPath = new Path(
-                System.getProperty("java.io.tmpdir")).append(
-                "birt-test-report-modified"
-                        + System.currentTimeMillis()).toString();
+        String dirPath = new Path(System.getProperty("java.io.tmpdir")).append(
+                "birt-test-report-modified" + System.currentTimeMillis()).toString();
         File baseDir = new File(dirPath);
         baseDir.mkdir();
 
-        File imagesDir = new File(
-                dirPath + "/images");
+        File imagesDir = new File(dirPath + "/images");
         imagesDir.mkdir();
 
-        File result = new File(dirPath
-                + "/report");
+        File result = new File(dirPath + "/report");
 
-        OutputStream out = new FileOutputStream(
-                result);
+        OutputStream out = new FileOutputStream(result);
 
         HTMLRenderOption options = new HTMLRenderOption();
         options.setImageHandler(new HTMLServerImageHandler());
@@ -196,8 +162,7 @@ public class TestBirtDesign  {
         options.setImageDirectory(imagesDir.getAbsolutePath());
 
         Map inputValues = new HashMap();
-        inputValues.put("docType",
-                "Folder");
+        inputValues.put("docType", "Folder");
         task.setParameterValues(inputValues);
 
         task.setRenderOption(options);

@@ -27,14 +27,10 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 
 /**
- *
- * Represents a report instance that is bound to a model.
- *
- * This interface holds the main methods for managing report parameter and
- * running the rendering.
+ * Represents a report instance that is bound to a model. This interface holds the main methods for managing report
+ * parameter and running the rendering.
  *
  * @author Tiry (tdelprat@nuxeo.com)
- *
  */
 public interface ReportInstance {
 
@@ -47,9 +43,8 @@ public interface ReportInstance {
     ReportModel getModel() throws ClientException;
 
     /**
-     * Get report parameters that can be entered by the user.
-     *
-     * This is used to generate the parameter form at rendering time.
+     * Get report parameters that can be entered by the user. This is used to generate the parameter form at rendering
+     * time.
      *
      * @return
      * @throws Exception
@@ -57,8 +52,7 @@ public interface ReportInstance {
     List<ReportParameter> getReportUserParameters() throws Exception;
 
     /**
-     * Get All reports parameters : merging model parameters with instance
-     * parameters
+     * Get All reports parameters : merging model parameters with instance parameters
      *
      * @return
      * @throws Exception
@@ -97,8 +91,7 @@ public interface ReportInstance {
      * @param parameters
      * @throws Exception
      */
-    void render(IRenderOption options, Map<String, Object> parameters)
-            throws Exception;
+    void render(IRenderOption options, Map<String, Object> parameters) throws Exception;
 
     /**
      * Gives access to the underlying {@link DocumentModel}
@@ -108,16 +101,13 @@ public interface ReportInstance {
     DocumentModel getDoc();
 
     /**
-     * Get the key used to uniquely identify the report instance
-     *
-     * This key is used in REST urls.
+     * Get the key used to uniquely identify the report instance This key is used in REST urls.
      *
      * @return
      */
     String getReportKey();
 
     /**
-     *
      * Sets the report key (used from a Core Listener)
      *
      * @param key

@@ -33,7 +33,7 @@ public class DSHelper {
 
     protected static Map<String, NuxeoDSConfig> detectedDS;
 
-    public static Map<String, NuxeoDSConfig> getDSForRepos() throws Exception {
+    public static Map<String, NuxeoDSConfig> getDSForRepos() {
         if (detectedDS == null) {
             Map<String, NuxeoDSConfig> configs = new HashMap<String, NuxeoDSConfig>();
             String singleDS = Framework.getProperty("nuxeo.db.singleDataSource", null);
@@ -53,7 +53,7 @@ public class DSHelper {
         return detectedDS;
     }
 
-    public static NuxeoDSConfig getDefaultRepoDS(String repositoryName) throws Exception {
+    public static NuxeoDSConfig getDefaultRepoDS(String repositoryName) {
         Map<String, NuxeoDSConfig> configs = getDSForRepos();
 
         if (configs.size() == 0) {
@@ -69,7 +69,7 @@ public class DSHelper {
         return configs.get(repositoryName);
     }
 
-    public static NuxeoDSConfig getReplacementDS(String birtDSName, String repositoryName) throws Exception {
+    public static NuxeoDSConfig getReplacementDS(String birtDSName, String repositoryName) {
         String name = birtDSName.toLowerCase();
         if (name.equals("nuxeo") || name.equals("nuxeovcs")) {
             return getDefaultRepoDS(repositoryName);

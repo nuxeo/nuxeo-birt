@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.api;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,22 +49,22 @@ public abstract class BaseBirtReportAdapter {
 
     protected abstract String getPrefix();
 
-    public abstract List<ReportParameter> getReportParameters() throws Exception;
+    public abstract List<ReportParameter> getReportParameters() throws IOException;
 
-    public void setParameter(ReportParameter param) throws Exception {
+    public void setParameter(ReportParameter param) throws IOException {
         setParameter(param, true);
     }
 
-    public void setParameter(ReportParameter param, boolean save) throws Exception {
+    public void setParameter(ReportParameter param, boolean save) throws IOException {
         setParameter(param.getName(), param.getStringValue(), save);
     }
 
-    public void setParameter(String name, Object value) throws Exception {
+    public void setParameter(String name, Object value) throws IOException {
         setParameter(name, value, true);
     }
 
     @SuppressWarnings("unchecked")
-    public void setParameter(String name, Object value, boolean save) throws Exception {
+    public void setParameter(String name, Object value, boolean save) throws IOException {
         List<ReportParameter> reportParams = getReportParameters();
         ReportParameter targetParameter = null;
         for (ReportParameter reportParam : reportParams) {

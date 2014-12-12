@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.api;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -53,16 +54,19 @@ public class BirtReportModel extends BaseBirtReportAdapter implements ReportMode
         return doc.getId();
     }
 
+    @Override
     public String getReportName() throws ClientException {
         return (String) doc.getPropertyValue(PREFIX + ":reportName");
     }
 
-    public InputStream getReportFileAsStream() throws Exception {
+    @Override
+    public InputStream getReportFileAsStream() throws IOException {
         BlobHolder bh = doc.getAdapter(BlobHolder.class);
         return bh.getBlob().getStream();
     }
 
-    public void parseParametersDefinition() throws Exception {
+    @Override
+    public void parseParametersDefinition() throws IOException {
         List<IParameterDefn> paramsDef = getParameterDef();
         for (IParameterDefn def : paramsDef) {
             ReportParameter param = new ReportParameter(def);
@@ -70,7 +74,8 @@ public class BirtReportModel extends BaseBirtReportAdapter implements ReportMode
         }
     }
 
-    public void updateMetadata() throws Exception {
+    @Override
+    public void updateMetadata() throws IOException {
         Map<String, String> meta = ReportHelper.getReportMetaData(getReportFileAsStream());
 
         String name = meta.get("displayName");
@@ -88,7 +93,7 @@ public class BirtReportModel extends BaseBirtReportAdapter implements ReportMode
         }
     }
 
-    protected List<IParameterDefn> getParameterDef() throws Exception {
+    protected List<IParameterDefn> getParameterDef() throws IOException {
         if (cachedParamsDef == null) {
             IReportRunnable report = ReportHelper.getReport(getReportFileAsStream());
             cachedParamsDef = ReportHelper.getReportParameter(report);
@@ -96,7 +101,8 @@ public class BirtReportModel extends BaseBirtReportAdapter implements ReportMode
         return cachedParamsDef;
     }
 
-    public List<ReportParameter> getReportParameters() throws Exception {
+    @Override
+    public List<ReportParameter> getReportParameters() throws IOException {
         Map<String, String> storedParams = getStoredParameters();
         List<IParameterDefn> paramsDef = getParameterDef();
 
@@ -108,6 +114,7 @@ public class BirtReportModel extends BaseBirtReportAdapter implements ReportMode
         return result;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public Map<String, String> getStoredParameters() throws ClientException {
         List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(PREFIX

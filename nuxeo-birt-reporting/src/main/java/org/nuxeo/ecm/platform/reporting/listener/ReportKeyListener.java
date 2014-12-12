@@ -63,7 +63,7 @@ public class ReportKeyListener implements EventListener {
                         if (key == null || key.isEmpty()) {
                             reportInstance.setReportKey(generateReportKey(reportInstance));
                         }
-                    } catch (Exception e) {
+                    } catch (ClientException e) {
                         log.error("Error while parsing report parameters", e);
                     }
                 }

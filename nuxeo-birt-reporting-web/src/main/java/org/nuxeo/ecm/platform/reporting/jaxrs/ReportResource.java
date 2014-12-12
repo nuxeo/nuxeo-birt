@@ -21,7 +21,9 @@ package org.nuxeo.ecm.platform.reporting.jaxrs;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,7 @@ import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.nuxeo.common.utils.Path;
+import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.platform.reporting.api.ReportInstance;
 import org.nuxeo.ecm.platform.reporting.report.ReportParameter;
 import org.nuxeo.ecm.webengine.WebEngine;
@@ -67,7 +70,7 @@ public class ReportResource extends DefaultObject {
 
     @GET
     @Produces("text/html")
-    public String doGet() throws Exception {
+    public String doGet() {
         return report.getModel().getReportName();
     }
 
@@ -90,7 +93,7 @@ public class ReportResource extends DefaultObject {
 
     @GET
     @javax.ws.rs.Path("images/{key}/{name}")
-    public Object getImage(@PathParam("key") String key, @PathParam("name") String name) throws Exception {
+    public Object getImage(@PathParam("key") String key, @PathParam("name") String name) throws IOException {
 
         String tmpPath = buildTmpPath(key);
         File imageFile = new File(tmpPath + "/images/" + name);
@@ -100,7 +103,7 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("editParams")
-    public Object editParams(@QueryParam("target") String target, @QueryParam("errors") String errors) throws Exception {
+    public Object editParams(@QueryParam("target") String target, @QueryParam("errors") String errors) throws IOException {
         HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
         @SuppressWarnings("unchecked")
         Map<String, Object> userParams = (Map<String, Object>) session.getAttribute(USER_PARAMS_NAME);
@@ -138,7 +141,7 @@ public class ReportResource extends DefaultObject {
         }
     }
 
-    protected void readParams(Map<String, Object> userParams, List<String> paramsInError) throws Exception {
+    protected void readParams(Map<String, Object> userParams, List<String> paramsInError) throws IOException {
         List<ReportParameter> params = report.getReportUserParameters();
         if (params.size() > 0) {
             FormData data = getContext().getForm();
@@ -165,11 +168,11 @@ public class ReportResource extends DefaultObject {
     @POST
     @Produces("text/html")
     @javax.ws.rs.Path("html")
-    public Object editAndRenderHtml() throws Exception {
+    public Object editAndRenderHtml() throws IOException {
         return html(false);
     }
 
-    protected Object validateInput(Map<String, Object> userParams, String target) throws Exception {
+    protected Object validateInput(Map<String, Object> userParams, String target) throws IOException {
         HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
         @SuppressWarnings("unchecked")
         Map<String, Object> savedUserParams = (Map<String, Object>) session.getAttribute(USER_PARAMS_NAME);
@@ -186,7 +189,11 @@ public class ReportResource extends DefaultObject {
             for (String err : errors) {
                 errorList = errorList + err + ",";
             }
-            errorList = URLEncoder.encode(errorList, "UTF-8");
+            try {
+                errorList = URLEncoder.encode(errorList, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new NuxeoException(e);
+            }
             return redirect(getPath() + "/editParams?target=" + target + "&errors=" + errorList);
         }
         return null;
@@ -195,7 +202,7 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("html")
-    public Object html(@QueryParam("forceFormDisplay") boolean forceFormDisplay) throws Exception {
+    public Object html(@QueryParam("forceFormDisplay") boolean forceFormDisplay) throws IOException {
         Map<String, Object> userParams = new HashMap<String, Object>();
         Object validationError = validateInput(userParams, "html");
 
@@ -231,14 +238,14 @@ public class ReportResource extends DefaultObject {
     @POST
     @Produces("application/pdf")
     @javax.ws.rs.Path("pdf")
-    public Object editAndRenderPdf() throws Exception {
+    public Object editAndRenderPdf() throws IOException {
         return pdf(false);
     }
 
     @GET
     @Produces("application/pdf")
     @javax.ws.rs.Path("pdf")
-    public Object pdf(@QueryParam("forceFormDisplay") boolean forceDisplayForm) throws Exception {
+    public Object pdf(@QueryParam("forceFormDisplay") boolean forceDisplayForm) throws IOException {
         Map<String, Object> userParams = new HashMap<String, Object>();
         Object validationError = validateInput(userParams, "pdf");
 
@@ -268,7 +275,7 @@ public class ReportResource extends DefaultObject {
     @GET
     @Produces("text/html")
     @javax.ws.rs.Path("clearParams")
-    public Object clearParams(@QueryParam("target") String target) throws Exception {
+    public Object clearParams(@QueryParam("target") String target) {
         HttpSession session = WebEngine.getActiveContext().getRequest().getSession();
         session.removeAttribute(USER_PARAMS_NAME);
         return redirect(getPath() + "/editParams?target=" + target);

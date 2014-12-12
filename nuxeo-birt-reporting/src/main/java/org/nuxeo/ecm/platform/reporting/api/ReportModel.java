@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.api;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -30,21 +31,21 @@ public interface ReportModel {
 
     String getId();
 
-    InputStream getReportFileAsStream() throws Exception;
+    InputStream getReportFileAsStream() throws IOException;
 
-    List<ReportParameter> getReportParameters() throws Exception;
+    List<ReportParameter> getReportParameters() throws IOException;
 
     Map<String, String> getStoredParameters() throws ClientException;
 
-    void setParameter(ReportParameter param) throws Exception;
+    void setParameter(ReportParameter param) throws IOException;
 
-    void setParameter(String name, Object value) throws Exception;
+    void setParameter(String name, Object value) throws IOException;
 
     String getReportName() throws ClientException;
 
-    void parseParametersDefinition() throws Exception;
+    void parseParametersDefinition() throws IOException;
 
-    void updateMetadata() throws Exception;
+    void updateMetadata() throws IOException;
 
     DocumentModel getDoc();
 

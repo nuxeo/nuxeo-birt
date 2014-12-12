@@ -54,7 +54,6 @@ import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 import org.nuxeo.ecm.platform.reporting.api.ReportService;
 import org.nuxeo.ecm.platform.ui.web.component.file.InputFileChoice;
 import org.nuxeo.ecm.platform.ui.web.component.file.InputFileInfo;
-import org.nuxeo.ecm.platform.ui.web.component.file.InputFileMimetypeValidator;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webapp.contentbrowser.DocumentActions;
 import org.nuxeo.runtime.api.Framework;
@@ -105,7 +104,7 @@ public class ReportActions implements Serializable {
         try {
             DocumentModel reportModelDoc = documentManager.getDocument(new IdRef(docId));
             return reportModelDoc.getAdapter(ReportModel.class);
-        } catch (Exception e) {
+        } catch (ClientException e) {
             return null;
         }
     }
@@ -146,13 +145,8 @@ public class ReportActions implements Serializable {
 
     public String getReportModelsContainerPath() throws ClientException {
         if (reportsContainerPath == null) {
-            ReportService reportService;
-            try {
-                reportService = Framework.getService(ReportService.class);
-                reportsContainerPath = reportService.getReportModelsContainer();
-            } catch (Exception e) {
-                log.error("Unable to retrieve ReportService", e);
-            }
+            ReportService reportService = Framework.getService(ReportService.class);
+            reportsContainerPath = reportService.getReportModelsContainer();
         }
         return reportsContainerPath;
     }

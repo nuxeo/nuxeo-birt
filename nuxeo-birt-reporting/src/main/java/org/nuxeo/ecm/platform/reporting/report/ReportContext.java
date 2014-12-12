@@ -60,7 +60,7 @@ public class ReportContext {
 
     public static final Pattern PATTERN_TO_CHECK = Pattern.compile("\\$\\{(\\w+)\\}");
 
-    public static void setContextualParameters(List<ReportParameter> reportParams, DocumentModel doc) throws Exception {
+    public static void setContextualParameters(List<ReportParameter> reportParams, DocumentModel doc) {
         Map<String, String> contextualParameters = buildContextualParametersMap(doc);
         for (ReportParameter parameter : reportParams) {
             String value = parameter.getStringValue();

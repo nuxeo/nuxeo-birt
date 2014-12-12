@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.widget;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class HtmlReportParameterWidgetTypeHandler extends AbstractWidgetTypeHand
                 ReportModel reportModel = doc.getAdapter(ReportModel.class);
                 reportParams = reportModel.getReportParameters();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new WidgetException("Unable to resolve report parameters", e);
         }
 

@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.report;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,11 +27,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.eclipse.birt.report.engine.api.impl.ScalarParameterDefn;
-import org.nuxeo.ecm.core.api.ClientException;
 
 /**
  * Wraps Birt Report parameters to manage Cast and Conversions
- * 
+ *
  * @author Tiry (tdelprat@nuxeo.com)
  */
 public class ReportParameter {
@@ -108,7 +108,7 @@ public class ReportParameter {
             }
             stringValue = value;
             return true;
-        } catch (Exception e) {
+        } catch (NumberFormatException | ParseException e) {
             return false;
         }
     }
@@ -186,7 +186,7 @@ public class ReportParameter {
             } else if (type == IParameterDefn.TYPE_TIME) {
                 return new SimpleDateFormat(TIME_FORMAT).parse(stringValue);
             }
-        } catch (Exception e) {
+        } catch (ParseException e) {
             String message = String.format("Error while parsing the '%s' date value", stringValue);
             log.error(message, e);
         }
@@ -194,15 +194,15 @@ public class ReportParameter {
     }
 
     public Boolean getBooleanValue() {
-        return Boolean.parseBoolean(stringValue);
+        return Boolean.valueOf(stringValue);
     }
 
     public Integer getIntegerValue() {
-        return Integer.parseInt(stringValue);
+        return Integer.valueOf(stringValue);
     }
 
     public Float getFloatValue() {
-        return Float.parseFloat(stringValue);
+        return Float.valueOf(stringValue);
     }
 
     public int getType() {

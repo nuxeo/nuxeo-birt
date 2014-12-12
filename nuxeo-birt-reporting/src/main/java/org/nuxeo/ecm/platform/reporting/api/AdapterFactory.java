@@ -31,9 +31,8 @@ import org.nuxeo.ecm.core.api.adapter.DocumentAdapterFactory;
  */
 public class AdapterFactory implements DocumentAdapterFactory {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Object getAdapter(DocumentModel doc, Class adapterClass) {
+    public Object getAdapter(DocumentModel doc, Class<?> adapterClass) {
         if (doc == null) {
             return null;
         }

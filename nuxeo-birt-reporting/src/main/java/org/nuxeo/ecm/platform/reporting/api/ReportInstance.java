@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.api;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -47,17 +48,15 @@ public interface ReportInstance {
      * time.
      *
      * @return
-     * @throws Exception
      */
-    List<ReportParameter> getReportUserParameters() throws Exception;
+    List<ReportParameter> getReportUserParameters() throws IOException;
 
     /**
      * Get All reports parameters : merging model parameters with instance parameters
      *
      * @return
-     * @throws Exception
      */
-    List<ReportParameter> getReportParameters() throws Exception;
+    List<ReportParameter> getReportParameters() throws IOException;
 
     /**
      * Get parameters as storef in thi resport instance
@@ -71,27 +70,24 @@ public interface ReportInstance {
      * Sets a parameter
      *
      * @param param
-     * @throws Exception
      */
-    void setParameter(ReportParameter param) throws Exception;
+    void setParameter(ReportParameter param) throws IOException;
 
     /**
      * Sets a parameter
      *
      * @param name
      * @param value
-     * @throws Exception
      */
-    void setParameter(String name, Object value) throws Exception;
+    void setParameter(String name, Object value) throws IOException;
 
     /**
      * Starts the rendering of the report according to {@link IRenderOption}
      *
      * @param options
      * @param parameters
-     * @throws Exception
      */
-    void render(IRenderOption options, Map<String, Object> parameters) throws Exception;
+    void render(IRenderOption options, Map<String, Object> parameters) throws IOException;
 
     /**
      * Gives access to the underlying {@link DocumentModel}
@@ -117,8 +113,6 @@ public interface ReportInstance {
 
     /**
      * Initialize the parameters from the associated model
-     *
-     * @throws Exception
      */
-    void initParameterList() throws Exception;
+    void initParameterList() throws IOException;
 }

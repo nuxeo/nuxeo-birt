@@ -18,6 +18,7 @@
 
 package org.nuxeo.ecm.platform.reporting.api;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,13 +27,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.ecm.platform.reporting.engine.BirtEngine;
 import org.nuxeo.ecm.platform.reporting.report.ReportContext;
 import org.nuxeo.ecm.platform.reporting.report.ReportHelper;
@@ -69,6 +73,7 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
         return docs[0].getAdapter(ReportModel.class);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public Map<String, String> getStoredParameters() throws ClientException {
 
@@ -88,7 +93,8 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
         return params;
     }
 
-    public List<ReportParameter> getReportParameters() throws Exception {
+    @Override
+    public List<ReportParameter> getReportParameters() throws IOException {
 
         List<ReportParameter> params = getModel().getReportParameters();
         Map<String, String> modelParams = getModel().getStoredParameters();
@@ -108,7 +114,8 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
         return params;
     }
 
-    public List<ReportParameter> getReportUserParameters() throws Exception {
+    @Override
+    public List<ReportParameter> getReportUserParameters() throws IOException {
         List<ReportParameter> params = getReportParameters();
         ReportContext.setContextualParameters(params, doc);
 
@@ -121,7 +128,8 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
         return userParams;
     }
 
-    public void initParameterList() throws Exception {
+    @Override
+    public void initParameterList() throws IOException {
         String oldModelRef = (String) doc.getPropertyValue(PREFIX + ":oldModelRef");
         String modelRef = (String) doc.getPropertyValue(PREFIX + ":modelRef");
 
@@ -139,8 +147,8 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void render(IRenderOption options, Map<String, Object> userParameters) throws Exception {
+    @Override
+    public void render(IRenderOption options, Map<String, Object> userParameters) throws IOException {
         // get Stored params
         List<ReportParameter> params = getReportParameters();
         // fill with user supplied parameters
@@ -158,7 +166,11 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
         Map<String, Object> birtParams = computeParametersForBirt(params);
         task.setParameterValues(birtParams);
         task.setRenderOption(options);
-        task.run();
+        try {
+            task.run();
+        } catch (BirtException e) {
+            throw new NuxeoException(e);
+        }
         task.close();
     }
 
@@ -175,14 +187,16 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
         return birtParameters;
     }
 
+    @Override
     public String getReportKey() {
         try {
             return (String) doc.getPropertyValue(PREFIX + ":reportKey");
-        } catch (Exception e) {
+        } catch (PropertyException e) {
             return null;
         }
     }
 
+    @Override
     public void setReportKey(String key) throws ClientException {
         doc.setPropertyValue(PREFIX + ":reportKey", key);
     }

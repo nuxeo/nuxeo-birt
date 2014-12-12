@@ -21,6 +21,8 @@ package org.nuxeo.ecm.platform.reporting.listener;
 import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_INSTANCE_SCHEMA;
 import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_MODEL_SCHEMA;
 
+import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -57,7 +59,7 @@ public class ReportParserListener implements EventListener {
                             reportModel.parseParametersDefinition();
                             reportModel.updateMetadata();
                         }
-                    } catch (Exception e) {
+                    } catch (ClientException | IOException e) {
                         log.error("Error while parsing report model parameters", e);
                     }
                 }
@@ -66,7 +68,7 @@ public class ReportParserListener implements EventListener {
                 if (reportInstance != null) {
                     try {
                         reportInstance.initParameterList();
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         log.error("Error initializing report parameters", e);
                     }
                 }

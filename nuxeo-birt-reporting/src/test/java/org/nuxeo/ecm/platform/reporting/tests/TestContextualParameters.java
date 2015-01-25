@@ -19,16 +19,18 @@ package org.nuxeo.ecm.platform.reporting.tests;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.FileUtils;
+import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
-import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
@@ -74,17 +76,17 @@ public class TestContextualParameters {
         assertEquals(workspace.getId(), reportParameters.get(3).getStringValue());
     }
 
-    private DocumentModel createReportInsideWorkspace() throws ClientException {
+    private DocumentModel createReportInsideWorkspace() throws ClientException, IOException {
         DocumentModel reportModel = createReportModel();
         return createReport(reportModel.getId(), "/default-domain/workspaces/workspace");
     }
 
-    private DocumentModel createReportModel() throws ClientException {
+    private DocumentModel createReportModel() throws ClientException, IOException {
         DocumentModel model = session.createDocumentModel("/", "model", "BirtReportModel");
         File report = FileUtils.getResourceFileFromContext("reports/VCSReportWithParams.rptdesign");
         model.setPropertyValue("dc:title", "My model");
         model.setPropertyValue("birtmodel:reportName", "VCSReportWithParams");
-        model.setPropertyValue("file:content", new FileBlob(report));
+        model.setPropertyValue("file:content", (Serializable) Blobs.createBlob(report));
         model = session.createDocument(model);
         session.save();
         return model;
@@ -99,7 +101,7 @@ public class TestContextualParameters {
         return instance;
     }
 
-    private DocumentModel createReportOutsideWorkspace() throws ClientException {
+    private DocumentModel createReportOutsideWorkspace() throws ClientException, IOException {
         DocumentModel reportModel = createReportModel();
         return createReport(reportModel.getId(), "/");
     }

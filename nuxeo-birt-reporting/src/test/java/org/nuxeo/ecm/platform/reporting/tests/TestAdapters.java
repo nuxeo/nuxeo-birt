@@ -26,6 +26,7 @@ import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_INSTANC
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +38,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.FileUtils;
 import org.nuxeo.common.utils.Path;
+import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.TransactionalFeature;
@@ -73,7 +74,7 @@ public class TestAdapters {
 
         model.setPropertyValue("dc:title", "My model");
         model.setPropertyValue("birtmodel:reportName", "VCSReportWithParams");
-        model.setPropertyValue("file:content", new FileBlob(report));
+        model.setPropertyValue("file:content", (Serializable) Blobs.createBlob(report));
 
         model = session.createDocument(model);
         session.save();

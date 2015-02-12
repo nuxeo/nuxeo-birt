@@ -12,7 +12,7 @@
   <description>Nuxeo Birt Reporting integration</description>
 
   <dependencies>
-    <!-- NXP-12166: Not needed but ensure replacement with shaded version resolve 
+    <!-- NXP-12166: Not needed but ensure replacement with shaded version resolve
       conflicts -->
     <dependency>
       <groupId>org.nuxeo.connect</groupId>
@@ -91,7 +91,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <forkMode>pertest</forkMode>
-          <argLine>-Xms256m -Xmx768m -XX:MaxPermSize=256m ${it.failsafe.argLine}</argLine>
+          <argLine>-Xms256m -Xmx768m ${it.failsafe.argLine}</argLine>
         </configuration>
       </plugin>
     </plugins>

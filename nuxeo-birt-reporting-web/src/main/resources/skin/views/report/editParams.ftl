@@ -1,5 +1,6 @@
 <html>
   <head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
   <script type="text/javascript" src="${skinPath}/script/jquery/jquery.js"></script>
   <link rel="stylesheet" href="${skinPath}/css/birt.css" type="text/css" media="screen" charset="utf-8">
   <script>

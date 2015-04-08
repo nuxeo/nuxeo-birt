@@ -1,51 +1,25 @@
 # Nuxeo BIRT
 
-This addons contains a set of Nuxeo Plugins to integrate BIRT Reporting engine into Nuxeo EP.
+This addon contains a set of Nuxeo Plugins to integrate BIRT Reporting engine into Nuxeo.
 
-* BIRT report files are imported as Nuxeo Documents (Birt Report Models)
-* Reports can be rendered from Nuxeo Documents (Birt Report Instances)
+* BIRT report files are imported as Nuxeo Documents (BIRT Report Models)
+* Reports can be rendered from Nuxeo Documents (BIRT Report Instances)
 * Reports instances are bound to Document Context
 * Report Rendering is automatically adjusted to use Nuxeo server data sources
 
+# Building
 
-## Building and deploying
+    mvn clean install
 
-To see the list of all commands available for building and deploying, use the following:
+## Deploying
 
-    $ ant usage
+Install [the Nuxeo - BIRT Integration (Reporting) Marketplace Package](https://connect.nuxeo.com/nuxeo/site/marketplace/package/nuxeo-birt-integration).
+Or manually copy the built artifacts into `$NUXEO_HOME/templates/custom/bundles/` and activate the "custom" template.
 
+## QA results
 
-### How to build
+[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=addons_nuxeo-birt-master)](https://qa.nuxeo.org/jenkins/job/addons_nuxeo-birt-master/)
 
-You can build Nuxeo BIRT with:
+# About Nuxeo
 
-    $ ant build
-
-If you want to build and launch the tests, do it with:
-
-    $ ant build-with-tests
-
-
-### How to deploy
-
-Configure the build.properties files (starting from the `build.properties.sample` file to be found in the current folder), to point your Tomcat instance:
-
-    $ cp build.properties.sample build.properties
-    $ vi build.properties
-
-You can then deploy Nuxeo BIRT to your Tomcat instance with:
-
-    $ ant deploy-tomcat
-
-
-## About Nuxeo
-
-Nuxeo provides a modular, extensible Java-based [open source software platform for enterprise content management] [1] and packaged applications for [document management] [2], [digital asset management] [3] and [case management] [4]. Designed by developers for developers, the Nuxeo platform offers a modern architecture, a powerful plug-in model and extensive packaging capabilities for building content applications.
-
-[1]: http://www.nuxeo.com/en/products/ep
-[2]: http://www.nuxeo.com/en/products/document-management
-[3]: http://www.nuxeo.com/en/products/dam
-[4]: http://www.nuxeo.com/en/products/case-management
-
-More information on: <http://www.nuxeo.com/>
-
+Nuxeo dramatically improves how content-based applications are built, managed and deployed, making customers more agile, innovative and successful. Nuxeo provides a next generation, enterprise ready platform for building traditional and cutting-edge content oriented applications. Combining a powerful application development environment with SaaS-based tools and a modular architecture, the Nuxeo Platform and Products provide clear business value to some of the most recognizable brands including Verizon, Electronic Arts, Netflix, Sharp, FICO, the U.S. Navy, and Boeing. Nuxeo is headquartered in New York and Paris. More information is available at www.nuxeo.com.

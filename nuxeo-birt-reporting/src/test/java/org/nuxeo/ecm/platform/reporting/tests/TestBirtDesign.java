@@ -20,6 +20,7 @@ package org.nuxeo.ecm.platform.reporting.tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,12 +29,15 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.FileUtils;
@@ -51,14 +55,19 @@ import org.nuxeo.ecm.platform.reporting.tests.TestBirtDesign.RepositoryInit;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-import org.nuxeo.runtime.test.runner.LocalDeploy;
+import org.nuxeo.runtime.test.runner.RuntimeHarness;
 
 @RunWith(FeaturesRunner.class)
 @Features({ TransactionalFeature.class, CoreFeature.class })
 @RepositoryConfig(init = RepositoryInit.class)
 @Deploy("org.nuxeo.runtime.datasource")
-@LocalDeploy("org.nuxeo.ecm.platform.birt.reporting:repo-ds.xml")
 public class TestBirtDesign {
+
+    @Inject
+    protected RuntimeHarness harness;
+
+    @Inject
+    protected CoreFeature coreFeature;
 
     String reportPath = null;
 
@@ -83,6 +92,12 @@ public class TestBirtDesign {
         }
     }
 
+    @Before
+    public void checkDB() {
+        // SQL Server has problem initializing the repo when the repo datasource is reconfigured
+        assumeTrue(!coreFeature.getStorageConfiguration().isVCSSQLServer());
+    }
+
     @After
     public void cleanFilesystem() throws Exception {
         if (reportPath != null) {
@@ -93,6 +108,17 @@ public class TestBirtDesign {
 
     @Test
     public void testNuxeoReport() throws Exception {
+        // not done with LocalDeploy because SQL Server has problem initializing the repo
+        // when the repo datasource is reconfigured
+        harness.deployContrib("org.nuxeo.ecm.platform.birt.reporting.test", "repo-ds.xml");
+        try {
+            doTestNuxeoReport();
+        } finally {
+            harness.undeployContrib("org.nuxeo.ecm.platform.birt.reporting.test", "repo-ds.xml");
+        }
+    }
+
+    public void doTestNuxeoReport() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/testNX2.rptdesign");
 
@@ -135,6 +161,15 @@ public class TestBirtDesign {
 
     @Test
     public void testNuxeoReportWithParams() throws Exception {
+        harness.deployContrib("org.nuxeo.ecm.platform.birt.reporting.test", "repo-ds.xml");
+        try {
+            doTestNuxeoReportWithParams();
+        } finally {
+            harness.undeployContrib("org.nuxeo.ecm.platform.birt.reporting.test", "repo-ds.xml");
+        }
+    }
+
+    public void doTestNuxeoReportWithParams() throws Exception {
 
         File report = FileUtils.getResourceFileFromContext("reports/simpleVCSReport.rptdesign");
 

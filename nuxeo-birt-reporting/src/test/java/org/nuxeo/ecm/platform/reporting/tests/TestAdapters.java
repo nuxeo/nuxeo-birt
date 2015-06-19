@@ -21,6 +21,7 @@ package org.nuxeo.ecm.platform.reporting.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 import static org.nuxeo.ecm.platform.reporting.api.Constants.BIRT_REPORT_INSTANCE_TYPE;
 
 import java.io.File;
@@ -36,6 +37,7 @@ import javax.inject.Inject;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.common.utils.FileUtils;
@@ -53,15 +55,21 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-import org.nuxeo.runtime.test.runner.LocalDeploy;
+import org.nuxeo.runtime.test.runner.RuntimeHarness;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
 @RunWith(FeaturesRunner.class)
 @Features({ TransactionalFeature.class, CoreFeature.class })
 @Deploy({ "org.nuxeo.ecm.platform.birt.reporting", "org.nuxeo.runtime.datasource" })
-@LocalDeploy("org.nuxeo.ecm.platform.birt.reporting:repo-ds.xml")
 public class TestAdapters {
 
     String reportPath = null;
+
+    @Inject
+    protected RuntimeHarness harness;
+
+    @Inject
+    protected CoreFeature coreFeature;
 
     @Inject
     protected CoreSession session;
@@ -78,9 +86,18 @@ public class TestAdapters {
 
         model = session.createDocument(model);
         session.save();
+
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
         Framework.getService(EventService.class).waitForAsyncCompletion();
 
         return model;
+    }
+
+    @Before
+    public void checkDB() {
+        // SQL Server has problem initializing the repo when the repo datasource is reconfigured
+        assumeTrue(!coreFeature.getStorageConfiguration().isVCSSQLServer());
     }
 
     @After
@@ -100,6 +117,9 @@ public class TestAdapters {
 
         instance = session.createDocument(instance);
         session.save();
+
+        TransactionHelper.commitOrRollbackTransaction();
+        TransactionHelper.startTransaction();
         Framework.getService(EventService.class).waitForAsyncCompletion();
 
         return instance;
@@ -107,6 +127,17 @@ public class TestAdapters {
 
     @Test
     public void testParams() throws Exception {
+        // not done with LocalDeploy because SQL Server has problem initializing the repo
+        // when the repo datasource is reconfigured
+        harness.deployContrib("org.nuxeo.ecm.platform.birt.reporting.test", "repo-ds.xml");
+        try {
+            doTestParams();
+        } finally {
+            harness.undeployContrib("org.nuxeo.ecm.platform.birt.reporting.test", "repo-ds.xml");
+        }
+    }
+
+    public void doTestParams() throws Exception {
 
         DocumentModel model = createModelDoc();
         ReportModel reportModel = model.getAdapter(ReportModel.class);
@@ -140,6 +171,15 @@ public class TestAdapters {
 
     @Test
     public void testAdapters() throws Exception {
+        harness.deployContrib("org.nuxeo.ecm.platform.birt.reporting.test", "repo-ds.xml");
+        try {
+            doTestAdapters();
+        } finally {
+            harness.undeployContrib("org.nuxeo.ecm.platform.birt.reporting.test", "repo-ds.xml");
+        }
+    }
+
+    public void doTestAdapters() throws Exception {
 
         DocumentModel model = createModelDoc();
 

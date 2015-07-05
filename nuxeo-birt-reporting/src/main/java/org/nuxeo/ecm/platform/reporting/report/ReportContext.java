@@ -76,7 +76,7 @@ public class ReportContext {
         }
     }
 
-    private static Map<String, String> buildContextualParametersMap(DocumentModel doc) throws ClientException {
+    private static Map<String, String> buildContextualParametersMap(DocumentModel doc) {
         Map<String, String> contextualParameters = new HashMap<String, String>();
         contextualParameters.put(USER_NAME, doc.getCoreSession().getPrincipal().getName());
         contextualParameters.put(DOC_TYPE, doc.getType());
@@ -103,7 +103,7 @@ public class ReportContext {
         return contextualParameters;
     }
 
-    private static DocumentModel getFirstParentWithType(DocumentModel doc, String type) throws ClientException {
+    private static DocumentModel getFirstParentWithType(DocumentModel doc, String type) {
         List<DocumentModel> parents = doc.getCoreSession().getParentDocuments(doc.getRef());
         for (DocumentModel parent : parents) {
             if (parent.getType().equals(type)) {
@@ -113,7 +113,7 @@ public class ReportContext {
         return null;
     }
 
-    private static DocumentModel getCurrentSuperSpace(DocumentModel doc) throws ClientException {
+    private static DocumentModel getCurrentSuperSpace(DocumentModel doc) {
         return doc.getCoreSession().getSuperSpace(doc);
     }
 

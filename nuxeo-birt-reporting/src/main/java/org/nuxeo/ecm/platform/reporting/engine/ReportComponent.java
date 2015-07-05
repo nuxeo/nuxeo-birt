@@ -55,7 +55,7 @@ public class ReportComponent extends DefaultComponent implements ReportService {
 
     @Override
     public List<ReportInstance> getReportInstanceByModelName(CoreSession session, String reportModelName)
-            throws ClientException {
+            {
         String uuid = getReportModelByName(session, reportModelName).getId();
         String query = "SELECT * FROM BirtReport WHERE birt:modelRef='" + uuid + "'";
         DocumentModelList reports = session.query(query);
@@ -70,7 +70,7 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
-    public ReportInstance getReportInstanceByKey(CoreSession session, String key) throws ClientException {
+    public ReportInstance getReportInstanceByKey(CoreSession session, String key) {
         String query = "SELECT * FROM BirtReport WHERE birt:reportKey='" + key + "'";
         DocumentModelList reports = session.query(query);
         if (reports.isEmpty()) {
@@ -85,7 +85,7 @@ public class ReportComponent extends DefaultComponent implements ReportService {
     }
 
     @Override
-    public ReportModel getReportModelByName(CoreSession session, String reportModelName) throws ClientException {
+    public ReportModel getReportModelByName(CoreSession session, String reportModelName) {
         String query = "SELECT * FROM BirtReportModel WHERE birtmodel:reportName='" + reportModelName + "'";
         DocumentModelList reports = session.query(query);
         if (reports.isEmpty()) {
@@ -94,7 +94,7 @@ public class ReportComponent extends DefaultComponent implements ReportService {
         return reports.get(0).getAdapter(ReportModel.class);
     }
 
-    public List<ReportModel> getReportAvailableModels(CoreSession session) throws ClientException {
+    public List<ReportModel> getReportAvailableModels(CoreSession session) {
         String query = "SELECT * FROM BirtReportModel WHERE ecm:currentLifeCycleState != 'deleted'";
         DocumentModelList reports = session.query(query);
         List<ReportModel> result = new ArrayList<ReportModel>();

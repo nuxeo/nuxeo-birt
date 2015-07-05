@@ -109,18 +109,18 @@ public class ReportActions implements Serializable {
         }
     }
 
-    public DocumentModel getBareReportModel() throws ClientException {
+    public DocumentModel getBareReportModel() {
         return documentManager.createDocumentModel(Constants.BIRT_REPORT_MODEL_TYPE);
     }
 
-    public DocumentModel getNewReportModel() throws ClientException {
+    public DocumentModel getNewReportModel() {
         if (newReportModel == null) {
             newReportModel = getBareReportModel();
         }
         return newReportModel;
     }
 
-    public String saveDocument() throws ClientException {
+    public String saveDocument() {
         createReportsModelContainerIfNeeded();
         String view = documentActions.saveDocument(newReportModel);
         resetDocument();
@@ -128,14 +128,14 @@ public class ReportActions implements Serializable {
         return view;
     }
 
-    protected void createReportsModelContainerIfNeeded() throws ClientException {
+    protected void createReportsModelContainerIfNeeded() {
         String path = getReportModelsContainerPath();
         if (!documentManager.exists(new PathRef(path))) {
             createReportsModelContainer(path);
         }
     }
 
-    protected void createReportsModelContainer(String path) throws ClientException {
+    protected void createReportsModelContainer(String path) {
         new UnrestrictedReportModelsContainerCreator(documentManager, path).runUnrestricted();
     }
 
@@ -143,7 +143,7 @@ public class ReportActions implements Serializable {
         newReportModel = null;
     }
 
-    public String getReportModelsContainerPath() throws ClientException {
+    public String getReportModelsContainerPath() {
         if (reportsContainerPath == null) {
             ReportService reportService = Framework.getService(ReportService.class);
             reportsContainerPath = reportService.getReportModelsContainer();
@@ -191,7 +191,7 @@ public class ReportActions implements Serializable {
         }
 
         @Override
-        public void run() throws ClientException {
+        public void run() {
             if (!session.exists(new PathRef(reportModelsContainerPath))) {
                 DocumentModel doc = session.createDocumentModel(session.getRootDocument().getPathAsString(),
                         reportModelsContainerPath.substring(1), Constants.BIRT_REPORT_MODELS_ROOT_TYPE);

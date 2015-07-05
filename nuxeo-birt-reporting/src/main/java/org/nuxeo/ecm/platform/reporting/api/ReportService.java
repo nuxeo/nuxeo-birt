@@ -31,14 +31,14 @@ import org.nuxeo.ecm.core.api.CoreSession;
  */
 public interface ReportService {
 
-    ReportModel getReportModelByName(CoreSession session, String reportModelName) throws ClientException;
+    ReportModel getReportModelByName(CoreSession session, String reportModelName);
 
-    List<ReportInstance> getReportInstanceByModelName(CoreSession session, String reportModelName)
-            throws ClientException;
+    List<ReportInstance> getReportInstanceByModelName(CoreSession session, String reportModelName);
 
-    List<ReportModel> getReportAvailableModels(CoreSession session) throws ClientException;
+    List<ReportModel> getReportAvailableModels(CoreSession session);
 
-    ReportInstance getReportInstanceByKey(CoreSession session, String key) throws ClientException;
+    ReportInstance getReportInstanceByKey(CoreSession session, String key);
 
     String getReportModelsContainer();
+
 }

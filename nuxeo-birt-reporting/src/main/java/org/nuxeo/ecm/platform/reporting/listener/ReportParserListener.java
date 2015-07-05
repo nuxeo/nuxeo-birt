@@ -44,7 +44,7 @@ public class ReportParserListener implements EventListener {
     protected static final Log log = LogFactory.getLog(ReportParserListener.class);
 
     @Override
-    public void handleEvent(Event event) throws ClientException {
+    public void handleEvent(Event event) {
 
         EventContext ctx = event.getContext();
         if (ctx instanceof DocumentEventContext) {

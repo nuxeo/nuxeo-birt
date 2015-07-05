@@ -42,7 +42,7 @@ public class ReportKeyListener implements EventListener {
     protected static final Log log = LogFactory.getLog(ReportKeyListener.class);
 
     @Override
-    public void handleEvent(Event event) throws ClientException {
+    public void handleEvent(Event event) {
         EventContext ctx = event.getContext();
         if (ctx instanceof DocumentEventContext) {
             DocumentEventContext docCtx = (DocumentEventContext) ctx;
@@ -71,7 +71,7 @@ public class ReportKeyListener implements EventListener {
         }
     }
 
-    protected String generateReportKey(ReportInstance reportInstance) throws ClientException {
+    protected String generateReportKey(ReportInstance reportInstance) {
         String name = reportInstance.getModel().getReportName();
         if (name == null) {
             name = reportInstance.getModel().getDoc().getName();

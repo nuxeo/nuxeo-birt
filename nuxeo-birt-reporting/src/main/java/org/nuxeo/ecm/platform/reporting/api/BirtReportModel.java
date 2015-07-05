@@ -55,7 +55,7 @@ public class BirtReportModel extends BaseBirtReportAdapter implements ReportMode
     }
 
     @Override
-    public String getReportName() throws ClientException {
+    public String getReportName() {
         return (String) doc.getPropertyValue(PREFIX + ":reportName");
     }
 
@@ -116,7 +116,7 @@ public class BirtReportModel extends BaseBirtReportAdapter implements ReportMode
 
     @Override
     @SuppressWarnings("unchecked")
-    public Map<String, String> getStoredParameters() throws ClientException {
+    public Map<String, String> getStoredParameters() {
         List<Map<String, Serializable>> localParams = (List<Map<String, Serializable>>) doc.getPropertyValue(PREFIX
                 + ":parameters");
         Map<String, String> params = new HashMap<String, String>();

@@ -35,13 +35,13 @@ public interface ReportModel {
 
     List<ReportParameter> getReportParameters() throws IOException;
 
-    Map<String, String> getStoredParameters() throws ClientException;
+    Map<String, String> getStoredParameters();
 
     void setParameter(ReportParameter param) throws IOException;
 
     void setParameter(String name, Object value) throws IOException;
 
-    String getReportName() throws ClientException;
+    String getReportName();
 
     void parseParametersDefinition() throws IOException;
 

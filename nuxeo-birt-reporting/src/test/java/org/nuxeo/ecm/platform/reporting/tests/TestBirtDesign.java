@@ -78,7 +78,7 @@ public class TestBirtDesign {
     public static class RepositoryInit extends DefaultRepositoryInit {
 
         @Override
-        public void populate(CoreSession session) throws ClientException {
+        public void populate(CoreSession session) {
             super.populate(session);
             folder1 = session.createDocumentModel("/", "folder1", "Folder");
             folder1.setProperty("dublincore", "title", "My Super Folder");

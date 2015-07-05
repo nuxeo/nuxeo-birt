@@ -39,9 +39,8 @@ public interface ReportInstance {
      * Return the associated {@link ReportModel}
      *
      * @return
-     * @throws ClientException
      */
-    ReportModel getModel() throws ClientException;
+    ReportModel getModel();
 
     /**
      * Get report parameters that can be entered by the user. This is used to generate the parameter form at rendering
@@ -62,9 +61,8 @@ public interface ReportInstance {
      * Get parameters as storef in thi resport instance
      *
      * @return
-     * @throws ClientException
      */
-    Map<String, String> getStoredParameters() throws ClientException;
+    Map<String, String> getStoredParameters();
 
     /**
      * Sets a parameter
@@ -107,9 +105,8 @@ public interface ReportInstance {
      * Sets the report key (used from a Core Listener)
      *
      * @param key
-     * @throws ClientException
      */
-    void setReportKey(String key) throws ClientException;
+    void setReportKey(String key);
 
     /**
      * Initialize the parameters from the associated model

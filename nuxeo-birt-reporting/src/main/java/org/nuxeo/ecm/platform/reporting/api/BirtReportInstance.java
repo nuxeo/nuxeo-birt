@@ -56,14 +56,14 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
     }
 
     @Override
-    public ReportModel getModel() throws ClientException {
+    public ReportModel getModel() {
         String modelUUID = (String) doc.getPropertyValue(PREFIX + ":modelRef");
         final IdRef modelRef = new IdRef(modelUUID);
 
         final DocumentModel[] docs = new DocumentModel[1];
         new UnrestrictedSessionRunner(getSession()) {
             @Override
-            public void run() throws ClientException {
+            public void run() {
                 DocumentModel doc = session.getDocument(modelRef);
                 doc.detach(true);
                 docs[0] = doc;
@@ -75,7 +75,7 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
 
     @Override
     @SuppressWarnings("unchecked")
-    public Map<String, String> getStoredParameters() throws ClientException {
+    public Map<String, String> getStoredParameters() {
 
         Map<String, String> params = new HashMap<String, String>();
 
@@ -197,7 +197,7 @@ public class BirtReportInstance extends BaseBirtReportAdapter implements ReportI
     }
 
     @Override
-    public void setReportKey(String key) throws ClientException {
+    public void setReportKey(String key) {
         doc.setPropertyValue(PREFIX + ":reportKey", key);
     }
 

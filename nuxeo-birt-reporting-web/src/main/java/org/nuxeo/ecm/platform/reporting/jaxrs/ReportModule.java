@@ -45,7 +45,7 @@ import org.nuxeo.runtime.api.Framework;
 @WebObject(type = "reports")
 public class ReportModule extends ModuleRoot {
 
-    protected ReportInstance findReport(String idOrKey) throws ClientException {
+    protected ReportInstance findReport(String idOrKey) {
 
         boolean useIdResolution = true;
         try {
@@ -77,7 +77,7 @@ public class ReportModule extends ModuleRoot {
     }
 
     @Path(value = "{reportIdOrName}")
-    public Object getReport(@PathParam("reportIdOrName") String reportIdOrName) throws ClientException {
+    public Object getReport(@PathParam("reportIdOrName") String reportIdOrName) {
         ReportInstance report = findReport(reportIdOrName);
         if (report == null) {
             return Response.status(404).build();

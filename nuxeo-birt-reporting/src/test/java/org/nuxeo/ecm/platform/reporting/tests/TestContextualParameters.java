@@ -76,12 +76,12 @@ public class TestContextualParameters {
         assertEquals(workspace.getId(), reportParameters.get(3).getStringValue());
     }
 
-    private DocumentModel createReportInsideWorkspace() throws ClientException, IOException {
+    private DocumentModel createReportInsideWorkspace() throws IOException {
         DocumentModel reportModel = createReportModel();
         return createReport(reportModel.getId(), "/default-domain/workspaces/workspace");
     }
 
-    private DocumentModel createReportModel() throws ClientException, IOException {
+    private DocumentModel createReportModel() throws IOException {
         DocumentModel model = session.createDocumentModel("/", "model", "BirtReportModel");
         File report = FileUtils.getResourceFileFromContext("reports/VCSReportWithParams.rptdesign");
         model.setPropertyValue("dc:title", "My model");
@@ -92,7 +92,7 @@ public class TestContextualParameters {
         return model;
     }
 
-    private DocumentModel createReport(String reportModelId, String path) throws ClientException {
+    private DocumentModel createReport(String reportModelId, String path) {
         DocumentModel instance = session.createDocumentModel(path, "instance", "BirtReport");
         instance.setPropertyValue("dc:title", "My instance");
         instance.setPropertyValue("birt:modelRef", reportModelId);
@@ -101,7 +101,7 @@ public class TestContextualParameters {
         return instance;
     }
 
-    private DocumentModel createReportOutsideWorkspace() throws ClientException, IOException {
+    private DocumentModel createReportOutsideWorkspace() throws IOException {
         DocumentModel reportModel = createReportModel();
         return createReport(reportModel.getId(), "/");
     }

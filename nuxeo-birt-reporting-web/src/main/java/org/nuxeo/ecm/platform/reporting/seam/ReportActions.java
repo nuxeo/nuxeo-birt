@@ -37,7 +37,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Install;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
@@ -49,6 +48,7 @@ import org.nuxeo.ecm.core.api.security.ACP;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.core.api.security.impl.ACLImpl;
 import org.nuxeo.ecm.core.api.security.impl.ACPImpl;
+import org.nuxeo.ecm.core.model.NoSuchDocumentException;
 import org.nuxeo.ecm.platform.reporting.api.Constants;
 import org.nuxeo.ecm.platform.reporting.api.ReportModel;
 import org.nuxeo.ecm.platform.reporting.api.ReportService;
@@ -91,20 +91,15 @@ public class ReportActions implements Serializable {
 
     @Factory(value = "reportModels", scope = ScopeType.EVENT, autoCreate = true)
     public List<ReportModel> getAvailableModels() {
-        try {
-            ReportService rs = Framework.getLocalService(ReportService.class);
-            return rs.getReportAvailableModels(documentManager);
-        } catch (ClientException e) {
-            log.error("Error while getting reports models", e);
-            return new ArrayList<ReportModel>();
-        }
+        ReportService rs = Framework.getLocalService(ReportService.class);
+        return rs.getReportAvailableModels(documentManager);
     }
 
     public ReportModel getReportModel(String docId) {
         try {
             DocumentModel reportModelDoc = documentManager.getDocument(new IdRef(docId));
             return reportModelDoc.getAdapter(ReportModel.class);
-        } catch (ClientException e) {
+        } catch (NoSuchDocumentException e) {
             return null;
         }
     }

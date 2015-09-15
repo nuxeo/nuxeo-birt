@@ -30,7 +30,7 @@ public class BirtRepositoryInit extends DefaultRepositoryInit {
         super.populate(session);
 
         DocumentModel doc = session.createDocumentModel("/", "default-domain", "Domain");
-        doc.setProperty("dublincore", "title", "Default domain");
+        doc.setProperty("dublincore", "title", "Domain");
         doc = session.createDocument(doc);
         session.saveDocument(doc);
 
